@@ -98,6 +98,40 @@ importers:
         specifier: ^7.0.2
         version: 7.0.2
 
+  apps/worklist:
+    dependencies:
+      '@tanstack/react-query':
+        specifier: ^5.101.4
+        version: 5.101.4(react@19.2.8)
+      react:
+        specifier: ^19.2.8
+        version: 19.2.8
+      react-dom:
+        specifier: ^19.2.8
+        version: 19.2.8(react@19.2.8)
+    devDependencies:
+      '@rsbuild/core':
+        specifier: ^2.1.10
+        version: 2.1.10
+      '@rsbuild/plugin-react':
+        specifier: ^2.1.0
+        version: 2.1.0(@rsbuild/core@2.1.10)(@rspack/core@2.1.8(@swc/helpers@0.5.23))
+      '@rsbuild/plugin-tailwindcss':
+        specifier: ^2.0.3
+        version: 2.0.3(@rsbuild/core@2.1.10)(@rspack/core@2.1.8(@swc/helpers@0.5.23))
+      '@types/react':
+        specifier: ^19.2.18
+        version: 19.2.18
+      '@types/react-dom':
+        specifier: ^19.2.4
+        version: 19.2.4(@types/react@19.2.18)
+      tailwindcss:
+        specifier: ^4.3.3
+        version: 4.3.3
+      typescript:
+        specifier: ^7.0.2
+        version: 7.0.2
+
   apps/claims/api:
     dependencies:
       cors:
