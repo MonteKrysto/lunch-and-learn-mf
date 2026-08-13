@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
+// Federated imports: these modules live in the uikit app running on :3101.
+import MetricCard from 'uikit/MetricCard';
 import { fetchMetrics } from '../lib/api';
-import { KpiTile } from '../components/kpi-tile';
 
 const usd = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' });
 
@@ -22,14 +23,14 @@ export function Dashboard() {
 
       {metrics && (
         <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
-          <KpiTile label="A/R Days" value={String(metrics.arDays)} hint="Avg age of open claims" />
-          <KpiTile label="Clean Claim Rate" value={`${metrics.cleanClaimRate}%`} />
-          <KpiTile
+          <MetricCard label="A/R Days" value={String(metrics.arDays)} hint="Avg age of open claims" />
+          <MetricCard label="Clean Claim Rate" value={`${metrics.cleanClaimRate}%`} />
+          <MetricCard
             label="Denied $"
             value={usd.format(metrics.totalDeniedAmount)}
             hint="Across all open denials"
           />
-          <KpiTile label="Open Claims" value={String(metrics.openClaims)} />
+          <MetricCard label="Open Claims" value={String(metrics.openClaims)} />
         </div>
       )}
     </div>
