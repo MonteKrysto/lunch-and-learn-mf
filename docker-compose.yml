@@ -1,0 +1,33 @@
+# Production-style demo: each app built + served independently, same ports as dev,
+# so remoteEntry URLs are identical in both modes. In real deployments you'd drive
+# remote URLs per environment via the MF runtime / manifest instead.
+services:
+  claims-api:
+    build: ./apps/claims/api
+    ports:
+      - '4100:4100'
+
+  uikit:
+    build: ./apps/uikit
+    ports:
+      - '3101:80'
+
+  claims:
+    build: ./apps/claims
+    ports:
+      - '3102:80'
+
+  worklist:
+    build: ./apps/worklist
+    ports:
+      - '3103:80'
+
+  shell:
+    build: ./apps/shell
+    ports:
+      - '3100:80'
+    depends_on:
+      - claims-api
+      - uikit
+      - claims
+      - worklist
