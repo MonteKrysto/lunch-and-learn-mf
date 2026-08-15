@@ -14,7 +14,8 @@ its own repo owned by its own team — this monorepo is just so you only clone o
 
 ## Before the session (please do this ahead of time!)
 
-Prereqs: Node 22+, pnpm 10 (`corepack enable`), Docker Desktop (optional, for the finale).
+Prereqs: Node 22+, pnpm 10 (`corepack enable`) (or `npm i -g pnpm@10` if your Node doesn't
+bundle corepack), Docker Desktop (optional, for the finale).
 
 ```bash
 git clone <repo-url> && cd lunch-and-learn-mfe
@@ -34,6 +35,10 @@ We code each step live. Fall behind? Jump to the checkpoint:
 git stash && git checkout step-2   # or step-1..step-5
 pnpm install
 ```
+
+Several steps add new dependencies (step-1: `@module-federation/rsbuild-plugin` in uikit +
+shell; step-2: same plugin in claims; step-3: same in worklist; step-5:
+`@tanstack/react-query-devtools` in shell) — always re-run `pnpm install` after a checkout.
 
 1. **step-1 — Hello federation.** uikit exposes its components; shell consumes them.
    `exposes` / `remotes` / `shared` singletons + federated TypeScript types.
@@ -56,7 +61,14 @@ is loading remotes cross-origin exactly like independently deployed micro-fronte
 
 ## Troubleshooting
 
-- **Port in use:** something else owns 3100-3103/4100; kill it or restart.
+- **Port in use:** something else owns 3100-3103/4100; kill it or restart. Rsbuild silently
+  picks the next free port if its port is taken, and every app *looks* fine while
+  federation breaks because the hard-coded remote URLs still point at the original ports —
+  check each dev server's startup banner shows exactly 3100/3101/3102/3103.
 - **Blank page after checkout:** re-run `pnpm install` (deps change between steps), restart `pnpm dev`.
 - **Remote fails to load:** is the remote's dev server running? Check the browser console
   for the failing `mf-manifest.json` URL.
+- **Red squiggles / typecheck errors on `uikit/...` or other federated imports** after
+  checking out a step: run `pnpm dev` once — federated TypeScript types are fetched from
+  the running remotes into each consumer's gitignored `@mf-types/` folder — then restart
+  your editor's TS server.
