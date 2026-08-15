@@ -1,7 +1,10 @@
+import { lazy, Suspense } from 'react';
 import { useQuery } from '@tanstack/react-query';
 // Federated imports: these modules live in the uikit app running on :3101.
 import MetricCard from 'uikit/MetricCard';
 import { fetchMetrics } from '../lib/api';
+
+const WorklistWidget = lazy(() => import('worklist/WorklistWidget'));
 
 const usd = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' });
 
@@ -33,6 +36,10 @@ export function Dashboard() {
           <MetricCard label="Open Claims" value={String(metrics.openClaims)} />
         </div>
       )}
+
+      <Suspense fallback={<p className="text-muted-foreground">Loading worklist…</p>}>
+        <WorklistWidget />
+      </Suspense>
     </div>
   );
 }

@@ -12,6 +12,7 @@ export default defineConfig({
       remotes: {
         uikit: 'uikit@http://localhost:3101/mf-manifest.json',
         claims: 'claims@http://localhost:3102/mf-manifest.json',
+        worklist: 'worklist@http://localhost:3103/mf-manifest.json',
       },
       shared: {
         react: { singleton: true },
