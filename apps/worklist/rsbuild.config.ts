@@ -18,6 +18,9 @@ export default defineConfig({
       shared: {
         react: { singleton: true },
         'react-dom': { singleton: true },
+        // Singleton so host and remote share ONE module instance -> ONE React context
+        // -> the widget picks up the shell's QueryClient (and its cache) automatically.
+        '@tanstack/react-query': { singleton: true },
       },
     }),
   ],

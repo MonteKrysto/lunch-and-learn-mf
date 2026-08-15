@@ -1,8 +1,7 @@
 // Exposed modules own their styles: this app's CSS travels with the module
 // through federation instead of relying on the host to build the same classes.
 import './index.css';
-import { useState } from 'react';
-import { QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 // This app is consumed BY the shell and now consumes uikit itself: host+remote.
 import ClaimStatusBadge from 'uikit/ClaimStatusBadge';
 import AgingBadge from 'uikit/AgingBadge';
@@ -59,10 +58,7 @@ function WorklistTable() {
 }
 
 export default function WorklistWidget() {
-  const [queryClient] = useState(() => new QueryClient());
-  return (
-    <QueryClientProvider client={queryClient}>
-      <WorklistTable />
-    </QueryClientProvider>
-  );
+  // No provider here: embedded, we ride the host's QueryClient; standalone,
+  // bootstrap.tsx provides one. Requires @tanstack/react-query to be a shared singleton.
+  return <WorklistTable />;
 }
