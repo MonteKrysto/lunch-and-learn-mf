@@ -1,7 +1,11 @@
+import { lazy, Suspense } from 'react';
 import { createBrowserRouter } from 'react-router';
 import { Layout } from './layout';
 import { Dashboard } from './pages/dashboard';
-import { ClaimsPlaceholder } from './pages/claims-placeholder';
+
+// The entire claims application — routing, data layer and all — loaded at runtime
+// from the claims team's deployment on :3102.
+const ClaimsApp = lazy(() => import('claims/ClaimsApp'));
 
 export const router = createBrowserRouter([
   {
@@ -9,7 +13,14 @@ export const router = createBrowserRouter([
     element: <Layout />,
     children: [
       { index: true, element: <Dashboard /> },
-      { path: 'claims/*', element: <ClaimsPlaceholder /> },
+      {
+        path: 'claims/*',
+        element: (
+          <Suspense fallback={<p className="p-6 text-muted-foreground">Loading claims app…</p>}>
+            <ClaimsApp basename="/claims" />
+          </Suspense>
+        ),
+      },
     ],
   },
 ]);
