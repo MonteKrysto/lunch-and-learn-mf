@@ -3,6 +3,10 @@
 import './index.css';
 import { useState } from 'react';
 import { QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-query';
+// This app is consumed BY the shell and now consumes uikit itself: host+remote.
+import ClaimStatusBadge from 'uikit/ClaimStatusBadge';
+import AgingBadge from 'uikit/AgingBadge';
+import CurrencyText from 'uikit/CurrencyText';
 import { fetchDenials } from './lib/api';
 
 function WorklistTable() {
@@ -37,9 +41,15 @@ function WorklistTable() {
               <td className="py-1.5 pr-3 font-medium">{d.id}</td>
               <td className="py-1.5 pr-3">{d.patientName}</td>
               <td className="py-1.5 pr-3">{d.denialReason?.code ?? '—'}</td>
-              <td className="py-1.5 pr-3">${d.amount.toFixed(2)}</td>
-              <td className="py-1.5 pr-3">{d.agingDays} days</td>
-              <td className="py-1.5 uppercase">{d.status}</td>
+              <td className="py-1.5 pr-3">
+                <CurrencyText amount={d.amount} />
+              </td>
+              <td className="py-1.5 pr-3">
+                <AgingBadge days={d.agingDays} />
+              </td>
+              <td className="py-1.5">
+                <ClaimStatusBadge status={d.status} />
+              </td>
             </tr>
           ))}
         </tbody>

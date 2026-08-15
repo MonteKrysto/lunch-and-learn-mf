@@ -12,6 +12,9 @@ export default defineConfig({
       exposes: {
         './WorklistWidget': './src/WorklistWidget.tsx',
       },
+      remotes: {
+        uikit: 'uikit@http://localhost:3101/mf-manifest.json',
+      },
       shared: {
         react: { singleton: true },
         'react-dom': { singleton: true },
