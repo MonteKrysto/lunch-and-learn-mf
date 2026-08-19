@@ -88,9 +88,8 @@ apps/
   shell/        # host
   uikit/        # components remote
   claims/       # full-app remote
+    api/        # Express API — owned by the claims team
   worklist/     # widget remote → host+remote
-services/
-  claims-api/   # Express API
 turbo.json
 pnpm-workspace.yaml
 docker-compose.yml
