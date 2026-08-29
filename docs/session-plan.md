@@ -1,8 +1,9 @@
 # Lunch & Learn: Run of Show + Video Series Plan
 
 Format: 30 minutes — 20 content, 10 Q&A. The live session is a **demo + pitch**, not a
-code-along. The hands-on work moves to a self-paced video series that follows this repo's
-`start` branch and `step-1`…`step-5` tags.
+code-along. The hands-on work moves to a self-paced video series: devs clone `main`
+(the zero-federation starter) and follow docs/workshop/; the finished build lives on
+the `final` branch with `step-1`…`step-5` tags (presenter reference).
 
 ## Pre-session checklist (15 min before)
 
@@ -67,9 +68,9 @@ query sitting in the shell's cache — state shared across apps via a singleton.
 
 ### 4. The pitch — 18:00–20:00
 
-- "Everything you just saw is one `git clone`. The `start` branch is these five apps with
-  **zero federation** — the videos add it back step by step, ~10 minutes each, and every
-  step is a git tag you can jump to if you fall behind."
+- "Everything you just saw is one `git clone`. What you clone is these five apps with
+  **zero federation** — the videos add it back step by step, ~10 minutes each, and if
+  you fall behind, `make catchup step=N` fast-forwards you. No git gymnastics."
 - Takeaways to say out loud: MFEs are a team-scaling tool; module federation is runtime
   composition; singletons are where it bites; a remote is a runtime dependency.
 
@@ -106,8 +107,8 @@ Record at the repo root with the relevant app's dev servers running.
 
 **Recording notes**
 
-- Open each video by checking out its starting ref and running `pnpm install` on camera —
-  that's the viewer's recovery path, so model it.
+- Open each video by running `make catchup step=N-1` (fresh clone for video 1) and
+  `pnpm install` on camera — that's the viewer's recovery path, so model it.
 - Type the federation config live (it's short); paste the JSX edits.
 - End each video at the tag state and say the tag name so viewers can self-verify with
   `git diff step-N` (empty diff = they nailed it).

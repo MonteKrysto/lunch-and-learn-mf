@@ -5,11 +5,9 @@ apps, zero federation — and wire the federation in yourself, step by step.
 
 ## How this works
 
-- **You code on your own branch.** From `start`, make a branch and build:
+- **What you cloned is the starting point.** No branches, no checkouts:
 
   ```bash
-  git checkout start
-  git checkout -b my-workshop
   pnpm install && pnpm dev
   ```
 
@@ -21,12 +19,16 @@ apps, zero federation — and wire the federation in yourself, step by step.
   diff apps/shell/src/router.tsx docs/workshop/solutions/step-2/apps/shell/src/router.tsx
   ```
 
-  Hopelessly stuck? Copy the step's solution files over yours and keep moving —
-  the point is the concepts, not the typing.
+  Hopelessly stuck, or joining late? Fast-forward to the end of any step — it
+  applies the solution files and installs whatever deps they need:
 
-- **The finished product is on `main`**, with git tags `step-1`…`step-5` marking
-  the canonical state after each step (useful for `git diff step-2` if you want a
-  full comparison; you never *need* to check them out).
+  ```bash
+  make catchup step=2
+  ```
+
+- **The finished product lives on the `final` branch** (tags `step-1`…`step-5`
+  mark each stage). That's reference material for the presenter — the workshop
+  never requires you to touch git.
 
 ## The steps
 

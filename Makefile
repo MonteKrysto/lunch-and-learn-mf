@@ -16,7 +16,7 @@ SHELL_URL := http://localhost:3100
 
 .DEFAULT_GOAL := help
 
-.PHONY: help up down restart ps logs build deploy open ports clean dev install
+.PHONY: help up down restart ps logs build deploy open ports clean dev install catchup
 
 help: ## Show available targets
 	@echo ""
@@ -89,6 +89,23 @@ ports: ## Show what's listening on the demo ports (3100-3103, 4100)
 
 clean: ## Tear down and remove the built images
 	$(COMPOSE) down --rmi local --remove-orphans
+
+catchup: ## Fast-forward your code to the end of a step (make catchup step=3) — no git involved
+	@if [ -z "$(step)" ]; then \
+		echo "usage: make catchup step=<1-5>   (applies workshop solutions 1..N + pnpm install)"; exit 1; fi
+	@case "$(step)" in 1|2|3|4|5) ;; *) echo "step must be 1-5"; exit 1;; esac
+	@for i in 1 2 3 4 5; do \
+		if [ $$i -le $(step) ]; then \
+			echo "→ applying docs/workshop/solutions/step-$$i"; \
+			cp -R docs/workshop/solutions/step-$$i/. .; \
+			if [ $$i -eq 1 ]; then rm -f apps/shell/src/components/kpi-tile.tsx; fi; \
+			if [ $$i -eq 2 ]; then rm -f apps/shell/src/pages/claims-placeholder.tsx; fi; \
+		fi; \
+	done
+	@echo "→ pnpm install (steps add dependencies)"
+	@pnpm install --silent
+	@echo ""
+	@echo "  You're at the end of step $(step). Restart 'pnpm dev' and carry on."
 
 dev: ## Run everything in dev mode instead (turbo + HMR — not docker)
 	pnpm dev

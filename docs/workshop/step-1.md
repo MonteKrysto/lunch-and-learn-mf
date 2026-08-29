@@ -1,6 +1,6 @@
 # Step 1 — Hello federation
 
-**Start from:** the `start` branch (zero federation) · **Ends at:** the state tagged `step-1`
+**Start from:** a fresh clone (zero federation) · **Ends at:** the state tagged `step-1`
 **Solution files:** [`solutions/step-1/`](solutions/step-1/)
 
 ## Goal

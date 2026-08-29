@@ -19,31 +19,30 @@ bundle corepack), Docker Desktop (optional, for the finale).
 
 ```bash
 git clone <repo-url> && cd lunch-and-learn-mfe
-git checkout start
 pnpm install
 pnpm dev
 ```
 
-Open all five: http://localhost:3100 (shell), :3101 (uikit gallery), :3102 (claims),
+That's the whole setup — what you cloned IS the starting point. Open all five:
+http://localhost:3100 (shell), :3101 (uikit gallery), :3102 (claims),
 :3103 (worklist), :4100/health (api). Five independent apps, zero federation — yet.
 
 ## Session steps
 
-**Working through this on your own (or with the videos)?** Follow the written
-guides in [docs/workshop/](docs/workshop/README.md) — one per step, each with a
-`solutions/step-N/` folder holding the final version of every file that step
-touches. You never need to leave your own branch.
+You add the federation yourself, step by step — live in the session, or self-paced
+with the videos. Follow the written guides in [docs/workshop/](docs/workshop/README.md):
+one per step, each with a `solutions/step-N/` folder holding the final version of
+every file that step touches. No git required at any point.
 
-We code each step live. Fall behind? Jump to the checkpoint:
+Fall behind or joining late? One command fast-forwards your code to the end of any
+step (applies the solution files and installs the deps they need):
 
 ```bash
-git stash && git checkout step-2   # or step-1..step-5
-pnpm install
+make catchup step=2
 ```
 
-Several steps add new dependencies (step-1: `@module-federation/rsbuild-plugin` in uikit +
-shell; step-2: same plugin in claims; step-3: same in worklist; step-5:
-`@tanstack/react-query-devtools` in shell) — always re-run `pnpm install` after a checkout.
+(The finished build lives on the `final` branch, with tags `step-1`…`step-5` marking
+each stage — presenter material; you won't need them.)
 
 1. **step-1 — Hello federation.** uikit exposes its components; shell consumes them.
    `exposes` / `remotes` / `shared` singletons + federated TypeScript types.
@@ -70,10 +69,10 @@ is loading remotes cross-origin exactly like independently deployed micro-fronte
   picks the next free port if its port is taken, and every app *looks* fine while
   federation breaks because the hard-coded remote URLs still point at the original ports —
   check each dev server's startup banner shows exactly 3100/3101/3102/3103.
-- **Blank page after checkout:** re-run `pnpm install` (deps change between steps), restart `pnpm dev`.
+- **Blank page after a catch-up:** re-run `pnpm install` (steps add dependencies), restart `pnpm dev`.
 - **Remote fails to load:** is the remote's dev server running? Check the browser console
   for the failing `mf-manifest.json` URL.
 - **Red squiggles / typecheck errors on `uikit/...` or other federated imports** after
-  checking out a step: run `pnpm dev` once — federated TypeScript types are fetched from
+  wiring up a step: run `pnpm dev` once — federated TypeScript types are fetched from
   the running remotes into each consumer's gitignored `@mf-types/` folder — then restart
   your editor's TS server.
