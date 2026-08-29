@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>One App, Many Teams</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=Instrument+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  :root {
+    --bg: #0E1217;
+    --surface: #161C24;
+    --line: #2B3442;
+    --line-strong: #55637A;
+    --text: #E9ECF1;
+    --muted: #8C97A8;
+    --accent: #F0A63C;
+    --tA: #5C8DEF;
+    --tB: #8E7CE8;
+    --tC: #38B8A2;
+    --tD: #D9899C;
+    --danger: #E45749;
+    --ok: #46B37F;
+    --display: "Bricolage Grotesque", "Avenir Next", "Segoe UI", sans-serif;
+    --body: "Instrument Sans", "Helvetica Neue", Arial, sans-serif;
+    --mono: "IBM Plex Mono", "SF Mono", Consolas, monospace;
+  }
+  html, body { height: 100%; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--body);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    overflow: hidden;
+  }
+  .deck {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    max-width: 1080px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 28px 40px 20px;
+    box-sizing: border-box;
+    min-height: 0;
+  }
+  header .eyebrow {
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin: 0 0 6px;
+  }
+  header h1 {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: clamp(24px, 3.4vw, 40px);
+    line-height: 1.1;
+    margin: 0;
+    text-wrap: balance;
+  }
+  .scene { display: none; flex: 1; flex-direction: column; min-height: 0; }
+  .scene.active { display: flex; }
+  figure.stage {
+    flex: 1;
+    margin: 14px 0 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 0;
+    cursor: pointer;
+  }
+  figure.stage svg {
+    width: 100%;
+    height: 100%;
+    max-height: 64vh;
+  }
+  .captions {
+    min-height: 60px;
+    display: flex;
+    align-items: flex-start;
+    border-top: 1px solid var(--line);
+    padding-top: 14px;
+  }
+  .captions p {
+    display: none;
+    margin: 0;
+    font-size: clamp(15px, 1.7vw, 19px);
+    line-height: 1.45;
+    color: var(--text);
+    max-width: 62ch;
+  }
+  .captions p.active { display: block; }
+  .captions code {
+    font-family: var(--mono);
+    font-size: 0.86em;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 5px;
+    padding: 1px 6px;
+  }
+  footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    padding: 14px 0 0;
+    gap: 10px 16px;
+  }
+  .hints { white-space: normal; }
+  .dots { display: flex; gap: 8px; }
+  .dots button {
+    width: 26px;
+    height: 8px;
+    border-radius: 4px;
+    border: none;
+    background: var(--line);
+    cursor: pointer;
+    padding: 0;
+  }
+  .dots button.on { background: var(--accent); }
+  .dots button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .hints {
+    font-family: var(--mono);
+    font-size: 11.5px;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+  .hints kbd {
+    font-family: inherit;
+    border: 1px solid var(--line);
+    border-bottom-width: 2px;
+    border-radius: 4px;
+    padding: 1px 5px;
+    margin: 0 1px;
+    background: var(--surface);
+  }
+
+  /* ---------- shared SVG styles ---------- */
+  svg text { font-family: var(--mono); fill: var(--text); }
+  .boxlabel { font-size: 15px; font-weight: 500; }
+  .sub { font-size: 11px; fill: var(--muted); }
+  .tag { font-size: 12px; fill: var(--muted); }
+  .nodebox { fill: var(--surface); stroke: var(--line-strong); stroke-width: 1.4; rx: 10; }
+  .pipe { stroke: var(--line-strong); stroke-width: 2; }
+  .fades { transition: opacity 0.55s ease; }
+  .team-move { transition: transform 0.8s cubic-bezier(0.35, 0, 0.2, 1); }
+
+  /* ---------- scene 1 ---------- */
+  #s1 .teamA rect { stroke: var(--tA); }
+  #s1 .teamB rect { stroke: var(--tB); }
+  #s1 .teamC rect { stroke: var(--tC); }
+  #s1 .teamD rect { stroke: var(--tD); }
+  #s1 .team rect { fill: var(--surface); stroke-width: 1.6; }
+  #s1 .teamA { transform: translate(88px, 78px); }
+  #s1 .teamB { transform: translate(88px, 170px); }
+  #s1 .teamC { transform: translate(88px, 262px); }
+  #s1 .teamD { transform: translate(88px, 354px); }
+  #s1[data-stage="2"] .teamA, #s1[data-stage="3"] .teamA { transform: translate(88px, 58px); }
+  #s1[data-stage="2"] .teamB, #s1[data-stage="3"] .teamB { transform: translate(88px, 160px); }
+  #s1[data-stage="2"] .teamC, #s1[data-stage="3"] .teamC { transform: translate(88px, 262px); }
+  #s1[data-stage="2"] .teamD, #s1[data-stage="3"] .teamD { transform: translate(88px, 364px); }
+
+  #s1 .mono-infra { opacity: 1; }
+  #s1[data-stage="2"] .mono-infra, #s1[data-stage="3"] .mono-infra { opacity: 0; }
+  #s1 .split-infra { opacity: 0; transition-delay: 0s; }
+  #s1[data-stage="2"] .split-infra, #s1[data-stage="3"] .split-infra { opacity: 1; transition-delay: 0.55s; }
+  #s1[data-stage="1"] .prodbox { opacity: 0.35; }
+  #s1 .prodbox { transition: opacity 0.4s ease; }
+
+  #s1 .mono-dots { opacity: 0; }
+  #s1[data-stage="0"] .mono-dots { opacity: 1; }
+  #s1 .jam { opacity: 0; }
+  #s1[data-stage="1"] .jam { opacity: 1; transition: opacity 0.4s ease 0.1s; }
+  #s1 .split-dots, #s1 .split-blocked { opacity: 0; }
+  #s1[data-stage="3"] .split-dots { opacity: 1; transition: opacity 0.4s ease 0.6s; }
+  #s1[data-stage="3"] .split-blocked { opacity: 1; transition: opacity 0.4s ease 0.6s; }
+
+  #s1 .qdot { animation: q-run 6s linear infinite; }
+  #s1 .qdot.d2 { animation-delay: -1.5s; }
+  #s1 .qdot.d3 { animation-delay: -3s; }
+  #s1 .qdot.d4 { animation-delay: -4.5s; }
+  @keyframes q-run {
+    from { transform: translateX(0); opacity: 0; }
+    6%   { opacity: 1; }
+    92%  { opacity: 1; }
+    to   { transform: translateX(438px); opacity: 0; }
+  }
+  #s1 .rdot { animation: r-run 4.5s linear infinite; }
+  #s1 .rdot.d2 { animation-delay: -2.2s; }
+  @keyframes r-run {
+    from { transform: translateX(0); opacity: 0; }
+    8%   { opacity: 1; }
+    90%  { opacity: 1; }
+    to   { transform: translateX(482px); opacity: 0; }
+  }
+
+  /* ---------- scene 2 ---------- */
+  #s2 .era { transition: opacity 0.55s ease; }
+  #s2 .era-build { opacity: 1; }
+  #s2 .era-runtime { opacity: 0; }
+  #s2[data-stage="2"] .era-build, #s2[data-stage="3"] .era-build { opacity: 0; }
+  #s2[data-stage="2"] .era-runtime, #s2[data-stage="3"] .era-runtime { opacity: 1; transition-delay: 0.4s; }
+
+  #s2 .chip-v1, #s2 .chip-v2 { transition: opacity 0.3s ease; }
+  #s2 .chip-v2 { opacity: 0; }
+  #s2[data-stage="1"] .chip-v1 { opacity: 0; }
+  #s2[data-stage="1"] .chip-v2 { opacity: 1; }
+  #s2 .baked { transition: all 0.3s ease; }
+  #s2[data-stage="1"] .baked rect { stroke: var(--danger); }
+  #s2[data-stage="1"] .baked text { fill: var(--danger); }
+  #s2 .churn { opacity: 0; transition: opacity 0.3s ease; }
+  #s2[data-stage="1"] .churn { opacity: 1; }
+  #s2 .churnfill { animation: churn 1.6s ease-in-out infinite; transform-box: fill-box; transform-origin: left center; }
+  @keyframes churn {
+    from { transform: scaleX(0); }
+    70%  { transform: scaleX(1); }
+    to   { transform: scaleX(1); opacity: 0; }
+  }
+  #s2 .flow { stroke-dasharray: 7 7; animation: dashflow 0.9s linear infinite; }
+  @keyframes dashflow { to { stroke-dashoffset: -14; } }
+  #s2 .deploypulse { animation: pulse 1.8s ease-in-out infinite; }
+  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.45; } }
+
+  #s2 .rchip { transition: transform 0.7s cubic-bezier(0.35, 0, 0.2, 1), opacity 0.5s ease; }
+  #s2 .singleton { opacity: 0; transition: opacity 0.45s ease; }
+  #s2[data-stage="3"] .rchip.c1 { transform: translate(94px, 0); opacity: 0; }
+  #s2[data-stage="3"] .rchip.c3 { transform: translate(-96px, 0); opacity: 0; }
+  #s2[data-stage="3"] .rchip.c2 { opacity: 0; }
+  #s2[data-stage="3"] .singleton { opacity: 1; transition-delay: 0.55s; }
+  #s2 .modchips { opacity: 0; transition: opacity 0.4s ease 0.7s; }
+  #s2[data-stage="2"] .modchips, #s2[data-stage="3"] .modchips { opacity: 1; }
+  #s2 .reactrow { opacity: 0; }
+  #s2[data-stage="3"] .reactrow { opacity: 1; transition: opacity 0.3s ease; }
+
+  /* ---------- scene 3 ---------- */
+  #s3 .vchip { transition: opacity 0.35s ease; }
+  #s3 .uk-slot-new, #s3 .cl-slot-bad, #s3 .uk-dep-new, #s3 .cl-dep-bad { opacity: 0; }
+  #s3[data-stage="2"] .uk-slot-old, #s3[data-stage="3"] .uk-slot-old { opacity: 0; }
+  #s3[data-stage="2"] .uk-slot-new, #s3[data-stage="3"] .uk-slot-new { opacity: 1; }
+  #s3[data-stage="3"] .cl-slot-old { opacity: 0; }
+  #s3[data-stage="3"] .cl-slot-bad { opacity: 1; }
+  #s3[data-stage="1"] .uk-dep-old, #s3[data-stage="2"] .uk-dep-old, #s3[data-stage="3"] .uk-dep-old { opacity: 0; }
+  #s3[data-stage="1"] .uk-dep-new, #s3[data-stage="2"] .uk-dep-new, #s3[data-stage="3"] .uk-dep-new { opacity: 1; }
+  #s3[data-stage="3"] .cl-dep-old { opacity: 0; }
+  #s3[data-stage="3"] .cl-dep-bad { opacity: 1; }
+  #s3[data-stage="1"] .uk-dep-new { animation: pulse 1.8s ease-in-out infinite; }
+  #s3[data-stage="3"] .cl-dep-bad { animation: pulse 1.8s ease-in-out infinite; }
+  #s3 .running-tag { opacity: 0; transition: opacity 0.35s ease; }
+  #s3[data-stage="1"] .running-tag { opacity: 1; }
+  #s3 .flowset, #s3 .reloadtag { opacity: 0; transition: opacity 0.35s ease; }
+  #s3[data-stage="2"] .flowset, #s3[data-stage="3"] .flowset { opacity: 1; }
+  #s3[data-stage="2"] .reloadtag, #s3[data-stage="3"] .reloadtag { opacity: 1; }
+  #s3 .flowset .flow2 { stroke-dasharray: 7 7; animation: dashflow 0.9s linear infinite; }
+  #s3 .slotframe { transition: stroke 0.35s ease; }
+  #s3[data-stage="3"] .cl-slotframe { stroke: var(--danger); }
+  #s3 .bad-tag { opacity: 0; transition: opacity 0.35s ease 0.4s; }
+  #s3[data-stage="3"] .bad-tag { opacity: 1; }
+
+  /* ---------- scene 4 ---------- */
+  #s4 .pagebox { opacity: 0.3; transition: opacity 0.45s ease; }
+  #s4[data-stage="1"] .pagebox, #s4[data-stage="2"] .pagebox { opacity: 1; }
+  #s4 .wiring { opacity: 0; transition: opacity 0.45s ease 0.15s; }
+  #s4[data-stage="1"] .wiring, #s4[data-stage="2"] .wiring { opacity: 1; }
+  #s4 .wiring .flow3 { stroke-dasharray: 7 7; animation: dashflow 0.9s linear infinite; }
+  #s4 .pdot { animation: p-run 2.6s linear infinite; }
+  #s4 .pdot.d2 { animation-delay: -1.3s; }
+  @keyframes p-run {
+    from { transform: translateX(0); opacity: 0; }
+    10%  { opacity: 1; }
+    88%  { opacity: 1; }
+    to   { transform: translateX(104px); opacity: 0; }
+  }
+  #s4 .api-v-old, #s4 .api-v-new { transition: opacity 0.35s ease; }
+  #s4 .api-v-new { opacity: 0; }
+  #s4[data-stage="2"] .api-v-old { opacity: 0; }
+  #s4[data-stage="2"] .api-v-new { opacity: 1; animation: pulse 1.8s ease-in-out infinite; }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition-duration: 1ms !important; }
+    #s1 .qdot, #s1 .rdot, #s2 .churnfill, #s2 .flow, #s2 .deploypulse,
+    #s3 .flow2, #s4 .pdot, #s4 .flow3 { animation-play-state: paused; }
+  }
+</style>
+</head>
+<body>
+
+<div class="deck">
+  <!-- ================= PART 1 ================= -->
+  <section class="scene active" id="scene1-wrap">
+    <header>
+      <p class="eyebrow">Part 1 &middot; The Problem</p>
+      <h1>Why teams reach for microfrontends</h1>
+    </header>
+    <figure class="stage" id="stage1">
+      <svg id="s1" data-stage="0" viewBox="0 0 960 470" role="img"
+           aria-label="Animation: four teams in one frontend repo share a single deploy queue; one broken build blocks everyone; splitting into independent apps gives each team its own deploy pipeline so failures stay contained.">
+        <defs>
+          <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M0,0 L10,5 L0,10 z" fill="#55637A"/>
+          </marker>
+        </defs>
+
+        <!-- monolith infra -->
+        <g class="mono-infra fades">
+          <text x="56" y="34" class="sub">one frontend repo</text>
+          <rect x="56" y="46" width="214" height="390" fill="none" stroke="var(--line)" stroke-width="1.6" rx="14"/>
+          <line class="pipe" x1="286" y1="240" x2="748" y2="240" marker-end="url(#arr)"/>
+          <text x="505" y="222" text-anchor="middle" class="tag">one deploy queue</text>
+          <g class="prodbox">
+            <rect x="762" y="198" width="140" height="84" class="nodebox" rx="10"/>
+            <text x="832" y="238" text-anchor="middle" class="boxlabel">prod</text>
+            <text x="832" y="258" text-anchor="middle" class="sub">everyone ships here</text>
+          </g>
+        </g>
+
+        <!-- teams (move between layouts) -->
+        <g class="team teamA team-move">
+          <rect width="150" height="64" rx="9"/>
+          <text x="16" y="28" class="boxlabel">team A</text>
+          <text x="16" y="48" class="sub">checkout</text>
+        </g>
+        <g class="team teamB team-move">
+          <rect width="150" height="64" rx="9"/>
+          <text x="16" y="28" class="boxlabel">team B</text>
+          <text x="16" y="48" class="sub">claims</text>
+        </g>
+        <g class="team teamC team-move">
+          <rect width="150" height="64" rx="9"/>
+          <text x="16" y="28" class="boxlabel">team C</text>
+          <text x="16" y="48" class="sub">reporting</text>
+        </g>
+        <g class="team teamD team-move">
+          <rect width="150" height="64" rx="9"/>
+          <text x="16" y="28" class="boxlabel">team D</text>
+          <text x="16" y="48" class="sub">accounts</text>
+        </g>
+
+        <!-- flowing commits, healthy monolith -->
+        <g class="mono-dots fades">
+          <circle class="qdot" cx="298" cy="240" r="7" fill="var(--tA)"/>
+          <circle class="qdot d2" cx="298" cy="240" r="7" fill="var(--tB)"/>
+          <circle class="qdot d3" cx="298" cy="240" r="7" fill="var(--tC)"/>
+          <circle class="qdot d4" cx="298" cy="240" r="7" fill="var(--tD)"/>
+        </g>
+
+        <!-- the jam -->
+        <g class="jam">
+          <circle cx="540" cy="240" r="9" fill="var(--danger)"/>
+          <text x="540" y="245" text-anchor="middle" font-size="11" fill="#0E1217" font-weight="600">&#x2715;</text>
+          <text x="540" y="206" text-anchor="middle" class="tag" fill="var(--danger)">team B&rsquo;s build broke</text>
+          <circle cx="500" cy="240" r="7" fill="var(--tC)"/>
+          <circle cx="462" cy="240" r="7" fill="var(--tA)"/>
+          <circle cx="424" cy="240" r="7" fill="var(--tD)"/>
+          <text x="462" y="270" text-anchor="middle" class="tag">everyone else, waiting</text>
+        </g>
+
+        <!-- split infra -->
+        <g class="split-infra fades">
+          <line class="pipe" x1="254" y1="90"  x2="748" y2="90"  marker-end="url(#arr)"/>
+          <line class="pipe" x1="254" y1="192" x2="748" y2="192" marker-end="url(#arr)"/>
+          <line class="pipe" x1="254" y1="294" x2="748" y2="294" marker-end="url(#arr)"/>
+          <line class="pipe" x1="254" y1="396" x2="748" y2="396" marker-end="url(#arr)"/>
+          <rect x="762" y="66"  width="140" height="48" class="nodebox" rx="9"/>
+          <rect x="762" y="168" width="140" height="48" class="nodebox" rx="9"/>
+          <rect x="762" y="270" width="140" height="48" class="nodebox" rx="9"/>
+          <rect x="762" y="372" width="140" height="48" class="nodebox" rx="9"/>
+          <text x="832" y="95"  text-anchor="middle" font-size="13">prod &middot; A</text>
+          <text x="832" y="197" text-anchor="middle" font-size="13">prod &middot; B</text>
+          <text x="832" y="299" text-anchor="middle" font-size="13">prod &middot; C</text>
+          <text x="832" y="401" text-anchor="middle" font-size="13">prod &middot; D</text>
+          <text x="500" y="72" text-anchor="middle" class="tag">a deploy pipeline per team</text>
+        </g>
+
+        <!-- split flow -->
+        <g class="split-dots">
+          <circle class="rdot"    cx="262" cy="90"  r="7" fill="var(--tA)"/>
+          <circle class="rdot d2" cx="262" cy="90"  r="7" fill="var(--tA)"/>
+          <circle class="rdot d2" cx="262" cy="294" r="7" fill="var(--tC)"/>
+          <circle class="rdot"    cx="262" cy="294" r="7" fill="var(--tC)"/>
+          <circle class="rdot d2" cx="262" cy="396" r="7" fill="var(--tD)"/>
+          <circle class="rdot"    cx="262" cy="396" r="7" fill="var(--tD)"/>
+        </g>
+        <g class="split-blocked">
+          <circle cx="480" cy="192" r="9" fill="var(--danger)"/>
+          <text x="480" y="197" text-anchor="middle" font-size="11" fill="#0E1217" font-weight="600">&#x2715;</text>
+          <text x="480" y="172" text-anchor="middle" class="tag" fill="var(--danger)">still broken &mdash; but only team B waits</text>
+        </g>
+      </svg>
+    </figure>
+  </section>
+
+  <!-- ================= PART 2 ================= -->
+  <section class="scene" id="scene2-wrap">
+    <header>
+      <p class="eyebrow">Part 2 &middot; Module Federation</p>
+      <h1>Sharing code at runtime, not build time</h1>
+    </header>
+    <figure class="stage" id="stage2">
+      <svg id="s2" data-stage="0" viewBox="0 0 960 470" role="img"
+           aria-label="Animation: sharing uikit as an npm package bakes a copy into every consumer, so a new version forces every consumer to rebuild and redeploy; with module federation the browser composes independently deployed apps at runtime, and shared singletons collapse duplicate React copies into one.">
+        <defs>
+          <marker id="arr2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M0,0 L10,5 L0,10 z" fill="#55637A"/>
+          </marker>
+        </defs>
+
+        <!-- ===== build-time era ===== -->
+        <g class="era era-build">
+          <rect x="392" y="54" width="176" height="64" class="nodebox"/>
+          <text x="480" y="82" text-anchor="middle" class="boxlabel">uikit</text>
+          <text x="480" y="102" text-anchor="middle" class="sub">npm package</text>
+          <g class="chip-v1">
+            <rect x="538" y="42" width="44" height="24" rx="12" fill="var(--surface)" stroke="var(--ok)" stroke-width="1.4"/>
+            <text x="560" y="58" text-anchor="middle" font-size="12" fill="var(--ok)">v1</text>
+          </g>
+          <g class="chip-v2">
+            <rect x="538" y="42" width="44" height="24" rx="12" fill="var(--surface)" stroke="var(--accent)" stroke-width="1.4"/>
+            <text x="560" y="58" text-anchor="middle" font-size="12" fill="var(--accent)">v2</text>
+          </g>
+
+          <line class="pipe" x1="452" y1="122" x2="222" y2="304" marker-end="url(#arr2)"/>
+          <line class="pipe" x1="480" y1="122" x2="480" y2="304" marker-end="url(#arr2)"/>
+          <line class="pipe" x1="508" y1="122" x2="738" y2="304" marker-end="url(#arr2)"/>
+          <text x="480" y="230" text-anchor="middle" class="tag" transform="translate(120 0)">installed at build time</text>
+
+          <!-- consumers -->
+          <g>
+            <rect x="110" y="308" width="200" height="104" class="nodebox" style="stroke: var(--tA)"/>
+            <text x="210" y="336" text-anchor="middle" class="boxlabel">shell</text>
+            <g class="baked">
+              <rect x="150" y="350" width="120" height="30" rx="8" fill="none" stroke="var(--line-strong)" stroke-width="1.3"/>
+              <text x="210" y="370" text-anchor="middle" font-size="12">uikit v1 &middot; baked in</text>
+            </g>
+            <g class="churn">
+              <rect x="150" y="390" width="120" height="6" rx="3" fill="var(--line)"/>
+              <rect class="churnfill" x="150" y="390" width="120" height="6" rx="3" fill="var(--accent)"/>
+              <text x="210" y="432" text-anchor="middle" class="sub">rebuild &rarr; redeploy</text>
+            </g>
+          </g>
+          <g>
+            <rect x="380" y="308" width="200" height="104" class="nodebox" style="stroke: var(--tB)"/>
+            <text x="480" y="336" text-anchor="middle" class="boxlabel">claims</text>
+            <g class="baked">
+              <rect x="420" y="350" width="120" height="30" rx="8" fill="none" stroke="var(--line-strong)" stroke-width="1.3"/>
+              <text x="480" y="370" text-anchor="middle" font-size="12">uikit v1 &middot; baked in</text>
+            </g>
+            <g class="churn">
+              <rect x="420" y="390" width="120" height="6" rx="3" fill="var(--line)"/>
+              <rect class="churnfill" x="420" y="390" width="120" height="6" rx="3" fill="var(--accent)"/>
+              <text x="480" y="432" text-anchor="middle" class="sub">rebuild &rarr; redeploy</text>
+            </g>
+          </g>
+          <g>
+            <rect x="650" y="308" width="200" height="104" class="nodebox" style="stroke: var(--tC)"/>
+            <text x="750" y="336" text-anchor="middle" class="boxlabel">worklist</text>
+            <g class="baked">
+              <rect x="690" y="350" width="120" height="30" rx="8" fill="none" stroke="var(--line-strong)" stroke-width="1.3"/>
+              <text x="750" y="370" text-anchor="middle" font-size="12">uikit v1 &middot; baked in</text>
+            </g>
+            <g class="churn">
+              <rect x="690" y="390" width="120" height="6" rx="3" fill="var(--line)"/>
+              <rect class="churnfill" x="690" y="390" width="120" height="6" rx="3" fill="var(--accent)"/>
+              <text x="750" y="432" text-anchor="middle" class="sub">rebuild &rarr; redeploy</text>
+            </g>
+          </g>
+        </g>
+
+        <!-- ===== runtime era ===== -->
+        <g class="era era-runtime">
+          <rect x="318" y="36" width="324" height="168" class="nodebox" rx="12"/>
+          <text x="480" y="64" text-anchor="middle" class="sub">the browser &middot; composed at runtime</text>
+          <g class="modchips">
+            <rect x="346" y="86" width="86" height="30" rx="8" fill="none" stroke="var(--tA)" stroke-width="1.4"/>
+            <text x="389" y="106" text-anchor="middle" font-size="12">shell</text>
+            <rect x="446" y="86" width="70" height="30" rx="8" fill="none" stroke="var(--tD)" stroke-width="1.4"/>
+            <text x="481" y="106" text-anchor="middle" font-size="12">uikit</text>
+            <rect x="530" y="86" width="84" height="30" rx="8" fill="none" stroke="var(--tB)" stroke-width="1.4"/>
+            <text x="572" y="106" text-anchor="middle" font-size="12">claims</text>
+          </g>
+          <g class="reactrow">
+            <g class="rchip c1">
+              <rect x="352" y="140" width="76" height="30" rx="15" fill="none" stroke="var(--tA)" stroke-width="1.4"/>
+              <text x="390" y="160" text-anchor="middle" font-size="12">react</text>
+            </g>
+            <g class="rchip c2">
+              <rect x="446" y="140" width="76" height="30" rx="15" fill="none" stroke="var(--tD)" stroke-width="1.4"/>
+              <text x="484" y="160" text-anchor="middle" font-size="12">react</text>
+            </g>
+            <g class="rchip c3">
+              <rect x="542" y="140" width="76" height="30" rx="15" fill="none" stroke="var(--tB)" stroke-width="1.4"/>
+              <text x="580" y="160" text-anchor="middle" font-size="12">react</text>
+            </g>
+            <g class="singleton">
+              <rect x="398" y="138" width="164" height="34" rx="17" fill="var(--surface)" stroke="var(--accent)" stroke-width="1.6"/>
+              <text x="480" y="160" text-anchor="middle" font-size="12.5" fill="var(--accent)">react &times;1 &middot; singleton</text>
+            </g>
+          </g>
+
+          <line class="pipe" x1="210" y1="304" x2="382" y2="210" marker-end="url(#arr2)"/>
+          <text x="242" y="242" class="tag">loads the host</text>
+          <line class="pipe flow" x1="480" y1="304" x2="480" y2="212" marker-end="url(#arr2)" stroke="var(--accent)"/>
+          <line class="pipe flow" x1="750" y1="304" x2="578" y2="210" marker-end="url(#arr2)" stroke="var(--accent)"/>
+          <text x="700" y="240" class="tag" fill="var(--accent)">fetched at runtime</text>
+          <text x="700" y="258" class="tag">manifest + remoteEntry</text>
+
+          <g>
+            <rect x="110" y="308" width="200" height="104" class="nodebox" style="stroke: var(--tA)"/>
+            <text x="210" y="340" text-anchor="middle" class="boxlabel">shell &middot; host</text>
+            <text x="210" y="362" text-anchor="middle" class="sub">deployed on its own</text>
+          </g>
+          <g>
+            <rect x="380" y="308" width="200" height="104" class="nodebox" style="stroke: var(--tD)"/>
+            <text x="480" y="340" text-anchor="middle" class="boxlabel">uikit &middot; remote</text>
+            <g class="deploypulse">
+              <rect x="420" y="354" width="120" height="26" rx="13" fill="none" stroke="var(--ok)" stroke-width="1.4"/>
+              <text x="480" y="371" text-anchor="middle" font-size="12" fill="var(--ok)">v2 just deployed</text>
+            </g>
+          </g>
+          <g>
+            <rect x="650" y="308" width="200" height="104" class="nodebox" style="stroke: var(--tB)"/>
+            <text x="750" y="340" text-anchor="middle" class="boxlabel">claims &middot; remote</text>
+            <text x="750" y="362" text-anchor="middle" class="sub">deployed on its own</text>
+          </g>
+        </g>
+      </svg>
+    </figure>
+  </section>
+
+  <!-- ================= PART 3 ================= -->
+  <section class="scene" id="scene3-wrap">
+    <header>
+      <p class="eyebrow">Part 3 &middot; Versioning</p>
+      <h1>Every remote releases on its own clock</h1>
+    </header>
+    <figure class="stage" id="stage3">
+      <svg id="s3" data-stage="0" viewBox="0 0 960 470" role="img"
+           aria-label="Animation: a running host page composes three remotes at different versions; the uikit team deploys a new version which the page picks up on the next reload while the other remotes stay put; a breaking release from the claims team shows why exposed modules are runtime contracts.">
+        <defs>
+          <marker id="arr3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M0,0 L10,5 L0,10 z" fill="#55637A"/>
+          </marker>
+        </defs>
+
+        <!-- browser / host page -->
+        <rect x="300" y="36" width="360" height="186" class="nodebox" rx="12"/>
+        <text x="480" y="62" text-anchor="middle" class="sub">the running page &middot; versions discovered at load</text>
+
+        <!-- slots -->
+        <g>
+          <rect class="slotframe" x="316" y="78" width="104" height="64" rx="9" fill="none" stroke="var(--tD)" stroke-width="1.4"/>
+          <text x="368" y="100" text-anchor="middle" font-size="12.5">uikit</text>
+          <g class="vchip uk-slot-old">
+            <rect x="334" y="108" width="68" height="22" rx="11" fill="var(--surface)" stroke="var(--line-strong)" stroke-width="1.2"/>
+            <text x="368" y="123" text-anchor="middle" font-size="11.5">v3.0</text>
+          </g>
+          <g class="vchip uk-slot-new">
+            <rect x="334" y="108" width="68" height="22" rx="11" fill="var(--surface)" stroke="var(--accent)" stroke-width="1.2"/>
+            <text x="368" y="123" text-anchor="middle" font-size="11.5" fill="var(--accent)">v3.1</text>
+          </g>
+          <text class="running-tag" x="368" y="156" text-anchor="middle" font-size="10.5" fill="var(--muted)">still running v3.0</text>
+        </g>
+        <g>
+          <rect class="slotframe cl-slotframe" x="428" y="78" width="104" height="64" rx="9" fill="none" stroke="var(--tB)" stroke-width="1.4"/>
+          <text x="480" y="100" text-anchor="middle" font-size="12.5">claims</text>
+          <g class="vchip cl-slot-old">
+            <rect x="446" y="108" width="68" height="22" rx="11" fill="var(--surface)" stroke="var(--line-strong)" stroke-width="1.2"/>
+            <text x="480" y="123" text-anchor="middle" font-size="11.5">v1.2</text>
+          </g>
+          <g class="vchip cl-slot-bad">
+            <rect x="446" y="108" width="68" height="22" rx="11" fill="var(--surface)" stroke="var(--danger)" stroke-width="1.2"/>
+            <text x="480" y="123" text-anchor="middle" font-size="11.5" fill="var(--danger)">v2.0 &#9888;</text>
+          </g>
+          <text class="bad-tag" x="480" y="156" text-anchor="middle" font-size="10.5" fill="var(--danger)">prop contract broke</text>
+        </g>
+        <g>
+          <rect class="slotframe" x="540" y="78" width="104" height="64" rx="9" fill="none" stroke="var(--tC)" stroke-width="1.4"/>
+          <text x="592" y="100" text-anchor="middle" font-size="12.5">worklist</text>
+          <g class="vchip">
+            <rect x="558" y="108" width="68" height="22" rx="11" fill="var(--surface)" stroke="var(--line-strong)" stroke-width="1.2"/>
+            <text x="592" y="123" text-anchor="middle" font-size="11.5">v2.1</text>
+          </g>
+        </g>
+        <text class="reloadtag" x="480" y="200" text-anchor="middle" font-size="12" fill="var(--accent)">&#8635; reload &mdash; compose the newest of each</text>
+
+        <!-- fetch arrows -->
+        <line class="pipe" x1="210" y1="304" x2="358" y2="226" marker-end="url(#arr3)" opacity="0.35"/>
+        <line class="pipe" x1="480" y1="304" x2="480" y2="226" marker-end="url(#arr3)" opacity="0.35"/>
+        <line class="pipe" x1="750" y1="304" x2="602" y2="226" marker-end="url(#arr3)" opacity="0.35"/>
+        <g class="flowset">
+          <line class="pipe flow2" x1="210" y1="304" x2="358" y2="226" stroke="var(--accent)"/>
+          <line class="pipe flow2" x1="480" y1="304" x2="480" y2="226" stroke="var(--accent)"/>
+          <line class="pipe flow2" x1="750" y1="304" x2="602" y2="226" stroke="var(--accent)"/>
+        </g>
+
+        <!-- deployed remotes -->
+        <g>
+          <rect x="110" y="308" width="200" height="104" class="nodebox" style="stroke: var(--tD)"/>
+          <text x="210" y="338" text-anchor="middle" class="boxlabel">uikit</text>
+          <g class="vchip uk-dep-old">
+            <rect x="150" y="354" width="120" height="26" rx="13" fill="none" stroke="var(--line-strong)" stroke-width="1.3"/>
+            <text x="210" y="371" text-anchor="middle" font-size="11.5">deployed: v3.0</text>
+          </g>
+          <g class="vchip uk-dep-new">
+            <rect x="150" y="354" width="120" height="26" rx="13" fill="none" stroke="var(--ok)" stroke-width="1.4"/>
+            <text x="210" y="371" text-anchor="middle" font-size="11.5" fill="var(--ok)">deployed: v3.1</text>
+          </g>
+        </g>
+        <g>
+          <rect x="380" y="308" width="200" height="104" class="nodebox" style="stroke: var(--tB)"/>
+          <text x="480" y="338" text-anchor="middle" class="boxlabel">claims</text>
+          <g class="vchip cl-dep-old">
+            <rect x="420" y="354" width="120" height="26" rx="13" fill="none" stroke="var(--line-strong)" stroke-width="1.3"/>
+            <text x="480" y="371" text-anchor="middle" font-size="11.5">deployed: v1.2</text>
+          </g>
+          <g class="vchip cl-dep-bad">
+            <rect x="420" y="354" width="120" height="26" rx="13" fill="none" stroke="var(--danger)" stroke-width="1.4"/>
+            <text x="480" y="371" text-anchor="middle" font-size="11.5" fill="var(--danger)">deployed: v2.0</text>
+          </g>
+        </g>
+        <g>
+          <rect x="650" y="308" width="200" height="104" class="nodebox" style="stroke: var(--tC)"/>
+          <text x="750" y="338" text-anchor="middle" class="boxlabel">worklist</text>
+          <g class="vchip">
+            <rect x="690" y="354" width="120" height="26" rx="13" fill="none" stroke="var(--line-strong)" stroke-width="1.3"/>
+            <text x="750" y="371" text-anchor="middle" font-size="11.5">deployed: v2.1</text>
+          </g>
+        </g>
+      </svg>
+    </figure>
+  </section>
+
+  <!-- ================= PART 4 ================= -->
+  <section class="scene" id="scene4-wrap">
+    <header>
+      <p class="eyebrow">Part 4 &middot; The Backends</p>
+      <h1>Where the APIs live</h1>
+    </header>
+    <figure class="stage" id="stage4">
+      <svg id="s4" data-stage="0" viewBox="0 0 960 470" role="img"
+           aria-label="Animation: the claims team owns a vertical slice containing both its UI remote and its Express API, each deploying on its own pipeline; the composed page consumes the UI via federation and calls the API over plain HTTP; the API deploys like any backend service without federation.">
+        <defs>
+          <marker id="arr4" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M0,0 L10,5 L0,10 z" fill="#55637A"/>
+          </marker>
+        </defs>
+
+        <!-- the composed page (top right) -->
+        <g class="pagebox">
+          <rect x="560" y="36" width="340" height="150" class="nodebox" rx="12"/>
+          <text x="730" y="62" text-anchor="middle" class="sub">the running page &middot; composed via federation</text>
+          <rect x="582" y="80" width="100" height="30" rx="8" fill="none" stroke="var(--tA)" stroke-width="1.4"/>
+          <text x="632" y="100" text-anchor="middle" font-size="12">dashboard</text>
+          <rect x="696" y="80" width="80" height="30" rx="8" fill="none" stroke="var(--tB)" stroke-width="1.4"/>
+          <text x="736" y="100" text-anchor="middle" font-size="12">claims</text>
+          <rect x="790" y="80" width="94" height="30" rx="8" fill="none" stroke="var(--tC)" stroke-width="1.4"/>
+          <text x="837" y="100" text-anchor="middle" font-size="12">worklist</text>
+          <text x="730" y="146" text-anchor="middle" class="sub">all three read claims data</text>
+        </g>
+
+        <!-- claims team slice (bottom left) -->
+        <rect x="70" y="210" width="330" height="220" rx="14" fill="none" stroke="var(--tB)" stroke-width="1.3" stroke-dasharray="6 6"/>
+        <text x="86" y="236" font-size="12" fill="var(--tB)">claims team &middot; one domain, one slice</text>
+        <text x="86" y="254" class="sub">apps/claims</text>
+
+        <g>
+          <rect x="95" y="266" width="130" height="76" class="nodebox" style="stroke: var(--tB)"/>
+          <text x="160" y="296" text-anchor="middle" font-size="13.5">claims app</text>
+          <text x="160" y="316" text-anchor="middle" class="sub">UI remote &middot; :3102</text>
+          <line class="pipe" x1="102" y1="366" x2="216" y2="366" marker-end="url(#arr4)"/>
+          <circle class="pdot" cx="106" cy="366" r="5" fill="var(--tB)"/>
+          <circle class="pdot d2" cx="106" cy="366" r="5" fill="var(--tB)"/>
+          <text x="160" y="390" text-anchor="middle" font-size="10.5" fill="var(--muted)">its own pipeline</text>
+        </g>
+        <g>
+          <rect x="245" y="266" width="130" height="76" class="nodebox" style="stroke: var(--tB)"/>
+          <text x="310" y="290" text-anchor="middle" font-size="13.5">claims-api</text>
+          <text x="310" y="308" text-anchor="middle" class="sub">express &middot; :4100</text>
+          <g class="api-v-old">
+            <rect x="272" y="316" width="76" height="20" rx="10" fill="none" stroke="var(--line-strong)" stroke-width="1.2"/>
+            <text x="310" y="330" text-anchor="middle" font-size="10.5">api v1.2</text>
+          </g>
+          <g class="api-v-new">
+            <rect x="272" y="316" width="76" height="20" rx="10" fill="none" stroke="var(--ok)" stroke-width="1.3"/>
+            <text x="310" y="330" text-anchor="middle" font-size="10.5" fill="var(--ok)">api v1.3</text>
+          </g>
+          <line class="pipe" x1="252" y1="366" x2="366" y2="366" marker-end="url(#arr4)"/>
+          <circle class="pdot d2" cx="256" cy="366" r="5" fill="var(--tB)"/>
+          <circle class="pdot" cx="256" cy="366" r="5" fill="var(--tB)"/>
+          <text x="310" y="390" text-anchor="middle" font-size="10.5" fill="var(--muted)">its own pipeline</text>
+        </g>
+
+        <!-- ui-only slices (context) -->
+        <g>
+          <rect x="590" y="350" width="140" height="70" rx="10" fill="none" stroke="var(--line-strong)" stroke-width="1.1" stroke-dasharray="6 6"/>
+          <text x="660" y="380" text-anchor="middle" font-size="12">uikit team</text>
+          <text x="660" y="400" text-anchor="middle" class="sub">UI-only slice &middot; no API</text>
+          <rect x="750" y="350" width="140" height="70" rx="10" fill="none" stroke="var(--line-strong)" stroke-width="1.1" stroke-dasharray="6 6"/>
+          <text x="820" y="380" text-anchor="middle" font-size="12">worklist team</text>
+          <text x="820" y="400" text-anchor="middle" class="sub">UI-only slice &middot; no API</text>
+        </g>
+
+        <!-- runtime wiring -->
+        <g class="wiring">
+          <line class="pipe flow3" x1="172" y1="262" x2="588" y2="176" stroke="var(--accent)" marker-end="url(#arr4)"/>
+          <text x="330" y="196" font-size="12" fill="var(--accent)">UI &middot; federated at runtime</text>
+          <line class="pipe" x1="716" y1="190" x2="336" y2="262" stroke="var(--tA)" marker-end="url(#arr4)"/>
+          <text x="562" y="242" font-size="12" fill="var(--tA)">data &middot; fetch('/api/claims')</text>
+        </g>
+      </svg>
+    </figure>
+  </section>
+
+  <div class="captions" id="captions">
+    <p data-step="0">Six teams, one repo, one deploy queue. Every release &mdash; everyone&rsquo;s release &mdash; marches through the same pipe.</p>
+    <p data-step="1">One broken build and the whole company waits. The queue <em>is</em> the coupling.</p>
+    <p data-step="2">Microfrontends: split along team lines. Each team owns its app &mdash; and grows its own pipeline.</p>
+    <p data-step="3">A failure now stays where it happened. The price: more moving parts, and something has to compose them back into one product.</p>
+    <p data-step="4">The npm way to share: publish uikit, and every consumer bakes a copy in at build time.</p>
+    <p data-step="5">uikit ships v2 &rarr; every consumer must rebuild and redeploy to pick it up. The upgrade tax scales with the number of consumers.</p>
+    <p data-step="6">Module federation: apps stay deployed; the browser composes them at runtime. uikit ships v2 &rarr; the next reload has it. Nobody rebuilt.</p>
+    <p data-step="7">Every remote arrives carrying React. <code>shared: { react: { singleton: true } }</code> negotiates one copy &mdash; and this line is where production bugs live.</p>
+    <p data-step="8">One page, three remotes, three different versions. The host never pinned these at build &mdash; it discovers what each remote is serving when the page loads.</p>
+    <p data-step="9">The uikit team ships v3.1. Pages already open keep running v3.0 &mdash; a deploy never yanks code out of a live session.</p>
+    <p data-step="10">Next load composes the newest of each: uikit moves to v3.1, claims and worklist don&rsquo;t budge. Three teams, three release cadences, zero host redeploys.</p>
+    <p data-step="11">The flip side: an exposed module is a <em>runtime</em> contract. claims ships a breaking v2.0 and the host meets it in production &mdash; keep exposed surfaces small and stable (<code>ClaimsApp</code> takes one prop for a reason).</p>
+    <p data-step="12">A domain team ships a vertical slice. The claims team owns its UI remote <em>and</em> the API behind it &mdash; <code>apps/claims</code> and <code>apps/claims/api</code> &mdash; each deploying on its own pipeline. Slices that don&rsquo;t need an API don&rsquo;t carry one.</p>
+    <p data-step="13">Federation composes the UI only; data stays plain HTTP. The dashboard, the worklist, and the claims app itself all call the claims team&rsquo;s API &mdash; consuming a team&rsquo;s data doesn&rsquo;t require consuming its UI.</p>
+    <p data-step="14">The API deploys like any backend service &mdash; its own container, no federation involved. Its contract is the REST contract, versioned the usual way. Two contracts per slice: the exposed module for UI, the endpoints for data.</p>
+  </div>
+
+  <footer>
+    <div class="dots" id="dots" role="tablist" aria-label="Steps"></div>
+    <p class="hints"><kbd>&larr;</kbd><kbd>&rarr;</kbd> step &middot; <kbd>1</kbd><kbd>2</kbd><kbd>3</kbd><kbd>4</kbd> part &middot; <kbd>R</kbd> replay &middot; <kbd>F</kbd> fullscreen &middot; or click the diagram</p>
+  </footer>
+</div>
+
+<script>
+  const TOTAL = 15;
+  const s1 = document.getElementById('s1');
+  const s2 = document.getElementById('s2');
+  const s3 = document.getElementById('s3');
+  const s4 = document.getElementById('s4');
+  const scenes = [
+    document.getElementById('scene1-wrap'),
+    document.getElementById('scene2-wrap'),
+    document.getElementById('scene3-wrap'),
+    document.getElementById('scene4-wrap'),
+  ];
+  const captions = Array.from(document.querySelectorAll('#captions p'));
+  const dotsWrap = document.getElementById('dots');
+  let step = 0;
+
+  for (let i = 0; i < TOTAL; i++) {
+    const b = document.createElement('button');
+    b.setAttribute('aria-label', 'Step ' + (i + 1));
+    b.addEventListener('click', (e) => { e.stopPropagation(); go(i); });
+    dotsWrap.appendChild(b);
+  }
+  const dots = Array.from(dotsWrap.children);
+
+  function render() {
+    const sceneIdx = step < 4 ? 0 : step < 8 ? 1 : step < 12 ? 2 : 3;
+    scenes.forEach((s, i) => s.classList.toggle('active', i === sceneIdx));
+    s1.setAttribute('data-stage', String(Math.min(step, 3)));
+    s2.setAttribute('data-stage', String(Math.min(Math.max(step - 4, 0), 3)));
+    s3.setAttribute('data-stage', String(Math.min(Math.max(step - 8, 0), 3)));
+    s4.setAttribute('data-stage', String(Math.max(step - 12, 0)));
+    captions.forEach((p, i) => p.classList.toggle('active', i === step));
+    dots.forEach((d, i) => d.classList.toggle('on', i === step));
+  }
+
+  function go(n) { step = Math.max(0, Math.min(TOTAL - 1, n)); render(); }
+  function replay() {
+    const svg = step >= 12 ? s4 : step >= 8 ? s3 : step >= 4 ? s2 : s1;
+    const val = svg.getAttribute('data-stage');
+    svg.setAttribute('data-stage', '-1');
+    void svg.getBoundingClientRect();
+    requestAnimationFrame(() => svg.setAttribute('data-stage', val));
+  }
+
+  document.querySelectorAll('figure.stage').forEach((f) =>
+    f.addEventListener('click', () => go(step + 1))
+  );
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') { e.preventDefault(); go(step + 1); }
+    else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); go(step - 1); }
+    else if (e.key === '1') go(0);
+    else if (e.key === '2') go(4);
+    else if (e.key === '3') go(8);
+    else if (e.key === '4') go(12);
+    else if (e.key === 'r' || e.key === 'R') replay();
+    else if (e.key === 'f' || e.key === 'F') {
+      if (document.fullscreenElement) document.exitFullscreen();
+      else document.documentElement.requestFullscreen().catch(() => {});
+    }
+  });
+
+  render();
+</script>
+
+</body>
+</html>

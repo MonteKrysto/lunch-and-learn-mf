@@ -1,6 +1,6 @@
 # Step 5 — Sharing state across apps
 
-**Start from:** your step-4 state · **Ends at:** the state tagged `step-5` (= `main`)
+**Start from:** your step-4 state · **Ends at:** the state tagged `step-5` (= the `final` branch)
 **Solution files:** [`solutions/step-5/`](solutions/step-5/)
 
 ## Goal
