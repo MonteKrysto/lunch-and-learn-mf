@@ -1,0 +1,115 @@
+# Lunch & Learn: Run of Show + Video Series Plan
+
+Format: 30 minutes — 20 content, 10 Q&A. The live session is a **demo + pitch**, not a
+code-along. The hands-on work moves to a self-paced video series that follows this repo's
+`start` branch and `step-1`…`step-5` tags.
+
+## Pre-session checklist (15 min before)
+
+- [ ] `pnpm dev` running, all five banners show 3100/3101/3102/3103/4100 exactly
+- [ ] Browser tabs open, in order: :3100 (shell), :3101 (uikit gallery), :3102 (claims standalone), :3103 (worklist standalone)
+- [ ] Editor open to `apps/uikit/rsbuild.config.ts` and `apps/shell/rsbuild.config.ts` side by side
+- [ ] Terminal font cranked up; a scratch terminal ready for the kill-a-remote bit
+- [ ] Repo URL on a slide / in chat so people can clone during Q&A
+
+## Run of show (20 min)
+
+### 1. The problem microfrontends solve — 0:00–3:00
+
+- Start with pain, not tech: one frontend repo, six teams, one deploy queue. Team A's
+  release waits on Team B's broken test. Every dependency upgrade is a six-team meeting.
+- Microfrontends = applying the microservices trade to the frontend: **independently
+  developed, independently deployed** pieces composed into one product.
+- Be honest about the cost: duplication, runtime complexity, version drift. This is a
+  *team-scaling* tool, not a code-organizing tool. If one team owns the frontend, don't.
+
+### 2. Module federation in one slide — 3:00–6:00
+
+- Ways to compose MFEs: iframes (isolation, but clunky UX), npm packages (build-time —
+  every consumer rebuilds/redeploys to pick up changes), server-side composition, and
+  **runtime composition — module federation**.
+- MF's core idea: an app can *expose* modules and *consume* modules from other deployed
+  apps **at runtime**, with shared dependencies (React) negotiated to a single copy.
+- Vocabulary you'll use for the rest of the demo: **host**, **remote**, `exposes`,
+  `remotes`, `shared` + singleton. Mention MF 2.0 gives a manifest + **federated
+  TypeScript types** — autocomplete across separately-deployed apps.
+
+### 3. The demo — 6:00–18:00
+
+All talk-track, no live coding. The audience codes later with the videos.
+
+**Beat 1 — the illusion (2 min).** Show :3100. "One app, right?" Walk the tabs: the KPI
+tiles come from :3101, the worklist from :3103, and Claims in the sidebar is the entire
+app running on :3102 — four dev servers pretending to be one product. Each of these
+directories is written as if it were its own repo owned by its own team.
+
+**Beat 2 — remotes are runtime dependencies (2 min).** In the scratch terminal:
+`kill $(lsof -nP -ti tcp:3101 -sTCP:LISTEN)` → reload :3100 → federation error in the
+console. "This is the trade you're making: a remote is a runtime dependency, like an API.
+You get independent deploys; you take on runtime failure modes." Restart with
+`pnpm --filter uikit dev`.
+
+**Beat 3 — the config that does it (3 min).** Show the two rsbuild configs side by side:
+uikit's `exposes` + `shared` vs shell's `remotes` + `shared`. That's the entire mechanism —
+maybe 15 lines. Point at `singleton: true` on react: "the #1 real-world footgun lives on
+this line; the videos show you the error you get without it." Hover a `uikit/MetricCard`
+import in the editor to show federated types autocomplete.
+
+**Beat 4 — a whole application as a remote (3 min).** Click Claims, click into a claim,
+show the URL `/claims/CLM-1014`, hit back, paste a deep link. Then show :3102 — same app,
+standalone at `/`. One exposed component + a `basename` prop. "The claims team ships a
+product; the platform team mounts it."
+
+**Beat 5 — federation is a graph (2 min).** The worklist is consumed *by* the shell while
+it consumes uikit's badges itself — host and remote at once. Everyone still gets exactly
+one React. If time: open React Query devtools on :3100 and show the worklist's `denials`
+query sitting in the shell's cache — state shared across apps via a singleton.
+
+### 4. The pitch — 18:00–20:00
+
+- "Everything you just saw is one `git clone`. The `start` branch is these five apps with
+  **zero federation** — the videos add it back step by step, ~10 minutes each, and every
+  step is a git tag you can jump to if you fall behind."
+- Takeaways to say out loud: MFEs are a team-scaling tool; module federation is runtime
+  composition; singletons are where it bites; a remote is a runtime dependency.
+
+### Q&A prep (20:00–30:00) — likely questions
+
+- *"Why not just npm packages?"* Build-time vs runtime: with packages, every consumer must
+  rebuild and redeploy to pick up a change; with MF the remote deploys once.
+- *"What happens when a remote is down in prod?"* Same as beat 2 — you own that failure
+  mode; real apps add error boundaries/fallbacks per remote (not in this demo, by design).
+- *"How do remote URLs work across environments?"* We hardcode localhost; real deployments
+  drive URLs per-environment via the MF runtime/manifest.
+- *"Why is the manifest always mf-manifest.json?"* The URL is the identity; the filename is
+  a well-known convention (like favicon.ico). `manifest.fileName` exists if you must.
+- *"Do styles/Tailwind conflict?"* Each exposed module imports its own CSS (that's
+  deliberate — video 2 covers it); identical utility definitions make collisions moot.
+- *"Version mismatches between apps?"* Singleton negotiation picks one copy; mismatched
+  ranges warn or error. Video 1 demos the failure on purpose.
+
+## Video series
+
+Each video starts from the previous tag and ends exactly at its own tag, so viewers can
+diff (`git diff step-1 step-2`) or skip ahead (`git checkout step-2 && pnpm install`).
+Record at the repo root with the relevant app's dev servers running.
+
+| # | Title | Ref range | ~Length | Covers |
+|---|-------|-----------|---------|--------|
+| 0 | Setup & the cast | `start` | 6–8 min | Clone, `pnpm install`, `pnpm dev`, tour all five apps + API, monorepo layout, why zero shared packages (each app = a pretend repo), ports 3100–3103/4100 |
+| 1 | Hello federation | `start` → `step-1` | 10–12 min | Install the MF plugin, uikit `exposes` its 4 components, shell `remotes` + consumes `MetricCard`, `shared` singletons — **break it on purpose** (remove `shared`, show the two-Reacts hook error, fix it), federated types + `@mf-types`, the exposed-module-owns-its-CSS rule |
+| 2 | A whole app as a remote | `step-1` → `step-2` | 10–12 min | claims exposes `ClaimsApp`, shell mounts it at `claims/*` via `lazy` + `Suspense`, `basename` prop, deep links + back button, app still works standalone |
+| 3 | A widget remote | `step-2` → `step-3` | 5–7 min | worklist exposes `WorklistWidget`, drops onto the dashboard; the pattern generalizes: page-sized or widget-sized, same mechanics |
+| 4 | A remote becomes a host | `step-3` → `step-4` | 8–10 min | worklist adds its own `remotes` and consumes uikit's badges while the shell consumes *it*; federation is a graph; network tab shows uikit loaded once |
+| 5 | Sharing state across apps | `step-4` → `step-5` | 8–10 min | `@tanstack/react-query` as a shared singleton, provider moves to worklist's bootstrap, embedded widget rides the shell's QueryClient — devtools shows one cache; why claims deliberately keeps its own |
+| 6 | Independent deploys (finale) | `main` + docker | 6–8 min | `docker compose up --build`: one nginx per app, same ports as dev, cross-origin `remoteEntry` + CORS; stop `pnpm dev` first (and the stale-dev-chunk story if curious) |
+
+**Recording notes**
+
+- Open each video by checking out its starting ref and running `pnpm install` on camera —
+  that's the viewer's recovery path, so model it.
+- Type the federation config live (it's short); paste the JSX edits.
+- End each video at the tag state and say the tag name so viewers can self-verify with
+  `git diff step-N` (empty diff = they nailed it).
+- Videos 1–2 carry the core ideas; 3 is short by design (a breather); 4–5 are the payoff
+  for people who want depth; 6 is optional.
