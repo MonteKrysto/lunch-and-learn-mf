@@ -29,6 +29,11 @@ Open all five: http://localhost:3100 (shell), :3101 (uikit gallery), :3102 (clai
 
 ## Session steps
 
+**Working through this on your own (or with the videos)?** Follow the written
+guides in [docs/workshop/](docs/workshop/README.md) — one per step, each with a
+`solutions/step-N/` folder holding the final version of every file that step
+touches. You never need to leave your own branch.
+
 We code each step live. Fall behind? Jump to the checkpoint:
 
 ```bash
