@@ -168,7 +168,9 @@ pnpm --filter uikit build && ls apps/uikit/dist/static/js
 **Say over the file list:** "THIS is what the uikit team deploys. A folder: a manifest,
 a remote entry, some chunks, some CSS. No Node server, no process, nothing executing —
 you could host this on S3 or GitHub Pages. The dev server we killed only exists in
-development. A remote *runs* in exactly one place: the browser."
+development. A remote *runs* in exactly one place: the browser. And when you finish
+the series, `make static` runs the entire product this way — every app served as
+nothing but files."
 
 ## 9:00–10:30 · Break it on purpose — the singleton lesson
 

@@ -16,7 +16,7 @@ SHELL_URL := http://localhost:3100
 
 .DEFAULT_GOAL := help
 
-.PHONY: help up down restart ps logs build deploy open ports clean dev install catchup
+.PHONY: help up down restart ps logs build deploy open ports clean dev install catchup static
 
 help: ## Show available targets
 	@echo ""
@@ -106,6 +106,14 @@ catchup: ## Fast-forward your code to the end of a step (make catchup step=3) �
 	@pnpm install --silent
 	@echo ""
 	@echo "  You're at the end of step $(step). Restart 'pnpm dev' and carry on."
+
+static: ## Build all apps and serve them as plain static files — how remotes really exist when deployed
+	@echo ""
+	@echo "  Building every app, then serving each one's dist/ as static files."
+	@echo "  No dev servers, no HMR, no docker — this is what 'deployed' means for"
+	@echo "  a remote: files on a host. Ctrl-C stops everything."
+	@echo ""
+	pnpm turbo preview
 
 dev: ## Run everything in dev mode instead (turbo + HMR — not docker)
 	pnpm dev
