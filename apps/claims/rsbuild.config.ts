@@ -20,6 +20,6 @@ export default defineConfig({
   ],
   html: { title: 'Claims Management' },
   server: { port: 3102, cors: true },
-  dev: { assetPrefix: 'http://localhost:3102' },
-  output: { assetPrefix: 'http://localhost:3102' },
+  dev: { assetPrefix: 'http://localhost:3102' },  // used by pnpm dev for local development
+  output: { assetPrefix: 'http://localhost:3102' },  // baked into production build by pnpm build
 });
