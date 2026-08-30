@@ -54,6 +54,16 @@ each stage — presenter material; you won't need them.)
 5. **step-5 — Sharing state (stretch).** `@tanstack/react-query` becomes a shared
    singleton; the worklist widget rides the shell's QueryClient and cache.
 
+## Run it like it's deployed (no docker needed)
+
+```bash
+make static
+```
+
+Builds every app, then serves each one's `dist/` as plain static files — no dev
+servers, no HMR. This is what "deployed" means for a remote: files on a host,
+running only in your browser. (Stop `pnpm dev` first — same ports.)
+
 ## The finale: independent deploys
 
 ```bash
