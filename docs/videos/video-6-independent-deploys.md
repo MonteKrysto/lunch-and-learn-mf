@@ -43,6 +43,18 @@ missing —" open the corner where devtools lived "— the query devtools. Dev-o
 design. Everything else is identical, because the ports are identical: the manifest
 URLs baked into the shell work in both worlds."
 
+**The nothing-is-running beat (30s):**
+
+```bash
+docker exec lunch-and-learn-mfe-uikit-1 ls /usr/share/nginx/html/static/js
+```
+
+**Say:** "Look inside the uikit 'app' in production: it's nginx serving a folder.
+None of the four frontends is *running* anywhere — no Node processes, no app servers.
+The only running programs in this whole stack are five file servers and one Express
+API. The applications themselves run in exactly one place: the browser. When people
+say a remote is 'deployed', they mean its files are reachable — that's all."
+
 ## 2:10–4:30 · THE moment — one team ships
 
 **Setup the stakes:** open :3100/claims in a tab and *leave it there*. "This tab is a
