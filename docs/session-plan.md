@@ -86,6 +86,10 @@ query sitting in the shell's cache — state shared across apps via a singleton.
   a well-known convention (like favicon.ico). `manifest.fileName` exists if you must.
 - *"Do styles/Tailwind conflict?"* Each exposed module imports its own CSS (that's
   deliberate — video 2 covers it); identical utility definitions make collisions moot.
+- *"So the remotes are running services somewhere?"* No — a deployed remote is
+  static files (manifest, remoteEntry, chunks) on nginx/S3/any CDN. Nothing executes
+  server-side; it runs only in the browser. Dev servers blur this — the docker stack
+  is the honest picture. Only the API is a running process.
 - *"Version mismatches between apps?"* Singleton negotiation picks one copy; mismatched
   ranges warn or error. Video 1 demos the failure on purpose.
 

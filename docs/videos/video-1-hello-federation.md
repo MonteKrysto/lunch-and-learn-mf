@@ -153,10 +153,22 @@ kill $(lsof -nP -ti tcp:3101 -sTCP:LISTEN)
 ```
 
 Reload :3100 → federation error in console. **Say:** "A remote is a *runtime*
-dependency. You gained independent deploys; you took on an API-style failure mode.
-Remember this error — it means 'is the remote actually up?'"
+dependency. And be precise about what I just killed: a **file server**, not an app.
+In production a remote isn't a running program — it's static files on a CDN. This
+error means 'the file host is unreachable', the frontend equivalent of a CDN outage."
 
 Restart: `pnpm --filter uikit dev`. Reload — healed.
+
+**The physical-reality beat (30s, do not skip):** in the scratch terminal:
+
+```bash
+pnpm --filter uikit build && ls apps/uikit/dist/static/js
+```
+
+**Say over the file list:** "THIS is what the uikit team deploys. A folder: a manifest,
+a remote entry, some chunks, some CSS. No Node server, no process, nothing executing —
+you could host this on S3 or GitHub Pages. The dev server we killed only exists in
+development. A remote *runs* in exactly one place: the browser."
 
 ## 9:00–10:30 · Break it on purpose — the singleton lesson
 

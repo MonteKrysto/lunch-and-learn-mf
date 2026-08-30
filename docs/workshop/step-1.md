@@ -96,6 +96,10 @@ same data, uikit's card styling. Then prove it's real:
 
 - `singleton: true` on react/react-dom is the #1 real-world footgun. Try removing
   `shared` entirely and reloading — two Reacts, hooks explode. Put it back.
+- What you "killed" above was a file server. Run `pnpm --filter uikit build` and
+  look at `apps/uikit/dist/` — that folder is the entire deployable: static files,
+  no server process. In production a remote lives on a CDN and runs only in the
+  browser; a dead remote is a CDN outage, not a crashed app.
 - Exposed components each `import '../index.css'` (already there since `start`):
   an exposed module must own its styles — the host won't build your CSS for you.
 

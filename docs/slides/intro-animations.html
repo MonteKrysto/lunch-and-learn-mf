@@ -511,7 +511,7 @@
           <g>
             <rect x="110" y="308" width="200" height="104" class="nodebox" style="stroke: var(--tA)"/>
             <text x="210" y="340" text-anchor="middle" class="boxlabel">shell &middot; host</text>
-            <text x="210" y="362" text-anchor="middle" class="sub">deployed on its own</text>
+            <text x="210" y="362" text-anchor="middle" class="sub">static files &middot; own nginx/CDN</text>
           </g>
           <g>
             <rect x="380" y="308" width="200" height="104" class="nodebox" style="stroke: var(--tD)"/>
@@ -524,7 +524,7 @@
           <g>
             <rect x="650" y="308" width="200" height="104" class="nodebox" style="stroke: var(--tB)"/>
             <text x="750" y="340" text-anchor="middle" class="boxlabel">claims &middot; remote</text>
-            <text x="750" y="362" text-anchor="middle" class="sub">deployed on its own</text>
+            <text x="750" y="362" text-anchor="middle" class="sub">static files &middot; own nginx/CDN</text>
           </g>
         </g>
       </svg>
@@ -722,13 +722,13 @@
     <p data-step="3">A failure now stays where it happened. The price: more moving parts, and something has to compose them back into one product.</p>
     <p data-step="4">The npm way to share: publish uikit, and every consumer bakes a copy in at build time.</p>
     <p data-step="5">uikit ships v2 &rarr; every consumer must rebuild and redeploy to pick it up. The upgrade tax scales with the number of consumers.</p>
-    <p data-step="6">Module federation: apps stay deployed; the browser composes them at runtime. uikit ships v2 &rarr; the next reload has it. Nobody rebuilt.</p>
+    <p data-step="6">Module federation: apps stay deployed; the browser composes them at runtime. uikit ships v2 &rarr; the next reload has it. Nobody rebuilt. And &ldquo;deployed&rdquo; means <em>static files on a CDN</em> &mdash; a remote only ever runs in the browser.</p>
     <p data-step="7">Every remote arrives carrying React. <code>shared: { react: { singleton: true } }</code> negotiates one copy &mdash; and this line is where production bugs live.</p>
     <p data-step="8">One page, three remotes, three different versions. The host never pinned these at build &mdash; it discovers what each remote is serving when the page loads.</p>
     <p data-step="9">The uikit team ships v3.1. Pages already open keep running v3.0 &mdash; a deploy never yanks code out of a live session.</p>
     <p data-step="10">Next load composes the newest of each: uikit moves to v3.1, claims and worklist don&rsquo;t budge. Three teams, three release cadences, zero host redeploys.</p>
     <p data-step="11">The flip side: an exposed module is a <em>runtime</em> contract. claims ships a breaking v2.0 and the host meets it in production &mdash; keep exposed surfaces small and stable (<code>ClaimsApp</code> takes one prop for a reason).</p>
-    <p data-step="12">A domain team ships a vertical slice. The claims team owns its UI remote <em>and</em> the API behind it &mdash; <code>apps/claims</code> and <code>apps/claims/api</code> &mdash; each deploying on its own pipeline. Slices that don&rsquo;t need an API don&rsquo;t carry one.</p>
+    <p data-step="12">A domain team ships a vertical slice: a UI remote (static files) <em>and</em> the API behind it (a running service) &mdash; <code>apps/claims</code> and <code>apps/claims/api</code> &mdash; each deploying on its own pipeline. Slices that don&rsquo;t need an API don&rsquo;t carry one.</p>
     <p data-step="13">Federation composes the UI only; data stays plain HTTP. The dashboard, the worklist, and the claims app itself all call the claims team&rsquo;s API &mdash; consuming a team&rsquo;s data doesn&rsquo;t require consuming its UI.</p>
     <p data-step="14">The API deploys like any backend service &mdash; its own container, no federation involved. Its contract is the REST contract, versioned the usual way. Two contracts per slice: the exposed module for UI, the endpoints for data.</p>
   </div>
