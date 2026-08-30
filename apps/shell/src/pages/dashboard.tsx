@@ -1,5 +1,6 @@
 import { lazy, Suspense } from 'react';
 import { useQuery } from '@tanstack/react-query';
+import { RemoteBoundary } from '../components/remote-boundary';
 // Federated imports: these modules live in the uikit app running on :3101.
 import MetricCard from 'uikit/MetricCard';
 import { fetchMetrics } from '../lib/api';
@@ -37,9 +38,11 @@ export function Dashboard() {
         </div>
       )}
 
-      <Suspense fallback={<p className="text-muted-foreground">Loading worklist…</p>}>
-        <WorklistWidget />
-      </Suspense>
+      <RemoteBoundary name="denials worklist">
+        <Suspense fallback={<p className="text-muted-foreground">Loading worklist…</p>}>
+          <WorklistWidget />
+        </Suspense>
+      </RemoteBoundary>
     </div>
   );
 }

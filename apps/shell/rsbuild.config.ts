@@ -28,6 +28,8 @@ export default defineConfig({
         // -> the widget picks up the shell's QueryClient (and its cache) automatically.
         '@tanstack/react-query': { singleton: true },
       },
+      // Graceful degradation when a remote is unreachable — see src/mf-fallback.ts
+      runtimePlugins: ['./src/mf-fallback.ts'],
     }),
   ],
   html: { title: 'RCM Console' },
