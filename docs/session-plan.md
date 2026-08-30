@@ -108,6 +108,7 @@ Record at the repo root with the relevant app's dev servers running.
 | 4 | A remote becomes a host | `step-3` → `step-4` | 8–10 min | worklist adds its own `remotes` and consumes uikit's badges while the shell consumes *it*; federation is a graph; network tab shows uikit loaded once |
 | 5 | Sharing state across apps | `step-4` → `step-5` | 8–10 min | `@tanstack/react-query` as a shared singleton, provider moves to worklist's bootstrap, embedded widget rides the shell's QueryClient — devtools shows one cache; why claims deliberately keeps its own |
 | 6 | Independent deploys (finale) | `main` + docker | 6–8 min | `docker compose up --build`: one nginx per app, same ports as dev, cross-origin `remoteEntry` + CORS; stop `pnpm dev` first (and the stale-dev-chunk story if curious) |
+| 7 | Bonus: the artifact store | step-6 (bonus) | 8–10 min | Remotes as pure artifacts: `make store` (pretend S3/Blob+CDN), `make publish app=X` per team, env-driven remote URLs (`ARTIFACT_STORE`), host + API as the only processes; deploy = file upload |
 
 **Recording notes**
 

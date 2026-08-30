@@ -13,10 +13,11 @@
 COMPOSE   := docker compose
 SERVICES  := shell uikit claims worklist claims-api
 SHELL_URL := http://localhost:3100
+STORE_URL := http://localhost:4400
 
 .DEFAULT_GOAL := help
 
-.PHONY: help up down restart ps logs build deploy open ports clean dev install catchup static
+.PHONY: help up down restart ps logs build deploy open ports clean dev install catchup static store publish host
 
 help: ## Show available targets
 	@echo ""
@@ -92,9 +93,9 @@ clean: ## Tear down and remove the built images
 
 catchup: ## Fast-forward your code to the end of a step (make catchup step=3) — no git involved
 	@if [ -z "$(step)" ]; then \
-		echo "usage: make catchup step=<1-5>   (applies workshop solutions 1..N + pnpm install)"; exit 1; fi
-	@case "$(step)" in 1|2|3|4|5) ;; *) echo "step must be 1-5"; exit 1;; esac
-	@for i in 1 2 3 4 5; do \
+		echo "usage: make catchup step=<1-6>   (applies workshop solutions 1..N + pnpm install)"; exit 1; fi
+	@case "$(step)" in 1|2|3|4|5|6) ;; *) echo "step must be 1-6"; exit 1;; esac
+	@for i in 1 2 3 4 5 6; do \
 		if [ $$i -le $(step) ]; then \
 			echo "→ applying docs/workshop/solutions/step-$$i"; \
 			cp -R docs/workshop/solutions/step-$$i/. .; \
@@ -106,6 +107,35 @@ catchup: ## Fast-forward your code to the end of a step (make catchup step=3) �
 	@pnpm install --silent
 	@echo ""
 	@echo "  You're at the end of step $(step). Restart 'pnpm dev' and carry on."
+
+store: ## Start the pretend artifact store (S3/Azure-Blob + CDN stand-in) on :4400
+	@mkdir -p .artifact-store
+	@echo ""
+	@echo "  Serving .artifact-store/ at $(STORE_URL) — that folder IS the deployment."
+	@echo "  Publish into it with:  make publish app=uikit   (Ctrl-C stops the store)"
+	@echo ""
+	node scripts/artifact-store.mjs
+
+publish: ## A team's CI in one command: build + upload one remote to the store (make publish app=uikit)
+	@if [ -z "$(app)" ]; then \
+		echo "usage: make publish app=<uikit|claims|worklist>"; exit 1; fi
+	@case "$(app)" in uikit|claims|worklist) ;; \
+		*) echo "only remotes publish to the store: uikit claims worklist"; exit 1;; esac
+	@echo ""
+	@echo "── $(app) team CI ─────────────────────────────────────────────"
+	@echo "→ building with ARTIFACT_STORE=$(STORE_URL) (assets resolve to the store)"
+	ARTIFACT_STORE=$(STORE_URL) pnpm --filter $(app) build
+	@echo "→ uploading (a deploy is a file copy)"
+	@rm -rf .artifact-store/$(app) && mkdir -p .artifact-store && cp -R apps/$(app)/dist .artifact-store/$(app)
+	@echo ""
+	@echo "  Published: $(STORE_URL)/$(app)/mf-manifest.json"
+	@echo "  Servers now running for the $(app) team: none."
+
+host: ## Build + run the shell against the artifact store, plus the API (store mode)
+	@echo "→ building the shell with remotes pointed at $(STORE_URL)"
+	ARTIFACT_STORE=$(STORE_URL) pnpm --filter shell build
+	@echo "→ shell on $(SHELL_URL), api on http://localhost:4100 (Ctrl-C stops both)"
+	@bash -c 'trap "kill 0" EXIT; pnpm --filter claims-api start & pnpm --filter shell preview'
 
 static: ## Build all apps and serve them as plain static files — how remotes really exist when deployed
 	@echo ""

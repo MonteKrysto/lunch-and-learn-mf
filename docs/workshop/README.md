@@ -39,6 +39,7 @@ apps, zero federation — and wire the federation in yourself, step by step.
 | [3](step-3.md) | A widget remote | worklist lands on the dashboard | `lazy` + `Suspense` around a remote |
 | [4](step-4.md) | A remote becomes a host | worklist consumes uikit while shell consumes it | federation is a graph |
 | [5](step-5.md) | Sharing state | one QueryClient across shell + worklist | singleton libraries share React context |
+| [6](step-6.md) | Bonus: the artifact store | remotes served from a pretend S3/Blob store — no per-remote servers at all | env-driven remote URLs; a deploy is a file upload |
 
 After step 5, run the deploy simulation — this is the payoff:
 

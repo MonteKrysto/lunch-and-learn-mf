@@ -2,5 +2,6 @@ node_modules/
 dist/
 .turbo/
 @mf-types/
+.artifact-store/
 *.log
 .DS_Store
