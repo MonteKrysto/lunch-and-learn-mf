@@ -3,6 +3,13 @@ import { pluginReact } from '@rsbuild/plugin-react';
 import { pluginTailwindcss } from '@rsbuild/plugin-tailwindcss';
 import { pluginModuleFederation } from '@module-federation/rsbuild-plugin';
 
+// Where do remote files live? Default: each team's own host (localhost ports).
+// With ARTIFACT_STORE set (e.g. http://localhost:4400), the build targets a central
+// artifact store instead — the S3/Azure-Blob pattern. See docs/workshop/step-6.md.
+const STORE = process.env.ARTIFACT_STORE;
+const remote = (name: string, port: number) =>
+  `${name}@${STORE ? `${STORE}/${name}` : `http://localhost:${port}`}/mf-manifest.json`;
+
 export default defineConfig({
   plugins: [
     pluginReact(),
@@ -10,9 +17,9 @@ export default defineConfig({
     pluginModuleFederation({
       name: 'shell',
       remotes: {
-        uikit: 'uikit@http://localhost:3101/mf-manifest.json',
-        claims: 'claims@http://localhost:3102/mf-manifest.json',
-        worklist: 'worklist@http://localhost:3103/mf-manifest.json',
+        uikit: remote('uikit', 3101),
+        claims: remote('claims', 3102),
+        worklist: remote('worklist', 3103),
       },
       shared: {
         react: { singleton: true },
