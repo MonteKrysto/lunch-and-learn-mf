@@ -93,9 +93,9 @@ clean: ## Tear down and remove the built images
 
 catchup: ## Fast-forward your code to the end of a step (make catchup step=3) — no git involved
 	@if [ -z "$(step)" ]; then \
-		echo "usage: make catchup step=<1-6>   (applies workshop solutions 1..N + pnpm install)"; exit 1; fi
-	@case "$(step)" in 1|2|3|4|5|6) ;; *) echo "step must be 1-6"; exit 1;; esac
-	@for i in 1 2 3 4 5 6; do \
+		echo "usage: make catchup step=<1-7>   (applies workshop solutions 1..N + pnpm install)"; exit 1; fi
+	@case "$(step)" in 1|2|3|4|5|6|7) ;; *) echo "step must be 1-7"; exit 1;; esac
+	@for i in 1 2 3 4 5 6 7; do \
 		if [ $$i -le $(step) ]; then \
 			echo "→ applying docs/workshop/solutions/step-$$i"; \
 			cp -R docs/workshop/solutions/step-$$i/. .; \

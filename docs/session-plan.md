@@ -79,7 +79,7 @@ query sitting in the shell's cache — state shared across apps via a singleton.
 - *"Why not just npm packages?"* Build-time vs runtime: with packages, every consumer must
   rebuild and redeploy to pick up a change; with MF the remote deploys once.
 - *"What happens when a remote is down in prod?"* Same as beat 2 — you own that failure
-  mode; real apps add error boundaries/fallbacks per remote (not in this demo, by design).
+  mode; you own that failure mode. Bonus step 7 adds the full fix: error boundaries per remote slot + an `errorLoadRemote` runtime plugin.
 - *"How do remote URLs work across environments?"* We hardcode localhost; real deployments
   drive URLs per-environment via the MF runtime/manifest.
 - *"Why is the manifest always mf-manifest.json?"* The URL is the identity; the filename is
@@ -109,6 +109,7 @@ Record at the repo root with the relevant app's dev servers running.
 | 5 | Sharing state across apps | `step-4` → `step-5` | 8–10 min | `@tanstack/react-query` as a shared singleton, provider moves to worklist's bootstrap, embedded widget rides the shell's QueryClient — devtools shows one cache; why claims deliberately keeps its own |
 | 6 | Independent deploys (finale) | `main` + docker | 6–8 min | `docker compose up --build`: one nginx per app, same ports as dev, cross-origin `remoteEntry` + CORS; stop `pnpm dev` first (and the stale-dev-chunk story if curious) |
 | 7 | Bonus: the artifact store | step-6 (bonus) | 8–10 min | Remotes as pure artifacts: `make store` (pretend S3/Blob+CDN), `make publish app=X` per team, env-driven remote URLs (`ARTIFACT_STORE`), host + API as the only processes; deploy = file upload |
+| 8 | Bonus: when a remote is down | step-7 (bonus) | 8–10 min | The crash nobody wants: dead remote = blank host. Fix in two layers — `RemoteBoundary` per slot, `errorLoadRemote` runtime plugin (stub manifest + placeholder modules); kill uikit live and watch the page degrade instead of die |
 
 **Recording notes**
 
