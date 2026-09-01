@@ -78,6 +78,10 @@ for the federated one, then delete `apps/shell/src/components/kpi-tile.tsx`:
 import MetricCard from 'uikit/MetricCard';   // was: { KpiTile } from '../components/kpi-tile'
 ```
 
+> ⚠️ Note the **default** import — `import MetricCard from …`, not
+> `import { MetricCard } from …`. KpiTile was a named export; the exposed uikit
+> components are default exports. The named form fails with "no exported member".
+
 (usage is a rename: `<KpiTile …>` → `<MetricCard …>` — same props.)
 
 ## Verify
