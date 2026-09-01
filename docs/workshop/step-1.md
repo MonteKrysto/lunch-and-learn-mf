@@ -99,7 +99,10 @@ same data, uikit's card styling. Then prove it's real:
 ## Worth noticing
 
 - `singleton: true` on react/react-dom is the #1 real-world footgun. Try removing
-  `shared` entirely and reloading — two Reacts, hooks explode. Put it back.
+  `shared` from both configs (restart both): the page still works, but the network tab
+  shows TWO `lib-react.js` loads — one per origin. It works only because uikit's
+  components have no hooks yet; add a `useState` to MetricCard and it explodes with an
+  invalid-hook error. Two Reacts is a time bomb, not a grenade. Put `shared` back.
 - What you "killed" above was a file server. Run `pnpm --filter uikit build` and
   look at `apps/uikit/dist/` — that folder is the entire deployable: static files,
   no server process. In production a remote lives on a CDN and runs only in the

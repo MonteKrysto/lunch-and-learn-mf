@@ -177,15 +177,32 @@ nothing but files."
 **Screen:** both rsbuild configs.
 
 **Do:** delete the `shared` block from **both** apps, restart both dev servers, reload
-:3100 → the page breaks; open the console and show the React hooks/dispatcher error.
+:3100. **The page still works** — say so, because that's the trap.
 
-**Say:** "Without `shared`, the shell loads its React *and* uikit's React. Two React
-copies, one page — hooks explode. `singleton: true` tells federation: negotiate ONE copy
-for everyone. This single line is the number-one module federation production bug. When
-you see a nonsense hooks error in a federated app, check `shared` first."
+**Show the receipts:** network tab, filter `react` → TWO `lib-react.js` requests, one
+from :3100 and one from :3101 (check the Domain column). "Two copies of React on one
+page. And nothing crashed — because uikit's components don't use hooks *yet*. Two
+Reacts is a time bomb, not a grenade. Watch it detonate:"
 
-**Do:** restore both `shared` blocks, restart, reload — healed. (Don't skip the restore
-on camera — viewers mirror you.)
+**Detonate it:** add a hook to uikit's `metric-card.tsx`:
+
+```tsx
+import { useState } from 'react';
+// first line inside MetricCard:
+const [hovered] = useState(false);
+```
+
+Save → console shows the invalid-hook/dispatcher error. "The uikit team added one
+innocent hook and every consumer just went down. THAT is the two-React bug — it ships
+silently and detonates on someone else's harmless change."
+
+**Say:** "`singleton: true` tells federation: negotiate ONE copy for everyone. This
+single line is the number-one module federation production bug. When you see a nonsense
+hooks error in a federated app, check `shared` first."
+
+**Do:** restore both `shared` blocks (keep the hook!), restart, reload — works, and the
+:3101 `lib-react.js` request is gone. Then remove the demo hook. (Don't skip the
+restores on camera — viewers mirror you.)
 
 ## 10:30–11:30 · Types, CSS, verify, out
 
