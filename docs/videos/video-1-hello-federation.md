@@ -200,8 +200,12 @@ silently and detonates on someone else's harmless change."
 single line is the number-one module federation production bug. When you see a nonsense
 hooks error in a federated app, check `shared` first."
 
-**Do:** restore both `shared` blocks (keep the hook!), restart, reload — works, and the
-:3101 `lib-react.js` request is gone. Then remove the demo hook. (Don't skip the
+**Do:** restore both `shared` blocks (keep the hook!), restart, reload — works. In the
+network tab the react chunks now wear verbose `webpack_sharing_consume_…` /
+`vendors-…react…` names — that's the share-scope plumbing showing itself (react imports
+now route through the negotiation table, which reshapes the chunks). Don't chase the
+names; read the **Domain column**: every react chunk comes from :3100 only. One copy,
+provided by the host, consumed by everyone. Then remove the demo hook. (Don't skip the
 restores on camera — viewers mirror you.)
 
 ## 10:30–11:30 · Types, CSS, verify, out
