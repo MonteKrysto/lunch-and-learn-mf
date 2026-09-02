@@ -189,38 +189,25 @@
   .captions.blank { visibility: hidden; }
 
   /* ---------- scene 1 : the coupling ladder ---------- */
-  #s1 .dom rect { fill: var(--surface); stroke-width: 1.6; }
-  #s1 .d1 rect { stroke: var(--tB); }
-  #s1 .d2 rect { stroke: var(--tC); }
-  #s1 .d3 rect { stroke: var(--tA); }
-  #s1 .d4 rect { stroke: var(--tD); }
-  #s1 .dom { transition: transform 0.8s cubic-bezier(0.35, 0, 0.2, 1); }
-  #s1 .d1 { transform: translate(92px, 96px); }
-  #s1 .d2 { transform: translate(204px, 130px); }
-  #s1 .d3 { transform: translate(104px, 250px); }
-  #s1 .d4 { transform: translate(212px, 292px); }
-  #s1[data-stage="2"] .d1, #s1[data-stage="3"] .d1 { transform: translate(85px, 92px); }
-  #s1[data-stage="2"] .d2, #s1[data-stage="3"] .d2 { transform: translate(245px, 92px); }
-  #s1[data-stage="2"] .d3, #s1[data-stage="3"] .d3 { transform: translate(85px, 264px); }
-  #s1[data-stage="2"] .d4, #s1[data-stage="3"] .d4 { transform: translate(245px, 264px); }
-  #s1[data-stage="4"] .d1, #s1[data-stage="5"] .d1 { transform: translate(88px, 58px); }
-  #s1[data-stage="4"] .d2, #s1[data-stage="5"] .d2 { transform: translate(88px, 160px); }
-  #s1[data-stage="4"] .d3, #s1[data-stage="5"] .d3 { transform: translate(88px, 262px); }
-  #s1[data-stage="4"] .d4, #s1[data-stage="5"] .d4 { transform: translate(88px, 364px); }
-
-  #s1 .repo-shell { opacity: 1; transition: opacity 0.5s ease; }
-  #s1[data-stage="4"] .repo-shell, #s1[data-stage="5"] .repo-shell { opacity: 0; }
-  #s1 .collisions { opacity: 1; transition: opacity 0.4s ease; }
-  #s1[data-stage="2"] .collisions, #s1[data-stage="3"] .collisions,
-  #s1[data-stage="4"] .collisions, #s1[data-stage="5"] .collisions { opacity: 0; }
+  #s1 .repo-shell, #s1 .ui-chips, #s1 .hub, #s1 .conflicts, #s1 .api-col { transition: opacity 0.5s ease; }
+  #s1[data-stage="4"] .repo-shell, #s1[data-stage="5"] .repo-shell,
+  #s1[data-stage="4"] .ui-chips,   #s1[data-stage="5"] .ui-chips,
+  #s1[data-stage="4"] .api-col,    #s1[data-stage="5"] .api-col { opacity: 0; }
+  #s1[data-stage="2"] .hub, #s1[data-stage="3"] .hub,
+  #s1[data-stage="4"] .hub, #s1[data-stage="5"] .hub { opacity: 0; }
+  #s1[data-stage="2"] .conflicts, #s1[data-stage="3"] .conflicts,
+  #s1[data-stage="4"] .conflicts, #s1[data-stage="5"] .conflicts { opacity: 0; }
+  #s1[data-stage="2"] .ui-chips .wire, #s1[data-stage="3"] .ui-chips .wire { opacity: 0; }
+  #s1 .ui-chips .wire { transition: opacity 0.4s ease; }
   #s1 .queue-jam { opacity: 0; transition: opacity 0.45s ease; }
   #s1[data-stage="1"] .queue-jam { opacity: 1; }
-  #s1 .dividers { opacity: 0; transition: opacity 0.45s ease 0.5s; }
+  #s1 .dividers { opacity: 0; transition: opacity 0.45s ease 0.35s; }
   #s1[data-stage="2"] .dividers, #s1[data-stage="3"] .dividers { opacity: 1; }
   #s1 .funnel { opacity: 0; transition: opacity 0.45s ease; }
+  #s1[data-stage="3"] .api-col { opacity: 0.2; }
   #s1[data-stage="3"] .funnel { opacity: 1; }
-  #s1 .split-infra1 { opacity: 0; transition: opacity 0.5s ease; }
-  #s1[data-stage="4"] .split-infra1, #s1[data-stage="5"] .split-infra1 { opacity: 1; transition-delay: 0.55s; }
+  #s1 .slices { opacity: 0; transition: opacity 0.55s ease; }
+  #s1[data-stage="4"] .slices, #s1[data-stage="5"] .slices { opacity: 1; transition-delay: 0.4s; }
   #s1 .split-run, #s1 .split-block, #s1 .next-q { opacity: 0; transition: opacity 0.4s ease 0.5s; }
   #s1[data-stage="5"] .split-run, #s1[data-stage="5"] .split-block, #s1[data-stage="5"] .next-q { opacity: 1; }
 
@@ -229,15 +216,96 @@
   @keyframes f-run {
     from { transform: translateX(0); opacity: 0; }
     12%  { opacity: 1; } 86% { opacity: 1; }
-    to   { transform: translateX(104px); opacity: 0; }
+    to   { transform: translateX(78px); opacity: 0; }
   }
   #s1 .rdot { animation: r-run 4.5s linear infinite; }
   #s1 .rdot.d2 { animation-delay: -2.2s; }
   @keyframes r-run {
     from { transform: translateX(0); opacity: 0; }
     8%   { opacity: 1; } 90% { opacity: 1; }
-    to   { transform: translateX(482px); opacity: 0; }
+    to   { transform: translateX(446px); opacity: 0; }
   }
+
+  /* ---------- scene 2 ---------- */
+  #s2 .era { transition: opacity 0.55s ease; }
+  #s2 .era-build { opacity: 1; }
+  #s2 .era-runtime { opacity: 0; }
+  #s2[data-stage="2"] .era-build, #s2[data-stage="3"] .era-build { opacity: 0; }
+  #s2[data-stage="2"] .era-runtime, #s2[data-stage="3"] .era-runtime { opacity: 1; transition-delay: 0.4s; }
+
+  #s2 .chip-v1, #s2 .chip-v2 { transition: opacity 0.3s ease; }
+  #s2 .chip-v2 { opacity: 0; }
+  #s2[data-stage="1"] .chip-v1 { opacity: 0; }
+  #s2[data-stage="1"] .chip-v2 { opacity: 1; }
+  #s2 .baked { transition: all 0.3s ease; }
+  #s2[data-stage="1"] .baked rect { stroke: var(--danger); }
+  #s2[data-stage="1"] .baked text { fill: var(--danger); }
+  #s2 .churn { opacity: 0; transition: opacity 0.3s ease; }
+  #s2[data-stage="1"] .churn { opacity: 1; }
+  #s2 .churnfill { animation: churn 1.6s ease-in-out infinite; transform-box: fill-box; transform-origin: left center; }
+  @keyframes churn {
+    from { transform: scaleX(0); }
+    70%  { transform: scaleX(1); }
+    to   { transform: scaleX(1); opacity: 0; }
+  }
+  #s2 .flow { stroke-dasharray: 7 7; animation: dashflow 0.9s linear infinite; }
+  @keyframes dashflow { to { stroke-dashoffset: -14; } }
+  #s2 .deploypulse { animation: pulse 1.8s ease-in-out infinite; }
+  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.45; } }
+
+  #s2 .rchip { transition: transform 0.7s cubic-bezier(0.35, 0, 0.2, 1), opacity 0.5s ease; }
+  #s2 .singleton { opacity: 0; transition: opacity 0.45s ease; }
+  #s2[data-stage="3"] .rchip.c1 { transform: translate(94px, 0); opacity: 0; }
+  #s2[data-stage="3"] .rchip.c3 { transform: translate(-96px, 0); opacity: 0; }
+  #s2[data-stage="3"] .rchip.c2 { opacity: 0; }
+  #s2[data-stage="3"] .singleton { opacity: 1; transition-delay: 0.55s; }
+  #s2 .modchips { opacity: 0; transition: opacity 0.4s ease 0.7s; }
+  #s2[data-stage="2"] .modchips, #s2[data-stage="3"] .modchips { opacity: 1; }
+  #s2 .reactrow { opacity: 0; }
+  #s2[data-stage="3"] .reactrow { opacity: 1; transition: opacity 0.3s ease; }
+
+  /* ---------- scene 3 ---------- */
+  #s3 .vchip { transition: opacity 0.35s ease; }
+  #s3 .uk-slot-new, #s3 .cl-slot-bad, #s3 .uk-dep-new, #s3 .cl-dep-bad { opacity: 0; }
+  #s3[data-stage="2"] .uk-slot-old, #s3[data-stage="3"] .uk-slot-old { opacity: 0; }
+  #s3[data-stage="2"] .uk-slot-new, #s3[data-stage="3"] .uk-slot-new { opacity: 1; }
+  #s3[data-stage="3"] .cl-slot-old { opacity: 0; }
+  #s3[data-stage="3"] .cl-slot-bad { opacity: 1; }
+  #s3[data-stage="1"] .uk-dep-old, #s3[data-stage="2"] .uk-dep-old, #s3[data-stage="3"] .uk-dep-old { opacity: 0; }
+  #s3[data-stage="1"] .uk-dep-new, #s3[data-stage="2"] .uk-dep-new, #s3[data-stage="3"] .uk-dep-new { opacity: 1; }
+  #s3[data-stage="3"] .cl-dep-old { opacity: 0; }
+  #s3[data-stage="3"] .cl-dep-bad { opacity: 1; }
+  #s3[data-stage="1"] .uk-dep-new { animation: pulse 1.8s ease-in-out infinite; }
+  #s3[data-stage="3"] .cl-dep-bad { animation: pulse 1.8s ease-in-out infinite; }
+  #s3 .running-tag { opacity: 0; transition: opacity 0.35s ease; }
+  #s3[data-stage="1"] .running-tag { opacity: 1; }
+  #s3 .flowset, #s3 .reloadtag { opacity: 0; transition: opacity 0.35s ease; }
+  #s3[data-stage="2"] .flowset, #s3[data-stage="3"] .flowset { opacity: 1; }
+  #s3[data-stage="2"] .reloadtag, #s3[data-stage="3"] .reloadtag { opacity: 1; }
+  #s3 .flowset .flow2 { stroke-dasharray: 7 7; animation: dashflow 0.9s linear infinite; }
+  #s3 .slotframe { transition: stroke 0.35s ease; }
+  #s3[data-stage="3"] .cl-slotframe { stroke: var(--danger); }
+  #s3 .bad-tag { opacity: 0; transition: opacity 0.35s ease 0.4s; }
+  #s3[data-stage="3"] .bad-tag { opacity: 1; }
+
+  /* ---------- scene 4 ---------- */
+  #s4 .pagebox { opacity: 0.3; transition: opacity 0.45s ease; }
+  #s4[data-stage="1"] .pagebox, #s4[data-stage="2"] .pagebox { opacity: 1; }
+  #s4 .wiring { opacity: 0; transition: opacity 0.45s ease 0.15s; }
+  #s4[data-stage="1"] .wiring, #s4[data-stage="2"] .wiring { opacity: 1; }
+  #s4 .wiring .flow3 { stroke-dasharray: 7 7; animation: dashflow 0.9s linear infinite; }
+  #s4 .pdot { animation: p-run 2.6s linear infinite; }
+  #s4 .pdot.d2 { animation-delay: -1.3s; }
+  @keyframes p-run {
+    from { transform: translateX(0); opacity: 0; }
+    10%  { opacity: 1; }
+    88%  { opacity: 1; }
+    to   { transform: translateX(104px); opacity: 0; }
+  }
+  #s4 .api-v-old, #s4 .api-v-new { transition: opacity 0.35s ease; }
+  #s4 .api-v-new { opacity: 0; }
+  #s4[data-stage="2"] .api-v-old { opacity: 0; }
+  #s4[data-stage="2"] .api-v-new { opacity: 1; animation: pulse 1.8s ease-in-out infinite; }
 
   /* ---------- scene 5 : topologies ---------- */
   #s5 .origin-tag { opacity: 0; transition: opacity 0.4s ease 0.3s; }
@@ -305,7 +373,7 @@
     </ul>
   </section>
 
-  <!-- ================= PART 1 : coupling ladder ================= -->
+<!-- ================= PART 1 : coupling ladder ================= -->
   <section class="scene" id="scene1-wrap">
     <header>
       <p class="eyebrow">Part 1 &middot; Why Microfrontends</p>
@@ -313,93 +381,139 @@
     </header>
     <figure class="stage" id="stage1">
       <svg id="s1" data-stage="0" viewBox="0 0 960 470" role="img"
-           aria-label="Animation: four domain teams share one codebase and collide; a single deploy queue jams; workspace slices give structural ownership but still build into one artifact; splitting into independently deployed apps contains failures, leaving the question of runtime composition.">
+           aria-label="Animation: four domain teams whose APIs already deploy independently share one frontend codebase through a shared core that causes merge conflicts; the single deploy queue jams; ownership walls carve the core into slices; the slices still build into one artifact; finally each team ships a full vertical slice of UI plus API on its own pipeline, containing failures.">
         <defs>
           <marker id="arr1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
             <path d="M0,0 L10,5 L0,10 z" fill="#55637A"/>
           </marker>
         </defs>
 
-        <!-- repo boundary -->
+        <!-- the frontend monolith -->
         <g class="repo-shell">
-          <text x="60" y="38" class="sub">one frontend codebase</text>
-          <rect x="60" y="50" width="400" height="384" fill="none" stroke="var(--line)" stroke-width="1.6" rx="14"/>
+          <text x="56" y="48" class="sub">one frontend codebase &middot; four teams</text>
+          <rect x="56" y="60" width="330" height="354" fill="none" stroke="var(--line)" stroke-width="1.6" rx="14"/>
         </g>
 
-        <!-- domain teams (constant boxes, moving boundaries) -->
-        <g class="dom d1">
-          <rect width="150" height="64" rx="9"/>
-          <text x="16" y="28" class="boxlabel">claims</text>
-          <text x="16" y="48" class="sub">one team &middot; one domain</text>
-        </g>
-        <g class="dom d2">
-          <rect width="150" height="64" rx="9"/>
-          <text x="16" y="28" class="boxlabel">denials</text>
-          <text x="16" y="48" class="sub">one team &middot; one domain</text>
-        </g>
-        <g class="dom d3">
-          <rect width="150" height="64" rx="9"/>
-          <text x="16" y="28" class="boxlabel">billing</text>
-          <text x="16" y="48" class="sub">one team &middot; one domain</text>
-        </g>
-        <g class="dom d4">
-          <rect width="150" height="64" rx="9"/>
-          <text x="16" y="28" class="boxlabel">eligibility</text>
-          <text x="16" y="48" class="sub">one team &middot; one domain</text>
+        <!-- ui areas inside the monolith -->
+        <g class="ui-chips">
+          <g class="wire">
+            <line x1="143" y1="130" x2="200" y2="206" stroke="var(--line-strong)" stroke-width="1.2"/>
+            <line x1="299" y1="130" x2="242" y2="206" stroke="var(--line-strong)" stroke-width="1.2"/>
+            <line x1="143" y1="332" x2="200" y2="266" stroke="var(--line-strong)" stroke-width="1.2"/>
+            <line x1="299" y1="332" x2="242" y2="266" stroke="var(--line-strong)" stroke-width="1.2"/>
+          </g>
+          <rect x="78"  y="86"  width="130" height="44" rx="8" fill="var(--surface)" stroke="var(--tB)" stroke-width="1.5"/>
+          <text x="143" y="113" text-anchor="middle" font-size="12.5">claims ui</text>
+          <rect x="234" y="86"  width="130" height="44" rx="8" fill="var(--surface)" stroke="var(--tC)" stroke-width="1.5"/>
+          <text x="299" y="113" text-anchor="middle" font-size="12.5">denials ui</text>
+          <rect x="78"  y="332" width="130" height="44" rx="8" fill="var(--surface)" stroke="var(--tA)" stroke-width="1.5"/>
+          <text x="143" y="359" text-anchor="middle" font-size="12.5">billing ui</text>
+          <rect x="234" y="332" width="130" height="44" rx="8" fill="var(--surface)" stroke="var(--tD)" stroke-width="1.5"/>
+          <text x="299" y="359" text-anchor="middle" font-size="12.5">eligibility ui</text>
         </g>
 
-        <!-- code collisions -->
-        <g class="collisions">
-          <circle cx="228" cy="146" r="10" fill="var(--danger)"/>
-          <text x="228" y="151" text-anchor="middle" font-size="11" fill="#0E1217" font-weight="600">&#x2715;</text>
-          <circle cx="240" cy="304" r="10" fill="var(--danger)"/>
-          <text x="240" y="309" text-anchor="middle" font-size="11" fill="#0E1217" font-weight="600">&#x2715;</text>
-          <text x="330" y="150" class="tag" fill="var(--danger)">same files</text>
-          <text x="342" y="308" class="tag" fill="var(--danger)">crossed wires</text>
+        <!-- the shared core everyone edits -->
+        <g class="hub">
+          <rect x="146" y="206" width="150" height="60" rx="10" fill="var(--surface)" stroke="var(--line-strong)" stroke-width="1.4"/>
+          <text x="221" y="230" text-anchor="middle" font-size="12.5">shared core</text>
+          <text x="221" y="250" text-anchor="middle" class="sub">components &middot; styles &middot; router</text>
+        </g>
+        <g class="conflicts">
+          <rect x="108" y="148" width="104" height="22" rx="11" fill="var(--surface)" stroke="var(--danger)" stroke-width="1.3"/>
+          <text x="160" y="163" text-anchor="middle" font-size="10.5" fill="var(--danger)">merge conflict</text>
+          <rect x="238" y="290" width="104" height="22" rx="11" fill="var(--surface)" stroke="var(--danger)" stroke-width="1.3"/>
+          <text x="290" y="305" text-anchor="middle" font-size="10.5" fill="var(--danger)">merge conflict</text>
         </g>
 
-        <!-- the deploy-queue jam -->
+        <!-- the backends already split -->
+        <g class="api-col">
+          <text x="831" y="58" text-anchor="middle" class="tag">the backends</text>
+          <rect x="756" y="72"  width="150" height="40" class="nodebox" rx="8" style="stroke: var(--tB)"/>
+          <text x="831" y="97"  text-anchor="middle" font-size="12">claims api</text>
+          <rect x="756" y="124" width="150" height="40" class="nodebox" rx="8" style="stroke: var(--tC)"/>
+          <text x="831" y="149" text-anchor="middle" font-size="12">denials api</text>
+          <rect x="756" y="176" width="150" height="40" class="nodebox" rx="8" style="stroke: var(--tA)"/>
+          <text x="831" y="201" text-anchor="middle" font-size="12">billing api</text>
+          <rect x="756" y="228" width="150" height="40" class="nodebox" rx="8" style="stroke: var(--tD)"/>
+          <text x="831" y="253" text-anchor="middle" font-size="12">eligibility api</text>
+          <text x="831" y="292" text-anchor="middle" class="sub">services &mdash; each already deploys alone</text>
+        </g>
+
+        <!-- one deploy queue for the whole frontend -->
         <g class="queue-jam">
-          <line class="pipe" x1="472" y1="240" x2="748" y2="240" marker-end="url(#arr1)"/>
-          <text x="600" y="220" text-anchor="middle" class="tag">one deploy queue</text>
-          <circle cx="600" cy="240" r="9" fill="var(--danger)"/>
-          <text x="600" y="245" text-anchor="middle" font-size="11" fill="#0E1217" font-weight="600">&#x2715;</text>
-          <circle cx="560" cy="240" r="7" fill="var(--tC)"/>
-          <circle cx="524" cy="240" r="7" fill="var(--tA)"/>
-          <circle cx="488" cy="240" r="7" fill="var(--tD)"/>
-          <text x="560" y="270" text-anchor="middle" class="tag">everyone waits</text>
-          <rect x="758" y="198" width="140" height="84" class="nodebox" opacity="0.35"/>
-          <text x="828" y="238" text-anchor="middle" class="boxlabel" opacity="0.35">prod</text>
+          <line class="pipe" x1="390" y1="380" x2="688" y2="380" marker-end="url(#arr1)"/>
+          <text x="540" y="360" text-anchor="middle" class="tag">one deploy queue &mdash; the whole frontend</text>
+          <circle cx="560" cy="380" r="9" fill="var(--danger)"/>
+          <text x="560" y="385" text-anchor="middle" font-size="11" fill="#0E1217" font-weight="600">&#x2715;</text>
+          <circle cx="520" cy="380" r="7" fill="var(--tC)"/>
+          <circle cx="484" cy="380" r="7" fill="var(--tA)"/>
+          <circle cx="448" cy="380" r="7" fill="var(--tD)"/>
+          <text x="500" y="410" text-anchor="middle" class="tag">everyone waits</text>
+          <rect x="700" y="346" width="200" height="64" class="nodebox" opacity="0.35"/>
+          <text x="800" y="384" text-anchor="middle" class="boxlabel" opacity="0.35">prod &middot; web</text>
         </g>
 
-        <!-- workspace walls -->
+        <!-- ownership walls -->
         <g class="dividers">
-          <line x1="240" y1="62" x2="240" y2="422" stroke="var(--line-strong)" stroke-width="1.2" stroke-dasharray="6 6"/>
-          <line x1="72" y1="226" x2="448" y2="226" stroke="var(--line-strong)" stroke-width="1.2" stroke-dasharray="6 6"/>
-          <text x="60" y="452" class="sub">a workspace per domain &mdash; this is a turborepo (and the repo you&rsquo;ll clone)</text>
+          <line x1="221" y1="72" x2="221" y2="402" stroke="var(--line-strong)" stroke-width="1.2" stroke-dasharray="6 6"/>
+          <line x1="68" y1="237" x2="374" y2="237" stroke="var(--line-strong)" stroke-width="1.2" stroke-dasharray="6 6"/>
+          <text x="56" y="444" class="sub">ownership walls &mdash; workspaces in one repo, or separate repos entirely</text>
         </g>
 
-        <!-- one build artifact -->
+        <!-- still one build artifact -->
         <g class="funnel">
-          <line class="pipe" x1="395" y1="124" x2="500" y2="200" marker-end="url(#arr1)"/>
-          <line class="pipe" x1="395" y1="296" x2="500" y2="230" marker-end="url(#arr1)"/>
-          <rect x="504" y="188" width="128" height="54" class="nodebox"/>
-          <text x="568" y="211" text-anchor="middle" font-size="12.5">one build</text>
-          <text x="568" y="229" text-anchor="middle" class="sub">one artifact</text>
-          <line class="pipe" x1="636" y1="215" x2="748" y2="215" marker-end="url(#arr1)"/>
-          <circle class="fdot" cx="642" cy="215" r="6" fill="var(--accent)"/>
-          <circle class="fdot k2" cx="642" cy="215" r="6" fill="var(--accent)"/>
-          <rect x="758" y="173" width="140" height="84" class="nodebox"/>
-          <text x="828" y="213" text-anchor="middle" class="boxlabel">prod</text>
-          <text x="828" y="233" text-anchor="middle" class="sub">one release train</text>
+          <line class="pipe" x1="390" y1="150" x2="466" y2="215" marker-end="url(#arr1)"/>
+          <line class="pipe" x1="390" y1="320" x2="466" y2="250" marker-end="url(#arr1)"/>
+          <rect x="470" y="205" width="128" height="56" class="nodebox"/>
+          <text x="534" y="228" text-anchor="middle" font-size="12.5">one build</text>
+          <text x="534" y="247" text-anchor="middle" class="sub">one artifact</text>
+          <line class="pipe" x1="598" y1="233" x2="688" y2="233" marker-end="url(#arr1)"/>
+          <circle class="fdot" cx="604" cy="233" r="6" fill="var(--accent)"/>
+          <circle class="fdot k2" cx="604" cy="233" r="6" fill="var(--accent)"/>
+          <rect x="700" y="199" width="200" height="64" class="nodebox"/>
+          <text x="800" y="226" text-anchor="middle" class="boxlabel">prod &middot; web</text>
+          <text x="800" y="246" text-anchor="middle" class="sub">one release train</text>
         </g>
 
-        <!-- independent pipelines -->
-        <g class="split-infra1">
-          <line class="pipe" x1="254" y1="90"  x2="748" y2="90"  marker-end="url(#arr1)"/>
-          <line class="pipe" x1="254" y1="192" x2="748" y2="192" marker-end="url(#arr1)"/>
-          <line class="pipe" x1="254" y1="294" x2="748" y2="294" marker-end="url(#arr1)"/>
-          <line class="pipe" x1="254" y1="396" x2="748" y2="396" marker-end="url(#arr1)"/>
+        <!-- vertical slices, independently deployed -->
+        <g class="slices">
+          <text x="500" y="40" text-anchor="middle" class="tag">a full slice per team &mdash; UI + API, built and deployed alone</text>
+          <g>
+            <rect x="88" y="58" width="190" height="64" rx="9" fill="var(--surface)" stroke="var(--tB)" stroke-width="1.6"/>
+            <text x="104" y="84" class="boxlabel">claims</text>
+            <rect x="102" y="94" width="52" height="20" rx="6" fill="none" stroke="var(--tB)" stroke-width="1.1"/>
+            <text x="128" y="108" text-anchor="middle" font-size="10.5">ui</text>
+            <rect x="162" y="94" width="52" height="20" rx="6" fill="none" stroke="var(--tB)" stroke-width="1.1"/>
+            <text x="188" y="108" text-anchor="middle" font-size="10.5">api</text>
+          </g>
+          <g>
+            <rect x="88" y="160" width="190" height="64" rx="9" fill="var(--surface)" stroke="var(--tC)" stroke-width="1.6"/>
+            <text x="104" y="186" class="boxlabel">denials</text>
+            <rect x="102" y="196" width="52" height="20" rx="6" fill="none" stroke="var(--tC)" stroke-width="1.1"/>
+            <text x="128" y="210" text-anchor="middle" font-size="10.5">ui</text>
+            <rect x="162" y="196" width="52" height="20" rx="6" fill="none" stroke="var(--tC)" stroke-width="1.1"/>
+            <text x="188" y="210" text-anchor="middle" font-size="10.5">api</text>
+          </g>
+          <g>
+            <rect x="88" y="262" width="190" height="64" rx="9" fill="var(--surface)" stroke="var(--tA)" stroke-width="1.6"/>
+            <text x="104" y="288" class="boxlabel">billing</text>
+            <rect x="102" y="298" width="52" height="20" rx="6" fill="none" stroke="var(--tA)" stroke-width="1.1"/>
+            <text x="128" y="312" text-anchor="middle" font-size="10.5">ui</text>
+            <rect x="162" y="298" width="52" height="20" rx="6" fill="none" stroke="var(--tA)" stroke-width="1.1"/>
+            <text x="188" y="312" text-anchor="middle" font-size="10.5">api</text>
+          </g>
+          <g>
+            <rect x="88" y="364" width="190" height="64" rx="9" fill="var(--surface)" stroke="var(--tD)" stroke-width="1.6"/>
+            <text x="104" y="390" class="boxlabel">eligibility</text>
+            <rect x="102" y="400" width="52" height="20" rx="6" fill="none" stroke="var(--tD)" stroke-width="1.1"/>
+            <text x="128" y="414" text-anchor="middle" font-size="10.5">ui</text>
+            <rect x="162" y="400" width="52" height="20" rx="6" fill="none" stroke="var(--tD)" stroke-width="1.1"/>
+            <text x="188" y="414" text-anchor="middle" font-size="10.5">api</text>
+          </g>
+          <line class="pipe" x1="290" y1="90"  x2="748" y2="90"  marker-end="url(#arr1)"/>
+          <line class="pipe" x1="290" y1="192" x2="748" y2="192" marker-end="url(#arr1)"/>
+          <line class="pipe" x1="290" y1="294" x2="748" y2="294" marker-end="url(#arr1)"/>
+          <line class="pipe" x1="290" y1="396" x2="748" y2="396" marker-end="url(#arr1)"/>
           <rect x="762" y="66"  width="140" height="48" class="nodebox" rx="9"/>
           <rect x="762" y="168" width="140" height="48" class="nodebox" rx="9"/>
           <rect x="762" y="270" width="140" height="48" class="nodebox" rx="9"/>
@@ -408,23 +522,22 @@
           <text x="832" y="197" text-anchor="middle" font-size="13">prod &middot; denials</text>
           <text x="832" y="299" text-anchor="middle" font-size="13">prod &middot; billing</text>
           <text x="832" y="401" text-anchor="middle" font-size="13">prod &middot; eligibility</text>
-          <text x="500" y="48" text-anchor="middle" class="tag">a pipeline per team &mdash; built AND deployed alone</text>
         </g>
         <g class="split-run">
-          <circle class="rdot"    cx="262" cy="90"  r="7" fill="var(--tB)"/>
-          <circle class="rdot d2" cx="262" cy="90"  r="7" fill="var(--tB)"/>
-          <circle class="rdot d2" cx="262" cy="294" r="7" fill="var(--tA)"/>
-          <circle class="rdot"    cx="262" cy="294" r="7" fill="var(--tA)"/>
-          <circle class="rdot d2" cx="262" cy="396" r="7" fill="var(--tD)"/>
-          <circle class="rdot"    cx="262" cy="396" r="7" fill="var(--tD)"/>
+          <circle class="rdot"    cx="298" cy="90"  r="7" fill="var(--tB)"/>
+          <circle class="rdot d2" cx="298" cy="90"  r="7" fill="var(--tB)"/>
+          <circle class="rdot d2" cx="298" cy="294" r="7" fill="var(--tA)"/>
+          <circle class="rdot"    cx="298" cy="294" r="7" fill="var(--tA)"/>
+          <circle class="rdot d2" cx="298" cy="396" r="7" fill="var(--tD)"/>
+          <circle class="rdot"    cx="298" cy="396" r="7" fill="var(--tD)"/>
         </g>
         <g class="split-block">
-          <circle cx="480" cy="192" r="9" fill="var(--danger)"/>
-          <text x="480" y="197" text-anchor="middle" font-size="11" fill="#0E1217" font-weight="600">&#x2715;</text>
-          <text x="480" y="172" text-anchor="middle" class="tag" fill="var(--danger)">broken &mdash; only denials waits</text>
+          <circle cx="500" cy="192" r="9" fill="var(--danger)"/>
+          <text x="500" y="197" text-anchor="middle" font-size="11" fill="#0E1217" font-weight="600">&#x2715;</text>
+          <text x="500" y="172" text-anchor="middle" class="tag" fill="var(--danger)">broken &mdash; only denials waits</text>
         </g>
         <g class="next-q">
-          <text x="500" y="452" text-anchor="middle" class="tag" fill="var(--accent)">four deployables &mdash; so who composes them back into ONE product? &rarr; Part 2</text>
+          <text x="500" y="456" text-anchor="middle" class="tag" fill="var(--accent)">four separate UIs &mdash; so who composes them back into ONE page? &rarr; Part 2</text>
         </g>
       </svg>
     </figure>
@@ -767,7 +880,7 @@
     </header>
     <figure class="stage" id="stage5">
       <svg id="s5" data-stage="0" viewBox="0 0 960 470" role="img"
-           aria-label="Animation: remotes served from a host per team, then migrating into one central artifact store where a deploy is a file upload, then co-located with the host's own origin — three hosting topologies for the same mechanism.">
+           aria-label="Animation: remotes served from a host per team, then migrating into one central artifact store where a deploy is a file upload, then co-located with the host's own origin &mdash; three hosting topologies for the same mechanism.">
         <defs>
           <marker id="arr5" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
             <path d="M0,0 L10,5 L0,10 z" fill="#55637A"/>
@@ -935,11 +1048,11 @@
   </section>
 
   <div class="captions" id="captions">
-    <p data-step="2">Four teams, four business domains &mdash; claims, denials, billing, eligibility &mdash; one codebase. The boxes are the org chart; the architecture just doesn&rsquo;t know it yet.</p>
-    <p data-step="3">Coupling #1: the code &mdash; same files, crossed wires. Coupling #2: the release &mdash; one broken build and every team&rsquo;s work waits in the same queue.</p>
-    <p data-step="4">First fix: draw the walls. Each domain becomes its own slice &mdash; own package, own config, own owner. This is a turborepo workspace, and it&rsquo;s exactly the repo you&rsquo;ll clone.</p>
-    <p data-step="5">But follow the right side: the slices still funnel into ONE build and ride ONE release train. The coupling moved from code to release &mdash; sharing by npm package behaves the same way.</p>
-    <p data-step="6">Cut the last coupling: each slice builds AND deploys alone. Independently developed, independently deployed &mdash; that is the definition of microfrontends.</p>
+    <p data-step="2">Four domains, four teams. The <em>backends</em> split into services years ago &mdash; each API already deploys alone. The frontend? One codebase, where every team&rsquo;s UI is wired into the same shared core. Merge conflicts are the symptom.</p>
+    <p data-step="3">And the frontend has one deploy queue: a single broken build parks every team&rsquo;s release. Code coupling and release coupling, stacked.</p>
+    <p data-step="4">First fix: draw ownership walls and carve the shared core into team-owned slices &mdash; workspaces in one repo, or separate repos entirely; the boundary is what matters. (Our demo simulates the multi-team world inside one turborepo so you only clone once.)</p>
+    <p data-step="5">But walls don&rsquo;t free the release: the slices still funnel into ONE build and ride ONE train. Sharing by npm package has exactly this shape too.</p>
+    <p data-step="6">The finish line: each team ships a full vertical slice &mdash; their UI <em>and</em> their API &mdash; built and deployed on their own pipeline. Independently developed, independently deployed: microfrontends.</p>
     <p data-step="7">A failure now stays where it happened. One question remains &mdash; and it&rsquo;s the whole second act: who composes four deployables back into one product?</p>
     <p data-step="8">The npm way to share: publish uikit, and every consumer bakes a copy in at build time.</p>
     <p data-step="9">uikit ships v2 &rarr; every consumer must rebuild and redeploy to pick it up. The upgrade tax scales with the number of consumers.</p>

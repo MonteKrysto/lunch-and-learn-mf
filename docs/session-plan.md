@@ -13,7 +13,7 @@ Keys: `0`–`6` jump to parts, arrows step, `F` fullscreen, `R` replays an anima
 | Time | Segment | Deck |
 |---|---|---|
 | 0–2 | Title + agenda; tease :3100 in a tab ("five apps pretending to be one") | steps 0–1 |
-| 2–10 | Part 1 — the coupling ladder (collisions → queue jam → turbo slices → one build artifact → independent deploys → contained failure) | steps 2–7 |
+| 2–10 | Part 1 — the coupling ladder (shared-core conflicts → queue jam → ownership slices [one repo or many] → one build artifact → full vertical slices, UI+API, deployed alone) | steps 2–7 |
 | 10–16 | Part 2 — build-time vs runtime sharing, the singleton | steps 8–11 |
 | 16–26 | LIVE block — the demo-cue slide lists the five beats (illusion tour, configs, federated types, kill-a-remote, time-bomb if time); beats detailed below | step 12 |
 | 26–31 | Part 3 — per-remote versioning (this replaces a live docker deploy) | steps 13–16 |
