@@ -150,252 +150,287 @@
   .fades { transition: opacity 0.55s ease; }
   .team-move { transition: transform 0.8s cubic-bezier(0.35, 0, 0.2, 1); }
 
-  /* ---------- scene 1 ---------- */
-  #s1 .teamA rect { stroke: var(--tA); }
-  #s1 .teamB rect { stroke: var(--tB); }
-  #s1 .teamC rect { stroke: var(--tC); }
-  #s1 .teamD rect { stroke: var(--tD); }
-  #s1 .team rect { fill: var(--surface); stroke-width: 1.6; }
-  #s1 .teamA { transform: translate(88px, 78px); }
-  #s1 .teamB { transform: translate(88px, 170px); }
-  #s1 .teamC { transform: translate(88px, 262px); }
-  #s1 .teamD { transform: translate(88px, 354px); }
-  #s1[data-stage="2"] .teamA, #s1[data-stage="3"] .teamA { transform: translate(88px, 58px); }
-  #s1[data-stage="2"] .teamB, #s1[data-stage="3"] .teamB { transform: translate(88px, 160px); }
-  #s1[data-stage="2"] .teamC, #s1[data-stage="3"] .teamC { transform: translate(88px, 262px); }
-  #s1[data-stage="2"] .teamD, #s1[data-stage="3"] .teamD { transform: translate(88px, 364px); }
+    /* ---------- slides (non-diagram steps) ---------- */
+  .slide { display: none; flex: 1; flex-direction: column; justify-content: center; gap: 18px; min-height: 0; }
+  .slide.active { display: flex; }
+  .slide .eyebrow {
+    font-family: var(--mono); font-size: 13px; letter-spacing: 0.16em;
+    text-transform: uppercase; color: var(--accent); margin: 0;
+  }
+  .slide h1 {
+    font-family: var(--display); font-weight: 700;
+    font-size: clamp(44px, 6.5vw, 84px); line-height: 1.04; margin: 0;
+    text-wrap: balance; max-width: 18ch;
+  }
+  .slide .sub { font-size: clamp(17px, 2vw, 22px); color: var(--muted); max-width: 52ch; line-height: 1.5; margin: 0; }
+  .slide .url { font-family: var(--mono); font-size: clamp(14px, 1.6vw, 18px); color: var(--text); margin: 0; }
+  .slide .url span { color: var(--accent); }
+  .agenda-list { display: flex; flex-direction: column; gap: 10px; margin: 6px 0 0; padding: 0; list-style: none; max-width: 640px; }
+  .agenda-list li {
+    display: flex; align-items: baseline; gap: 16px;
+    font-size: clamp(15px, 1.8vw, 19px); border-bottom: 1px solid var(--line); padding-bottom: 9px;
+  }
+  .agenda-list .n { font-family: var(--mono); font-size: 12px; color: var(--accent); min-width: 2.2em; }
+  .agenda-list .t { flex: 1; }
+  .agenda-list .d { font-family: var(--mono); font-size: 12px; color: var(--muted); }
+  .agenda-list li.live .n, .agenda-list li.live .t { color: var(--ok); }
+  .cue-list { display: flex; flex-direction: column; gap: 12px; margin: 8px 0 0; padding: 0; list-style: none; max-width: 640px; }
+  .cue-list li { display: flex; gap: 14px; font-size: clamp(15px, 1.8vw, 19px); align-items: baseline; }
+  .cue-list .n { font-family: var(--mono); font-size: 12px; color: var(--accent); min-width: 1.6em; }
+  .cue-list code { font-family: var(--mono); font-size: 0.85em; background: var(--surface); border: 1px solid var(--line); border-radius: 5px; padding: 1px 7px; }
+  .cmds { font-family: var(--mono); font-size: clamp(14px, 1.7vw, 17px); background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 16px 20px; max-width: 560px; line-height: 1.9; }
+  .cmds b { color: var(--accent); font-weight: 500; }
 
-  #s1 .mono-infra { opacity: 1; }
-  #s1[data-stage="2"] .mono-infra, #s1[data-stage="3"] .mono-infra { opacity: 0; }
-  #s1 .split-infra { opacity: 0; transition-delay: 0s; }
-  #s1[data-stage="2"] .split-infra, #s1[data-stage="3"] .split-infra { opacity: 1; transition-delay: 0.55s; }
-  #s1[data-stage="1"] .prodbox { opacity: 0.35; }
-  #s1 .prodbox { transition: opacity 0.4s ease; }
+  /* ---------- progress bar ---------- */
+  .progress { display: flex; align-items: center; gap: 14px; flex: 1; min-width: 240px; }
+  .plabel { font-family: var(--mono); font-size: 12px; color: var(--muted); white-space: nowrap; }
+  .pbar { flex: 1; height: 6px; border-radius: 3px; background: var(--line); overflow: hidden; }
+  .pfill { height: 100%; width: 0; background: var(--accent); border-radius: 3px; transition: width 0.3s ease; }
+  .captions.blank { visibility: hidden; }
 
-  #s1 .mono-dots { opacity: 0; }
-  #s1[data-stage="0"] .mono-dots { opacity: 1; }
-  #s1 .jam { opacity: 0; }
-  #s1[data-stage="1"] .jam { opacity: 1; transition: opacity 0.4s ease 0.1s; }
-  #s1 .split-dots, #s1 .split-blocked { opacity: 0; }
-  #s1[data-stage="3"] .split-dots { opacity: 1; transition: opacity 0.4s ease 0.6s; }
-  #s1[data-stage="3"] .split-blocked { opacity: 1; transition: opacity 0.4s ease 0.6s; }
+  /* ---------- scene 1 : the coupling ladder ---------- */
+  #s1 .dom rect { fill: var(--surface); stroke-width: 1.6; }
+  #s1 .d1 rect { stroke: var(--tB); }
+  #s1 .d2 rect { stroke: var(--tC); }
+  #s1 .d3 rect { stroke: var(--tA); }
+  #s1 .d4 rect { stroke: var(--tD); }
+  #s1 .dom { transition: transform 0.8s cubic-bezier(0.35, 0, 0.2, 1); }
+  #s1 .d1 { transform: translate(92px, 96px); }
+  #s1 .d2 { transform: translate(204px, 130px); }
+  #s1 .d3 { transform: translate(104px, 250px); }
+  #s1 .d4 { transform: translate(212px, 292px); }
+  #s1[data-stage="2"] .d1, #s1[data-stage="3"] .d1 { transform: translate(85px, 92px); }
+  #s1[data-stage="2"] .d2, #s1[data-stage="3"] .d2 { transform: translate(245px, 92px); }
+  #s1[data-stage="2"] .d3, #s1[data-stage="3"] .d3 { transform: translate(85px, 264px); }
+  #s1[data-stage="2"] .d4, #s1[data-stage="3"] .d4 { transform: translate(245px, 264px); }
+  #s1[data-stage="4"] .d1, #s1[data-stage="5"] .d1 { transform: translate(88px, 58px); }
+  #s1[data-stage="4"] .d2, #s1[data-stage="5"] .d2 { transform: translate(88px, 160px); }
+  #s1[data-stage="4"] .d3, #s1[data-stage="5"] .d3 { transform: translate(88px, 262px); }
+  #s1[data-stage="4"] .d4, #s1[data-stage="5"] .d4 { transform: translate(88px, 364px); }
 
-  #s1 .qdot { animation: q-run 6s linear infinite; }
-  #s1 .qdot.d2 { animation-delay: -1.5s; }
-  #s1 .qdot.d3 { animation-delay: -3s; }
-  #s1 .qdot.d4 { animation-delay: -4.5s; }
-  @keyframes q-run {
+  #s1 .repo-shell { opacity: 1; transition: opacity 0.5s ease; }
+  #s1[data-stage="4"] .repo-shell, #s1[data-stage="5"] .repo-shell { opacity: 0; }
+  #s1 .collisions { opacity: 1; transition: opacity 0.4s ease; }
+  #s1[data-stage="2"] .collisions, #s1[data-stage="3"] .collisions,
+  #s1[data-stage="4"] .collisions, #s1[data-stage="5"] .collisions { opacity: 0; }
+  #s1 .queue-jam { opacity: 0; transition: opacity 0.45s ease; }
+  #s1[data-stage="1"] .queue-jam { opacity: 1; }
+  #s1 .dividers { opacity: 0; transition: opacity 0.45s ease 0.5s; }
+  #s1[data-stage="2"] .dividers, #s1[data-stage="3"] .dividers { opacity: 1; }
+  #s1 .funnel { opacity: 0; transition: opacity 0.45s ease; }
+  #s1[data-stage="3"] .funnel { opacity: 1; }
+  #s1 .split-infra1 { opacity: 0; transition: opacity 0.5s ease; }
+  #s1[data-stage="4"] .split-infra1, #s1[data-stage="5"] .split-infra1 { opacity: 1; transition-delay: 0.55s; }
+  #s1 .split-run, #s1 .split-block, #s1 .next-q { opacity: 0; transition: opacity 0.4s ease 0.5s; }
+  #s1[data-stage="5"] .split-run, #s1[data-stage="5"] .split-block, #s1[data-stage="5"] .next-q { opacity: 1; }
+
+  #s1 .fdot { animation: f-run 2.6s linear infinite; }
+  #s1 .fdot.k2 { animation-delay: -1.3s; }
+  @keyframes f-run {
     from { transform: translateX(0); opacity: 0; }
-    6%   { opacity: 1; }
-    92%  { opacity: 1; }
-    to   { transform: translateX(438px); opacity: 0; }
+    12%  { opacity: 1; } 86% { opacity: 1; }
+    to   { transform: translateX(104px); opacity: 0; }
   }
   #s1 .rdot { animation: r-run 4.5s linear infinite; }
   #s1 .rdot.d2 { animation-delay: -2.2s; }
   @keyframes r-run {
     from { transform: translateX(0); opacity: 0; }
-    8%   { opacity: 1; }
-    90%  { opacity: 1; }
+    8%   { opacity: 1; } 90% { opacity: 1; }
     to   { transform: translateX(482px); opacity: 0; }
   }
 
-  /* ---------- scene 2 ---------- */
-  #s2 .era { transition: opacity 0.55s ease; }
-  #s2 .era-build { opacity: 1; }
-  #s2 .era-runtime { opacity: 0; }
-  #s2[data-stage="2"] .era-build, #s2[data-stage="3"] .era-build { opacity: 0; }
-  #s2[data-stage="2"] .era-runtime, #s2[data-stage="3"] .era-runtime { opacity: 1; transition-delay: 0.4s; }
+  /* ---------- scene 5 : topologies ---------- */
+  #s5 .origin-tag { opacity: 0; transition: opacity 0.4s ease 0.3s; }
+  #s5 .origin-box { transition: opacity 0.45s ease; }
+  #s5[data-stage="1"] .origin-box, #s5[data-stage="2"] .origin-box { opacity: 0.3; }
+  #s5[data-stage="1"] .origin-tag, #s5[data-stage="2"] .origin-tag { opacity: 1; }
+  #s5 .store, #s5 .arrows-store { opacity: 0; transition: opacity 0.45s ease 0.25s; }
+  #s5[data-stage="1"] .store, #s5[data-stage="2"] .store,
+  #s5[data-stage="1"] .arrows-store, #s5[data-stage="2"] .arrows-store { opacity: 1; }
+  #s5 .arrows-direct { opacity: 1; transition: opacity 0.4s ease; }
+  #s5[data-stage="1"] .arrows-direct, #s5[data-stage="2"] .arrows-direct { opacity: 0; }
+  #s5 .fchip { transition: transform 0.8s cubic-bezier(0.35, 0, 0.2, 1); }
+  #s5 .fc1 { transform: translate(170px, 344px); }
+  #s5 .fc2 { transform: translate(440px, 344px); }
+  #s5 .fc3 { transform: translate(710px, 344px); }
+  #s5[data-stage="1"] .fc1, #s5[data-stage="2"] .fc1 { transform: translate(352px, 366px); }
+  #s5[data-stage="1"] .fc2, #s5[data-stage="2"] .fc2 { transform: translate(444px, 366px); }
+  #s5[data-stage="1"] .fc3, #s5[data-stage="2"] .fc3 { transform: translate(536px, 366px); }
+  #s5 .super { opacity: 0; transition: opacity 0.5s ease 0.2s; }
+  #s5[data-stage="2"] .super { opacity: 1; }
+  #s5 .flow5 { stroke-dasharray: 7 7; animation: dashflow 0.9s linear infinite; }
 
-  #s2 .chip-v1, #s2 .chip-v2 { transition: opacity 0.3s ease; }
-  #s2 .chip-v2 { opacity: 0; }
-  #s2[data-stage="1"] .chip-v1 { opacity: 0; }
-  #s2[data-stage="1"] .chip-v2 { opacity: 1; }
-  #s2 .baked { transition: all 0.3s ease; }
-  #s2[data-stage="1"] .baked rect { stroke: var(--danger); }
-  #s2[data-stage="1"] .baked text { fill: var(--danger); }
-  #s2 .churn { opacity: 0; transition: opacity 0.3s ease; }
-  #s2[data-stage="1"] .churn { opacity: 1; }
-  #s2 .churnfill { animation: churn 1.6s ease-in-out infinite; transform-box: fill-box; transform-origin: left center; }
-  @keyframes churn {
-    from { transform: scaleX(0); }
-    70%  { transform: scaleX(1); }
-    to   { transform: scaleX(1); opacity: 0; }
-  }
-  #s2 .flow { stroke-dasharray: 7 7; animation: dashflow 0.9s linear infinite; }
-  @keyframes dashflow { to { stroke-dashoffset: -14; } }
-  #s2 .deploypulse { animation: pulse 1.8s ease-in-out infinite; }
-  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.45; } }
-
-  #s2 .rchip { transition: transform 0.7s cubic-bezier(0.35, 0, 0.2, 1), opacity 0.5s ease; }
-  #s2 .singleton { opacity: 0; transition: opacity 0.45s ease; }
-  #s2[data-stage="3"] .rchip.c1 { transform: translate(94px, 0); opacity: 0; }
-  #s2[data-stage="3"] .rchip.c3 { transform: translate(-96px, 0); opacity: 0; }
-  #s2[data-stage="3"] .rchip.c2 { opacity: 0; }
-  #s2[data-stage="3"] .singleton { opacity: 1; transition-delay: 0.55s; }
-  #s2 .modchips { opacity: 0; transition: opacity 0.4s ease 0.7s; }
-  #s2[data-stage="2"] .modchips, #s2[data-stage="3"] .modchips { opacity: 1; }
-  #s2 .reactrow { opacity: 0; }
-  #s2[data-stage="3"] .reactrow { opacity: 1; transition: opacity 0.3s ease; }
-
-  /* ---------- scene 3 ---------- */
-  #s3 .vchip { transition: opacity 0.35s ease; }
-  #s3 .uk-slot-new, #s3 .cl-slot-bad, #s3 .uk-dep-new, #s3 .cl-dep-bad { opacity: 0; }
-  #s3[data-stage="2"] .uk-slot-old, #s3[data-stage="3"] .uk-slot-old { opacity: 0; }
-  #s3[data-stage="2"] .uk-slot-new, #s3[data-stage="3"] .uk-slot-new { opacity: 1; }
-  #s3[data-stage="3"] .cl-slot-old { opacity: 0; }
-  #s3[data-stage="3"] .cl-slot-bad { opacity: 1; }
-  #s3[data-stage="1"] .uk-dep-old, #s3[data-stage="2"] .uk-dep-old, #s3[data-stage="3"] .uk-dep-old { opacity: 0; }
-  #s3[data-stage="1"] .uk-dep-new, #s3[data-stage="2"] .uk-dep-new, #s3[data-stage="3"] .uk-dep-new { opacity: 1; }
-  #s3[data-stage="3"] .cl-dep-old { opacity: 0; }
-  #s3[data-stage="3"] .cl-dep-bad { opacity: 1; }
-  #s3[data-stage="1"] .uk-dep-new { animation: pulse 1.8s ease-in-out infinite; }
-  #s3[data-stage="3"] .cl-dep-bad { animation: pulse 1.8s ease-in-out infinite; }
-  #s3 .running-tag { opacity: 0; transition: opacity 0.35s ease; }
-  #s3[data-stage="1"] .running-tag { opacity: 1; }
-  #s3 .flowset, #s3 .reloadtag { opacity: 0; transition: opacity 0.35s ease; }
-  #s3[data-stage="2"] .flowset, #s3[data-stage="3"] .flowset { opacity: 1; }
-  #s3[data-stage="2"] .reloadtag, #s3[data-stage="3"] .reloadtag { opacity: 1; }
-  #s3 .flowset .flow2 { stroke-dasharray: 7 7; animation: dashflow 0.9s linear infinite; }
-  #s3 .slotframe { transition: stroke 0.35s ease; }
-  #s3[data-stage="3"] .cl-slotframe { stroke: var(--danger); }
-  #s3 .bad-tag { opacity: 0; transition: opacity 0.35s ease 0.4s; }
-  #s3[data-stage="3"] .bad-tag { opacity: 1; }
-
-  /* ---------- scene 4 ---------- */
-  #s4 .pagebox { opacity: 0.3; transition: opacity 0.45s ease; }
-  #s4[data-stage="1"] .pagebox, #s4[data-stage="2"] .pagebox { opacity: 1; }
-  #s4 .wiring { opacity: 0; transition: opacity 0.45s ease 0.15s; }
-  #s4[data-stage="1"] .wiring, #s4[data-stage="2"] .wiring { opacity: 1; }
-  #s4 .wiring .flow3 { stroke-dasharray: 7 7; animation: dashflow 0.9s linear infinite; }
-  #s4 .pdot { animation: p-run 2.6s linear infinite; }
-  #s4 .pdot.d2 { animation-delay: -1.3s; }
-  @keyframes p-run {
-    from { transform: translateX(0); opacity: 0; }
-    10%  { opacity: 1; }
-    88%  { opacity: 1; }
-    to   { transform: translateX(104px); opacity: 0; }
-  }
-  #s4 .api-v-old, #s4 .api-v-new { transition: opacity 0.35s ease; }
-  #s4 .api-v-new { opacity: 0; }
-  #s4[data-stage="2"] .api-v-old { opacity: 0; }
-  #s4[data-stage="2"] .api-v-new { opacity: 1; animation: pulse 1.8s ease-in-out infinite; }
+  /* ---------- scene 6 : resilience ---------- */
+  #s6 .kill1, #s6 .page-dead { opacity: 0; transition: opacity 0.45s ease; }
+  #s6[data-stage="0"] .kill1 { opacity: 1; }
+  #s6[data-stage="0"] .page-dead { opacity: 1; transition-delay: 0.5s; }
+  #s6 .defense { opacity: 0; transition: opacity 0.45s ease 0.2s; }
+  #s6[data-stage="1"] .defense, #s6[data-stage="2"] .defense { opacity: 1; }
+  #s6 .kill2, #s6 .uk-slot-fb { opacity: 0; transition: opacity 0.45s ease; }
+  #s6[data-stage="2"] .kill2 { opacity: 1; }
+  #s6[data-stage="2"] .uk-slot-fb { opacity: 1; transition-delay: 0.4s; }
+  #s6 .uk-slot-ok { transition: opacity 0.3s ease; }
+  #s6[data-stage="2"] .uk-slot-ok { opacity: 0; }
 
   @media (prefers-reduced-motion: reduce) {
     * { transition-duration: 1ms !important; }
-    #s1 .qdot, #s1 .rdot, #s2 .churnfill, #s2 .flow, #s2 .deploypulse,
-    #s3 .flow2, #s4 .pdot, #s4 .flow3 { animation-play-state: paused; }
+    #s1 .fdot, #s1 .rdot, #s2 .churnfill, #s2 .flow, #s2 .deploypulse,
+    #s3 .flow2, #s5 .flow5 { animation-play-state: paused; }
   }
 </style>
 </head>
 <body>
 
 <div class="deck">
-  <!-- ================= PART 1 ================= -->
-  <section class="scene active" id="scene1-wrap">
+  <!-- ================= TITLE ================= -->
+  <section class="slide active" id="slide-title">
+    <p class="eyebrow">Engineering Lunch &amp; Learn</p>
+    <h1>One App, Many&nbsp;Teams</h1>
+    <p class="sub">Microfrontends and module federation &mdash; how four teams ship one product
+    without waiting for each other. With a repo you&rsquo;ll build yourself.</p>
+    <p class="url"><span>github.com/</span>MonteKrysto/lunch-and-learn-mf</p>
+  </section>
+
+  <!-- ================= AGENDA ================= -->
+  <section class="slide" id="slide-agenda">
+    <p class="eyebrow">The next 45 minutes</p>
+    <ul class="agenda-list">
+      <li><span class="n">1</span><span class="t">Why microfrontends &mdash; the coupling ladder</span><span class="d">8 min</span></li>
+      <li><span class="n">2</span><span class="t">Module federation &mdash; runtime composition</span><span class="d">6 min</span></li>
+      <li class="live"><span class="n">&#9654;</span><span class="t">Live &mdash; the real thing</span><span class="d">10 min</span></li>
+      <li><span class="n">3</span><span class="t">Versioning &mdash; every team on its own clock</span><span class="d">5 min</span></li>
+      <li><span class="n">4</span><span class="t">Where the APIs live</span><span class="d">4 min</span></li>
+      <li><span class="n">5</span><span class="t">Where the files live &mdash; three topologies</span><span class="d">4 min</span></li>
+      <li><span class="n">6</span><span class="t">When a remote dies &mdash; resilience</span><span class="d">4 min</span></li>
+    </ul>
+  </section>
+
+  <!-- ================= PART 1 : coupling ladder ================= -->
+  <section class="scene" id="scene1-wrap">
     <header>
-      <p class="eyebrow">Part 1 &middot; The Problem</p>
-      <h1>Why teams reach for microfrontends</h1>
+      <p class="eyebrow">Part 1 &middot; Why Microfrontends</p>
+      <h1>The coupling ladder</h1>
     </header>
     <figure class="stage" id="stage1">
       <svg id="s1" data-stage="0" viewBox="0 0 960 470" role="img"
-           aria-label="Animation: four teams in one frontend repo share a single deploy queue; one broken build blocks everyone; splitting into independent apps gives each team its own deploy pipeline so failures stay contained.">
+           aria-label="Animation: four domain teams share one codebase and collide; a single deploy queue jams; workspace slices give structural ownership but still build into one artifact; splitting into independently deployed apps contains failures, leaving the question of runtime composition.">
         <defs>
-          <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <marker id="arr1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
             <path d="M0,0 L10,5 L0,10 z" fill="#55637A"/>
           </marker>
         </defs>
 
-        <!-- monolith infra -->
-        <g class="mono-infra fades">
-          <text x="56" y="34" class="sub">one frontend repo</text>
-          <rect x="56" y="46" width="214" height="390" fill="none" stroke="var(--line)" stroke-width="1.6" rx="14"/>
-          <line class="pipe" x1="286" y1="240" x2="748" y2="240" marker-end="url(#arr)"/>
-          <text x="505" y="222" text-anchor="middle" class="tag">one deploy queue</text>
-          <g class="prodbox">
-            <rect x="762" y="198" width="140" height="84" class="nodebox" rx="10"/>
-            <text x="832" y="238" text-anchor="middle" class="boxlabel">prod</text>
-            <text x="832" y="258" text-anchor="middle" class="sub">everyone ships here</text>
-          </g>
+        <!-- repo boundary -->
+        <g class="repo-shell">
+          <text x="60" y="38" class="sub">one frontend codebase</text>
+          <rect x="60" y="50" width="400" height="384" fill="none" stroke="var(--line)" stroke-width="1.6" rx="14"/>
         </g>
 
-        <!-- teams (move between layouts) -->
-        <g class="team teamA team-move">
+        <!-- domain teams (constant boxes, moving boundaries) -->
+        <g class="dom d1">
           <rect width="150" height="64" rx="9"/>
-          <text x="16" y="28" class="boxlabel">team A</text>
-          <text x="16" y="48" class="sub">checkout</text>
+          <text x="16" y="28" class="boxlabel">claims</text>
+          <text x="16" y="48" class="sub">one team &middot; one domain</text>
         </g>
-        <g class="team teamB team-move">
+        <g class="dom d2">
           <rect width="150" height="64" rx="9"/>
-          <text x="16" y="28" class="boxlabel">team B</text>
-          <text x="16" y="48" class="sub">claims</text>
+          <text x="16" y="28" class="boxlabel">denials</text>
+          <text x="16" y="48" class="sub">one team &middot; one domain</text>
         </g>
-        <g class="team teamC team-move">
+        <g class="dom d3">
           <rect width="150" height="64" rx="9"/>
-          <text x="16" y="28" class="boxlabel">team C</text>
-          <text x="16" y="48" class="sub">reporting</text>
+          <text x="16" y="28" class="boxlabel">billing</text>
+          <text x="16" y="48" class="sub">one team &middot; one domain</text>
         </g>
-        <g class="team teamD team-move">
+        <g class="dom d4">
           <rect width="150" height="64" rx="9"/>
-          <text x="16" y="28" class="boxlabel">team D</text>
-          <text x="16" y="48" class="sub">accounts</text>
+          <text x="16" y="28" class="boxlabel">eligibility</text>
+          <text x="16" y="48" class="sub">one team &middot; one domain</text>
         </g>
 
-        <!-- flowing commits, healthy monolith -->
-        <g class="mono-dots fades">
-          <circle class="qdot" cx="298" cy="240" r="7" fill="var(--tA)"/>
-          <circle class="qdot d2" cx="298" cy="240" r="7" fill="var(--tB)"/>
-          <circle class="qdot d3" cx="298" cy="240" r="7" fill="var(--tC)"/>
-          <circle class="qdot d4" cx="298" cy="240" r="7" fill="var(--tD)"/>
+        <!-- code collisions -->
+        <g class="collisions">
+          <circle cx="228" cy="146" r="10" fill="var(--danger)"/>
+          <text x="228" y="151" text-anchor="middle" font-size="11" fill="#0E1217" font-weight="600">&#x2715;</text>
+          <circle cx="240" cy="304" r="10" fill="var(--danger)"/>
+          <text x="240" y="309" text-anchor="middle" font-size="11" fill="#0E1217" font-weight="600">&#x2715;</text>
+          <text x="330" y="150" class="tag" fill="var(--danger)">same files</text>
+          <text x="342" y="308" class="tag" fill="var(--danger)">crossed wires</text>
         </g>
 
-        <!-- the jam -->
-        <g class="jam">
-          <circle cx="540" cy="240" r="9" fill="var(--danger)"/>
-          <text x="540" y="245" text-anchor="middle" font-size="11" fill="#0E1217" font-weight="600">&#x2715;</text>
-          <text x="540" y="206" text-anchor="middle" class="tag" fill="var(--danger)">team B&rsquo;s build broke</text>
-          <circle cx="500" cy="240" r="7" fill="var(--tC)"/>
-          <circle cx="462" cy="240" r="7" fill="var(--tA)"/>
-          <circle cx="424" cy="240" r="7" fill="var(--tD)"/>
-          <text x="462" y="270" text-anchor="middle" class="tag">everyone else, waiting</text>
+        <!-- the deploy-queue jam -->
+        <g class="queue-jam">
+          <line class="pipe" x1="472" y1="240" x2="748" y2="240" marker-end="url(#arr1)"/>
+          <text x="600" y="220" text-anchor="middle" class="tag">one deploy queue</text>
+          <circle cx="600" cy="240" r="9" fill="var(--danger)"/>
+          <text x="600" y="245" text-anchor="middle" font-size="11" fill="#0E1217" font-weight="600">&#x2715;</text>
+          <circle cx="560" cy="240" r="7" fill="var(--tC)"/>
+          <circle cx="524" cy="240" r="7" fill="var(--tA)"/>
+          <circle cx="488" cy="240" r="7" fill="var(--tD)"/>
+          <text x="560" y="270" text-anchor="middle" class="tag">everyone waits</text>
+          <rect x="758" y="198" width="140" height="84" class="nodebox" opacity="0.35"/>
+          <text x="828" y="238" text-anchor="middle" class="boxlabel" opacity="0.35">prod</text>
         </g>
 
-        <!-- split infra -->
-        <g class="split-infra fades">
-          <line class="pipe" x1="254" y1="90"  x2="748" y2="90"  marker-end="url(#arr)"/>
-          <line class="pipe" x1="254" y1="192" x2="748" y2="192" marker-end="url(#arr)"/>
-          <line class="pipe" x1="254" y1="294" x2="748" y2="294" marker-end="url(#arr)"/>
-          <line class="pipe" x1="254" y1="396" x2="748" y2="396" marker-end="url(#arr)"/>
+        <!-- workspace walls -->
+        <g class="dividers">
+          <line x1="240" y1="62" x2="240" y2="422" stroke="var(--line-strong)" stroke-width="1.2" stroke-dasharray="6 6"/>
+          <line x1="72" y1="226" x2="448" y2="226" stroke="var(--line-strong)" stroke-width="1.2" stroke-dasharray="6 6"/>
+          <text x="60" y="452" class="sub">a workspace per domain &mdash; this is a turborepo (and the repo you&rsquo;ll clone)</text>
+        </g>
+
+        <!-- one build artifact -->
+        <g class="funnel">
+          <line class="pipe" x1="395" y1="124" x2="500" y2="200" marker-end="url(#arr1)"/>
+          <line class="pipe" x1="395" y1="296" x2="500" y2="230" marker-end="url(#arr1)"/>
+          <rect x="504" y="188" width="128" height="54" class="nodebox"/>
+          <text x="568" y="211" text-anchor="middle" font-size="12.5">one build</text>
+          <text x="568" y="229" text-anchor="middle" class="sub">one artifact</text>
+          <line class="pipe" x1="636" y1="215" x2="748" y2="215" marker-end="url(#arr1)"/>
+          <circle class="fdot" cx="642" cy="215" r="6" fill="var(--accent)"/>
+          <circle class="fdot k2" cx="642" cy="215" r="6" fill="var(--accent)"/>
+          <rect x="758" y="173" width="140" height="84" class="nodebox"/>
+          <text x="828" y="213" text-anchor="middle" class="boxlabel">prod</text>
+          <text x="828" y="233" text-anchor="middle" class="sub">one release train</text>
+        </g>
+
+        <!-- independent pipelines -->
+        <g class="split-infra1">
+          <line class="pipe" x1="254" y1="90"  x2="748" y2="90"  marker-end="url(#arr1)"/>
+          <line class="pipe" x1="254" y1="192" x2="748" y2="192" marker-end="url(#arr1)"/>
+          <line class="pipe" x1="254" y1="294" x2="748" y2="294" marker-end="url(#arr1)"/>
+          <line class="pipe" x1="254" y1="396" x2="748" y2="396" marker-end="url(#arr1)"/>
           <rect x="762" y="66"  width="140" height="48" class="nodebox" rx="9"/>
           <rect x="762" y="168" width="140" height="48" class="nodebox" rx="9"/>
           <rect x="762" y="270" width="140" height="48" class="nodebox" rx="9"/>
           <rect x="762" y="372" width="140" height="48" class="nodebox" rx="9"/>
-          <text x="832" y="95"  text-anchor="middle" font-size="13">prod &middot; A</text>
-          <text x="832" y="197" text-anchor="middle" font-size="13">prod &middot; B</text>
-          <text x="832" y="299" text-anchor="middle" font-size="13">prod &middot; C</text>
-          <text x="832" y="401" text-anchor="middle" font-size="13">prod &middot; D</text>
-          <text x="500" y="72" text-anchor="middle" class="tag">a deploy pipeline per team</text>
+          <text x="832" y="95"  text-anchor="middle" font-size="13">prod &middot; claims</text>
+          <text x="832" y="197" text-anchor="middle" font-size="13">prod &middot; denials</text>
+          <text x="832" y="299" text-anchor="middle" font-size="13">prod &middot; billing</text>
+          <text x="832" y="401" text-anchor="middle" font-size="13">prod &middot; eligibility</text>
+          <text x="500" y="48" text-anchor="middle" class="tag">a pipeline per team &mdash; built AND deployed alone</text>
         </g>
-
-        <!-- split flow -->
-        <g class="split-dots">
-          <circle class="rdot"    cx="262" cy="90"  r="7" fill="var(--tA)"/>
-          <circle class="rdot d2" cx="262" cy="90"  r="7" fill="var(--tA)"/>
-          <circle class="rdot d2" cx="262" cy="294" r="7" fill="var(--tC)"/>
-          <circle class="rdot"    cx="262" cy="294" r="7" fill="var(--tC)"/>
+        <g class="split-run">
+          <circle class="rdot"    cx="262" cy="90"  r="7" fill="var(--tB)"/>
+          <circle class="rdot d2" cx="262" cy="90"  r="7" fill="var(--tB)"/>
+          <circle class="rdot d2" cx="262" cy="294" r="7" fill="var(--tA)"/>
+          <circle class="rdot"    cx="262" cy="294" r="7" fill="var(--tA)"/>
           <circle class="rdot d2" cx="262" cy="396" r="7" fill="var(--tD)"/>
           <circle class="rdot"    cx="262" cy="396" r="7" fill="var(--tD)"/>
         </g>
-        <g class="split-blocked">
+        <g class="split-block">
           <circle cx="480" cy="192" r="9" fill="var(--danger)"/>
           <text x="480" y="197" text-anchor="middle" font-size="11" fill="#0E1217" font-weight="600">&#x2715;</text>
-          <text x="480" y="172" text-anchor="middle" class="tag" fill="var(--danger)">still broken &mdash; but only team B waits</text>
+          <text x="480" y="172" text-anchor="middle" class="tag" fill="var(--danger)">broken &mdash; only denials waits</text>
+        </g>
+        <g class="next-q">
+          <text x="500" y="452" text-anchor="middle" class="tag" fill="var(--accent)">four deployables &mdash; so who composes them back into ONE product? &rarr; Part 2</text>
         </g>
       </svg>
     </figure>
   </section>
 
-  <!-- ================= PART 2 ================= -->
-  <section class="scene" id="scene2-wrap">
+<section class="scene" id="scene2-wrap">
     <header>
       <p class="eyebrow">Part 2 &middot; Module Federation</p>
       <h1>Sharing code at runtime, not build time</h1>
@@ -530,9 +565,7 @@
       </svg>
     </figure>
   </section>
-
-  <!-- ================= PART 3 ================= -->
-  <section class="scene" id="scene3-wrap">
+<section class="scene" id="scene3-wrap">
     <header>
       <p class="eyebrow">Part 3 &middot; Versioning</p>
       <h1>Every remote releases on its own clock</h1>
@@ -633,9 +666,7 @@
       </svg>
     </figure>
   </section>
-
-  <!-- ================= PART 4 ================= -->
-  <section class="scene" id="scene4-wrap">
+<section class="scene" id="scene4-wrap">
     <header>
       <p class="eyebrow">Part 4 &middot; The Backends</p>
       <h1>Where the APIs live</h1>
@@ -714,85 +745,305 @@
       </svg>
     </figure>
   </section>
+  <!-- ================= LIVE DEMO CUE ================= -->
+  <section class="slide" id="slide-demo">
+    <p class="eyebrow">Live &middot; the real thing &middot; &asymp;10 min</p>
+    <h1>Enough pictures.</h1>
+    <ul class="cue-list">
+      <li><span class="n">1</span><span>The illusion: :3100 is four codebases &mdash; walk :3101, :3102, :3103</span></li>
+      <li><span class="n">2</span><span>The whole mechanism: two configs side by side &mdash; <code>exposes</code> / <code>remotes</code> / <code>shared</code></span></li>
+      <li><span class="n">3</span><span>Federated types: hover <code>uikit/MetricCard</code> &mdash; autocomplete from another app</span></li>
+      <li><span class="n">4</span><span>Kill uikit&rsquo;s file server &rarr; reload &rarr; a remote fails like a CDN, not like an app</span></li>
+      <li><span class="n">5</span><span>If time: the two-React time bomb &mdash; remove <code>shared</code>, add a hook, boom</span></li>
+    </ul>
+    <p class="sub">Deck resumes at Part 3.</p>
+  </section>
+
+  <!-- ================= PART 5 : topologies ================= -->
+  <section class="scene" id="scene5-wrap">
+    <header>
+      <p class="eyebrow">Part 5 &middot; Topologies</p>
+      <h1>Where the files live</h1>
+    </header>
+    <figure class="stage" id="stage5">
+      <svg id="s5" data-stage="0" viewBox="0 0 960 470" role="img"
+           aria-label="Animation: remotes served from a host per team, then migrating into one central artifact store where a deploy is a file upload, then co-located with the host's own origin — three hosting topologies for the same mechanism.">
+        <defs>
+          <marker id="arr5" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M0,0 L10,5 L0,10 z" fill="#55637A"/>
+          </marker>
+        </defs>
+
+        <rect x="330" y="40" width="300" height="118" class="nodebox" rx="12"/>
+        <text x="480" y="66" text-anchor="middle" class="sub">the composed page</text>
+        <text x="480" y="106" text-anchor="middle" font-size="13">binds to stable manifest URLs</text>
+        <text x="480" y="128" text-anchor="middle" class="sub">everything below is an infra choice</text>
+
+        <!-- topology 1: a host per remote -->
+        <g class="origin-box">
+          <rect x="110" y="300" width="200" height="110" class="nodebox" style="stroke: var(--tD)"/>
+          <text x="210" y="330" text-anchor="middle" class="boxlabel">uikit</text>
+          <text x="210" y="352" text-anchor="middle" class="sub">:3101 &middot; own nginx/CDN</text>
+        </g>
+        <g class="origin-box">
+          <rect x="380" y="300" width="200" height="110" class="nodebox" style="stroke: var(--tB)"/>
+          <text x="480" y="330" text-anchor="middle" class="boxlabel">claims</text>
+          <text x="480" y="352" text-anchor="middle" class="sub">:3102 &middot; own nginx/CDN</text>
+        </g>
+        <g class="origin-box">
+          <rect x="650" y="300" width="200" height="110" class="nodebox" style="stroke: var(--tC)"/>
+          <text x="750" y="330" text-anchor="middle" class="boxlabel">worklist</text>
+          <text x="750" y="352" text-anchor="middle" class="sub">:3103 &middot; own nginx/CDN</text>
+        </g>
+        <g class="origin-tag">
+          <text x="210" y="384" text-anchor="middle" class="tag" fill="var(--ok)">no server at all</text>
+          <text x="480" y="384" text-anchor="middle" class="tag" fill="var(--ok)">no server at all</text>
+          <text x="750" y="384" text-anchor="middle" class="tag" fill="var(--ok)">no server at all</text>
+        </g>
+
+        <g class="arrows-direct">
+          <line class="pipe" x1="210" y1="296" x2="392" y2="162" marker-end="url(#arr5)"/>
+          <line class="pipe" x1="480" y1="296" x2="480" y2="162" marker-end="url(#arr5)"/>
+          <line class="pipe" x1="750" y1="296" x2="568" y2="162" marker-end="url(#arr5)"/>
+        </g>
+
+        <!-- topology 2: the artifact store -->
+        <g class="store">
+          <rect x="330" y="330" width="300" height="78" class="nodebox" rx="10" style="stroke: var(--accent)"/>
+          <text x="480" y="352" text-anchor="middle" font-size="12.5" fill="var(--accent)">artifact store &middot; S3 / Azure Blob + CDN</text>
+        </g>
+        <g class="fchip fc1">
+          <rect width="84" height="26" rx="7" fill="var(--surface)" stroke="var(--tD)" stroke-width="1.3"/>
+          <text x="42" y="17" text-anchor="middle" font-size="11">/uikit</text>
+        </g>
+        <g class="fchip fc2">
+          <rect width="84" height="26" rx="7" fill="var(--surface)" stroke="var(--tB)" stroke-width="1.3"/>
+          <text x="42" y="17" text-anchor="middle" font-size="11">/claims</text>
+        </g>
+        <g class="fchip fc3">
+          <rect width="84" height="26" rx="7" fill="var(--surface)" stroke="var(--tC)" stroke-width="1.3"/>
+          <text x="42" y="17" text-anchor="middle" font-size="11">/worklist</text>
+        </g>
+        <g class="arrows-store">
+          <line class="pipe flow5" x1="480" y1="326" x2="480" y2="162" stroke="var(--accent)" marker-end="url(#arr5)"/>
+          <text x="620" y="250" class="tag" fill="var(--accent)">a deploy is a file upload</text>
+        </g>
+
+        <!-- topology 3: co-located with the host -->
+        <g class="super">
+          <rect x="296" y="18" width="368" height="404" rx="16" fill="none" stroke="var(--ok)" stroke-width="1.4" stroke-dasharray="8 7"/>
+          <text x="316" y="444" class="tag" fill="var(--ok)">topology 3: same origin as the host &mdash; no CORS, but other teams&rsquo; CI writes to your bucket</text>
+        </g>
+      </svg>
+    </figure>
+  </section>
+
+  <!-- ================= PART 6 : resilience ================= -->
+  <section class="scene" id="scene6-wrap">
+    <header>
+      <p class="eyebrow">Part 6 &middot; Resilience</p>
+      <h1>When a remote dies</h1>
+    </header>
+    <figure class="stage" id="stage6">
+      <svg id="s6" data-stage="0" viewBox="0 0 960 470" role="img"
+           aria-label="Animation: an unreachable remote blanks the whole host page; adding an error boundary per slot and the errorLoadRemote runtime plugin makes the same outage degrade to a placeholder in one slot while the rest of the page keeps working.">
+        <defs>
+          <marker id="arr6" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M0,0 L10,5 L0,10 z" fill="#55637A"/>
+          </marker>
+        </defs>
+
+        <!-- the page -->
+        <g class="pagegrp">
+          <rect x="300" y="36" width="360" height="196" class="nodebox" rx="12"/>
+          <text x="480" y="62" text-anchor="middle" class="sub">the running page</text>
+          <g class="uk-slot-ok">
+            <rect x="322" y="84" width="98" height="58" rx="8" fill="none" stroke="var(--tD)" stroke-width="1.4"/>
+            <text x="371" y="117" text-anchor="middle" font-size="12">uikit</text>
+          </g>
+          <g class="uk-slot-fb">
+            <rect x="322" y="84" width="98" height="58" rx="8" fill="none" stroke="var(--danger)" stroke-width="1.3" stroke-dasharray="5 5"/>
+            <text x="371" y="109" text-anchor="middle" font-size="10.5" fill="var(--muted)">unavailable</text>
+            <text x="371" y="126" text-anchor="middle" font-size="10.5" fill="var(--muted)">right now</text>
+          </g>
+          <rect x="432" y="84" width="98" height="58" rx="8" fill="none" stroke="var(--tB)" stroke-width="1.4"/>
+          <text x="481" y="117" text-anchor="middle" font-size="12">claims</text>
+          <rect x="542" y="84" width="98" height="58" rx="8" fill="none" stroke="var(--tC)" stroke-width="1.4"/>
+          <text x="591" y="117" text-anchor="middle" font-size="12">worklist</text>
+        </g>
+
+        <!-- defenses -->
+        <g class="defense">
+          <rect x="315" y="77" width="112" height="72" rx="11" fill="none" stroke="var(--ok)" stroke-width="1.2" stroke-dasharray="4 5"/>
+          <rect x="425" y="77" width="112" height="72" rx="11" fill="none" stroke="var(--ok)" stroke-width="1.2" stroke-dasharray="4 5"/>
+          <rect x="535" y="77" width="112" height="72" rx="11" fill="none" stroke="var(--ok)" stroke-width="1.2" stroke-dasharray="4 5"/>
+          <text x="330" y="172" font-size="11" fill="var(--ok)">an error boundary around every slot</text>
+          <rect x="330" y="184" width="212" height="28" rx="8" fill="var(--surface)" stroke="var(--ok)" stroke-width="1.2"/>
+          <text x="436" y="203" text-anchor="middle" font-size="11" fill="var(--ok)">errorLoadRemote runtime plugin</text>
+        </g>
+
+        <!-- page death overlay (stage 0) -->
+        <g class="page-dead">
+          <rect x="300" y="36" width="360" height="196" rx="12" fill="var(--bg)" opacity="0.88"/>
+          <text x="480" y="128" text-anchor="middle" font-size="26" fill="var(--danger)">&#x2715;</text>
+          <text x="480" y="158" text-anchor="middle" font-size="12.5" fill="var(--danger)">blank page &mdash; boot failed</text>
+        </g>
+
+        <!-- deployed remotes -->
+        <g>
+          <rect x="110" y="308" width="200" height="84" class="nodebox" style="stroke: var(--tD)"/>
+          <text x="210" y="342" text-anchor="middle" class="boxlabel">uikit</text>
+          <text x="210" y="364" text-anchor="middle" class="sub">static files &middot; CDN</text>
+          <rect x="380" y="308" width="200" height="84" class="nodebox" style="stroke: var(--tB)"/>
+          <text x="480" y="342" text-anchor="middle" class="boxlabel">claims</text>
+          <text x="480" y="364" text-anchor="middle" class="sub">static files &middot; CDN</text>
+          <rect x="650" y="308" width="200" height="84" class="nodebox" style="stroke: var(--tC)"/>
+          <text x="750" y="342" text-anchor="middle" class="boxlabel">worklist</text>
+          <text x="750" y="364" text-anchor="middle" class="sub">static files &middot; CDN</text>
+          <line class="pipe" x1="210" y1="304" x2="386" y2="236" marker-end="url(#arr6)"/>
+          <line class="pipe" x1="480" y1="304" x2="480" y2="236" marker-end="url(#arr6)"/>
+          <line class="pipe" x1="750" y1="304" x2="574" y2="236" marker-end="url(#arr6)"/>
+        </g>
+
+        <!-- outage marks -->
+        <g class="kill1">
+          <circle cx="210" cy="308" r="12" fill="var(--danger)"/>
+          <text x="210" y="313" text-anchor="middle" font-size="12" fill="#0E1217" font-weight="600">&#x2715;</text>
+          <text x="210" y="418" text-anchor="middle" class="tag" fill="var(--danger)">unreachable</text>
+        </g>
+        <g class="kill2">
+          <circle cx="210" cy="308" r="12" fill="var(--danger)"/>
+          <text x="210" y="313" text-anchor="middle" font-size="12" fill="#0E1217" font-weight="600">&#x2715;</text>
+          <text x="210" y="418" text-anchor="middle" class="tag" fill="var(--danger)">unreachable &mdash; again</text>
+        </g>
+      </svg>
+    </figure>
+  </section>
+
+  <!-- ================= CLOSE ================= -->
+  <section class="slide" id="slide-close">
+    <p class="eyebrow">Build it yourself</p>
+    <h1>Your turn.</h1>
+    <div class="cmds">
+      <div><b>git clone</b> github.com/MonteKrysto/lunch-and-learn-mf</div>
+      <div><b>pnpm install</b> &amp;&amp; <b>pnpm dev</b> &mdash; five apps, zero federation</div>
+      <div>follow the videos + docs/workshop &middot; stuck? <b>make catchup step=N</b></div>
+    </div>
+    <p class="sub">Takeaways: microfrontends are a team-scaling tool &middot; a remote is files that
+    run in the browser &middot; singletons are where it bites &middot; every consumer owns its resilience.</p>
+    <p class="url">Questions?</p>
+  </section>
 
   <div class="captions" id="captions">
-    <p data-step="0">Six teams, one repo, one deploy queue. Every release &mdash; everyone&rsquo;s release &mdash; marches through the same pipe.</p>
-    <p data-step="1">One broken build and the whole company waits. The queue <em>is</em> the coupling.</p>
-    <p data-step="2">Microfrontends: split along team lines. Each team owns its app &mdash; and grows its own pipeline.</p>
-    <p data-step="3">A failure now stays where it happened. The price: more moving parts, and something has to compose them back into one product.</p>
-    <p data-step="4">The npm way to share: publish uikit, and every consumer bakes a copy in at build time.</p>
-    <p data-step="5">uikit ships v2 &rarr; every consumer must rebuild and redeploy to pick it up. The upgrade tax scales with the number of consumers.</p>
-    <p data-step="6">Module federation: apps stay deployed; the browser composes them at runtime. uikit ships v2 &rarr; the next reload has it. Nobody rebuilt. And &ldquo;deployed&rdquo; means <em>static files on a CDN</em> &mdash; a remote only ever runs in the browser.</p>
-    <p data-step="7">Every remote arrives carrying React. <code>shared: { react: { singleton: true } }</code> negotiates one copy &mdash; and this line is where production bugs live.</p>
-    <p data-step="8">One page, three remotes, three different versions. The host never pinned these at build &mdash; it discovers what each remote is serving when the page loads.</p>
-    <p data-step="9">The uikit team ships v3.1. Pages already open keep running v3.0 &mdash; a deploy never yanks code out of a live session.</p>
-    <p data-step="10">Next load composes the newest of each: uikit moves to v3.1, claims and worklist don&rsquo;t budge. Three teams, three release cadences, zero host redeploys.</p>
-    <p data-step="11">The flip side: an exposed module is a <em>runtime</em> contract. claims ships a breaking v2.0 and the host meets it in production &mdash; keep exposed surfaces small and stable (<code>ClaimsApp</code> takes one prop for a reason).</p>
-    <p data-step="12">A domain team ships a vertical slice: a UI remote (static files) <em>and</em> the API behind it (a running service) &mdash; <code>apps/claims</code> and <code>apps/claims/api</code> &mdash; each deploying on its own pipeline. Slices that don&rsquo;t need an API don&rsquo;t carry one.</p>
-    <p data-step="13">Federation composes the UI only; data stays plain HTTP. The dashboard, the worklist, and the claims app itself all call the claims team&rsquo;s API &mdash; consuming a team&rsquo;s data doesn&rsquo;t require consuming its UI.</p>
-    <p data-step="14">The API deploys like any backend service &mdash; its own container, no federation involved. Its contract is the REST contract, versioned the usual way. Two contracts per slice: the exposed module for UI, the endpoints for data.</p>
+    <p data-step="2">Four teams, four business domains &mdash; claims, denials, billing, eligibility &mdash; one codebase. The boxes are the org chart; the architecture just doesn&rsquo;t know it yet.</p>
+    <p data-step="3">Coupling #1: the code &mdash; same files, crossed wires. Coupling #2: the release &mdash; one broken build and every team&rsquo;s work waits in the same queue.</p>
+    <p data-step="4">First fix: draw the walls. Each domain becomes its own slice &mdash; own package, own config, own owner. This is a turborepo workspace, and it&rsquo;s exactly the repo you&rsquo;ll clone.</p>
+    <p data-step="5">But follow the right side: the slices still funnel into ONE build and ride ONE release train. The coupling moved from code to release &mdash; sharing by npm package behaves the same way.</p>
+    <p data-step="6">Cut the last coupling: each slice builds AND deploys alone. Independently developed, independently deployed &mdash; that is the definition of microfrontends.</p>
+    <p data-step="7">A failure now stays where it happened. One question remains &mdash; and it&rsquo;s the whole second act: who composes four deployables back into one product?</p>
+    <p data-step="8">The npm way to share: publish uikit, and every consumer bakes a copy in at build time.</p>
+    <p data-step="9">uikit ships v2 &rarr; every consumer must rebuild and redeploy to pick it up. The upgrade tax scales with the number of consumers.</p>
+    <p data-step="10">Module federation: apps stay deployed; the browser composes them at runtime. uikit ships v2 &rarr; the next reload has it. Nobody rebuilt. And &ldquo;deployed&rdquo; means <em>static files on a CDN</em> &mdash; a remote only ever runs in the browser.</p>
+    <p data-step="11">Every remote arrives carrying React. <code>shared: { react: { singleton: true } }</code> negotiates one copy &mdash; and this line is where production bugs live.</p>
+    <p data-step="13">One page, three remotes, three different versions. The host never pinned these at build &mdash; it discovers what each remote is serving when the page loads.</p>
+    <p data-step="14">The uikit team ships v3.1. Pages already open keep running v3.0 &mdash; a deploy never yanks code out of a live session.</p>
+    <p data-step="15">Next load composes the newest of each: uikit moves to v3.1, claims and worklist don&rsquo;t budge. Three teams, three release cadences, zero host redeploys.</p>
+    <p data-step="16">The flip side: an exposed module is a <em>runtime</em> contract. claims ships a breaking v2.0 and the host meets it in production &mdash; keep exposed surfaces small and stable (<code>ClaimsApp</code> takes one prop for a reason).</p>
+    <p data-step="17">A domain team ships a vertical slice: a UI remote (static files) <em>and</em> the API behind it (a running service) &mdash; <code>apps/claims</code> and <code>apps/claims/api</code> &mdash; each deploying on its own pipeline. Slices that don&rsquo;t need an API don&rsquo;t carry one.</p>
+    <p data-step="18">Federation composes the UI only; data stays plain HTTP. The dashboard, the worklist, and the claims app itself all call the claims team&rsquo;s API &mdash; consuming a team&rsquo;s data doesn&rsquo;t require consuming its UI.</p>
+    <p data-step="19">The API deploys like any backend service &mdash; its own container, no federation involved. Its contract is the REST contract, versioned the usual way. Two contracts per slice: the exposed module for UI, the endpoints for data.</p>
+    <p data-step="20">Topology one &mdash; what the demo runs: every remote behind its own host. Team boundaries are visible in the network tab, but N hosts must stay reachable and every load is CORS.</p>
+    <p data-step="21">Topology two &mdash; the artifact store: every team&rsquo;s CI uploads its build into one bucket behind a CDN. A deploy becomes a file copy, and remote servers stop existing. (<code>make store</code> + <code>make publish</code> simulate this.)</p>
+    <p data-step="22">Topology three &mdash; co-locate the files with the host&rsquo;s own origin: no CORS, one thing to keep reachable &mdash; but other teams&rsquo; CI writes into your bucket. The invariant everywhere: the host binds to a stable manifest URL; the rest is infra taste.</p>
+    <p data-step="23">The failure mode nobody demos: one unreachable remote and the host is <em>gone</em> &mdash; the runtime fetches every manifest at boot, and a failed remote can unmount the whole React tree.</p>
+    <p data-step="24">Two layers of defense, about thirty lines: an error boundary around every slot a remote fills, and the runtime&rsquo;s <code>errorLoadRemote</code> hook &mdash; stub manifest for dead hosts, placeholder component for dead modules.</p>
+    <p data-step="25">Same outage, new day: the dead remote degrades to a placeholder in its slot; everything else keeps working. Every consumer owns its own resilience &mdash; bonus step 7 in the repo.</p>
   </div>
 
   <footer>
-    <div class="dots" id="dots" role="tablist" aria-label="Steps"></div>
-    <p class="hints"><kbd>&larr;</kbd><kbd>&rarr;</kbd> step &middot; <kbd>1</kbd><kbd>2</kbd><kbd>3</kbd><kbd>4</kbd> part &middot; <kbd>R</kbd> replay &middot; <kbd>F</kbd> fullscreen &middot; or click the diagram</p>
+    <div class="progress">
+      <span class="plabel" id="plabel"></span>
+      <div class="pbar"><div class="pfill" id="pfill"></div></div>
+    </div>
+    <p class="hints"><kbd>&larr;</kbd><kbd>&rarr;</kbd> step &middot; <kbd>0</kbd>&ndash;<kbd>6</kbd> part &middot; <kbd>R</kbd> replay &middot; <kbd>F</kbd> fullscreen &middot; or click</p>
   </footer>
 </div>
 
 <script>
-  const TOTAL = 15;
-  const s1 = document.getElementById('s1');
-  const s2 = document.getElementById('s2');
-  const s3 = document.getElementById('s3');
-  const s4 = document.getElementById('s4');
-  const scenes = [
-    document.getElementById('scene1-wrap'),
-    document.getElementById('scene2-wrap'),
-    document.getElementById('scene3-wrap'),
-    document.getElementById('scene4-wrap'),
-  ];
+  const el = (id) => document.getElementById(id);
+  const SCENES = {
+    title:  { node: el('slide-title') },
+    agenda: { node: el('slide-agenda') },
+    p1:     { node: el('scene1-wrap'), svg: el('s1') },
+    p2:     { node: el('scene2-wrap'), svg: el('s2') },
+    demo:   { node: el('slide-demo') },
+    p3:     { node: el('scene3-wrap'), svg: el('s3') },
+    p4:     { node: el('scene4-wrap'), svg: el('s4') },
+    p5:     { node: el('scene5-wrap'), svg: el('s5') },
+    p6:     { node: el('scene6-wrap'), svg: el('s6') },
+    close:  { node: el('slide-close') },
+  };
+  const LABELS = {
+    title: 'One App, Many Teams', agenda: 'Agenda',
+    p1: 'Part 1 \u00b7 Why microfrontends', p2: 'Part 2 \u00b7 Module federation',
+    demo: 'Live demo', p3: 'Part 3 \u00b7 Versioning', p4: 'Part 4 \u00b7 The backends',
+    p5: 'Part 5 \u00b7 Where the files live', p6: 'Part 6 \u00b7 When a remote dies',
+    close: 'Build it yourself',
+  };
+  const STEPS = [{ s: 'title' }, { s: 'agenda' }];
+  for (let g = 0; g < 6; g++) STEPS.push({ s: 'p1', g });
+  for (let g = 0; g < 4; g++) STEPS.push({ s: 'p2', g });
+  STEPS.push({ s: 'demo' });
+  for (let g = 0; g < 4; g++) STEPS.push({ s: 'p3', g });
+  for (let g = 0; g < 3; g++) STEPS.push({ s: 'p4', g });
+  for (let g = 0; g < 3; g++) STEPS.push({ s: 'p5', g });
+  for (let g = 0; g < 3; g++) STEPS.push({ s: 'p6', g });
+  STEPS.push({ s: 'close' });
+  const TOTAL = STEPS.length;
+  const PART_KEYS = { 0: 0, 1: 2, 2: 8, 3: 13, 4: 17, 5: 20, 6: 23 };
+
   const captions = Array.from(document.querySelectorAll('#captions p'));
-  const dotsWrap = document.getElementById('dots');
+  const capWrap = el('captions');
   let step = 0;
 
-  for (let i = 0; i < TOTAL; i++) {
-    const b = document.createElement('button');
-    b.setAttribute('aria-label', 'Step ' + (i + 1));
-    b.addEventListener('click', (e) => { e.stopPropagation(); go(i); });
-    dotsWrap.appendChild(b);
-  }
-  const dots = Array.from(dotsWrap.children);
-
   function render() {
-    const sceneIdx = step < 4 ? 0 : step < 8 ? 1 : step < 12 ? 2 : 3;
-    scenes.forEach((s, i) => s.classList.toggle('active', i === sceneIdx));
-    s1.setAttribute('data-stage', String(Math.min(step, 3)));
-    s2.setAttribute('data-stage', String(Math.min(Math.max(step - 4, 0), 3)));
-    s3.setAttribute('data-stage', String(Math.min(Math.max(step - 8, 0), 3)));
-    s4.setAttribute('data-stage', String(Math.max(step - 12, 0)));
-    captions.forEach((p, i) => p.classList.toggle('active', i === step));
-    dots.forEach((d, i) => d.classList.toggle('on', i === step));
+    const cur = STEPS[step];
+    for (const key of Object.keys(SCENES)) {
+      const sc = SCENES[key];
+      const active = key === cur.s;
+      sc.node.classList.toggle('active', active);
+      if (sc.svg && active) sc.svg.setAttribute('data-stage', String(cur.g));
+    }
+    let hasCaption = false;
+    captions.forEach((p) => {
+      const on = Number(p.dataset.step) === step;
+      p.classList.toggle('active', on);
+      if (on) hasCaption = true;
+    });
+    capWrap.classList.toggle('blank', !hasCaption);
+    el('plabel').textContent = LABELS[cur.s] + (cur.g !== undefined ? ` \u2014 ${cur.g + 1}` : '');
+    el('pfill').style.width = `${(step / (TOTAL - 1)) * 100}%`;
   }
 
   function go(n) { step = Math.max(0, Math.min(TOTAL - 1, n)); render(); }
   function replay() {
-    const svg = step >= 12 ? s4 : step >= 8 ? s3 : step >= 4 ? s2 : s1;
-    const val = svg.getAttribute('data-stage');
+    const cur = STEPS[step];
+    const svg = SCENES[cur.s].svg;
+    if (!svg) return;
     svg.setAttribute('data-stage', '-1');
     void svg.getBoundingClientRect();
-    requestAnimationFrame(() => svg.setAttribute('data-stage', val));
+    requestAnimationFrame(() => svg.setAttribute('data-stage', String(cur.g)));
   }
 
-  document.querySelectorAll('figure.stage').forEach((f) =>
+  document.querySelectorAll('figure.stage, .slide').forEach((f) =>
     f.addEventListener('click', () => go(step + 1))
   );
   document.addEventListener('keydown', (e) => {
     if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') { e.preventDefault(); go(step + 1); }
     else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); go(step - 1); }
-    else if (e.key === '1') go(0);
-    else if (e.key === '2') go(4);
-    else if (e.key === '3') go(8);
-    else if (e.key === '4') go(12);
+    else if (e.key === 'Home') go(0);
+    else if (e.key === 'End') go(TOTAL - 1);
+    else if (e.key in PART_KEYS) go(PART_KEYS[e.key]);
     else if (e.key === 'r' || e.key === 'R') replay();
     else if (e.key === 'f' || e.key === 'F') {
       if (document.fullscreenElement) document.exitFullscreen();

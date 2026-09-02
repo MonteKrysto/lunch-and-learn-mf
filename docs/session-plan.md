@@ -1,9 +1,26 @@
 # Lunch & Learn: Run of Show + Video Series Plan
 
-Format: 30 minutes — 20 content, 10 Q&A. The live session is a **demo + pitch**, not a
-code-along. The hands-on work moves to a self-paced video series: devs clone `main`
-(the zero-federation starter) and follow docs/workshop/; the finished build lives on
-the `final` branch with `step-1`…`step-5` tags (presenter reference).
+Format: 60 minutes — 45 content, 15 Q&A. The live session is **animated deck + one
+live demo block**, not a code-along. The hands-on work moves to a self-paced video
+series: devs clone `main` (the zero-federation starter) and follow docs/workshop/.
+
+Present from the deck (docs/slides/intro-animations.html, or the artifact link):
+27 steps across six animated parts plus title/agenda/demo-cue/close slides.
+Keys: `0`–`6` jump to parts, arrows step, `F` fullscreen, `R` replays an animation.
+
+## Run of show (45 min)
+
+| Time | Segment | Deck |
+|---|---|---|
+| 0–2 | Title + agenda; tease :3100 in a tab ("five apps pretending to be one") | steps 0–1 |
+| 2–10 | Part 1 — the coupling ladder (collisions → queue jam → turbo slices → one build artifact → independent deploys → contained failure) | steps 2–7 |
+| 10–16 | Part 2 — build-time vs runtime sharing, the singleton | steps 8–11 |
+| 16–26 | LIVE block — the demo-cue slide lists the five beats (illusion tour, configs, federated types, kill-a-remote, time-bomb if time); beats detailed below | step 12 |
+| 26–31 | Part 3 — per-remote versioning (this replaces a live docker deploy) | steps 13–16 |
+| 31–35 | Part 4 — where the APIs live | steps 17–19 |
+| 35–39 | Part 5 — three hosting topologies (the artifact-store story) | steps 20–22 |
+| 39–43 | Part 6 — when a remote dies, two-layer resilience | steps 23–25 |
+| 43–45 | Close — the pitch: clone, videos, `make catchup` | step 26 |
 
 ## Pre-session checklist (15 min before)
 
@@ -13,7 +30,7 @@ the `final` branch with `step-1`…`step-5` tags (presenter reference).
 - [ ] Terminal font cranked up; a scratch terminal ready for the kill-a-remote bit
 - [ ] Repo URL on a slide / in chat so people can clone during Q&A
 
-## Run of show (20 min)
+## Segment details (beat-by-beat reference)
 
 ### 1. The problem microfrontends solve — 0:00–3:00
 
@@ -79,7 +96,7 @@ query sitting in the shell's cache — state shared across apps via a singleton.
 - *"Why not just npm packages?"* Build-time vs runtime: with packages, every consumer must
   rebuild and redeploy to pick up a change; with MF the remote deploys once.
 - *"What happens when a remote is down in prod?"* Same as beat 2 — you own that failure
-  mode; you own that failure mode. Bonus step 7 adds the full fix: error boundaries per remote slot + an `errorLoadRemote` runtime plugin.
+  mode. Bonus step 7 adds the full fix: error boundaries per remote slot + an `errorLoadRemote` runtime plugin.
 - *"How do remote URLs work across environments?"* We hardcode localhost; real deployments
   drive URLs per-environment via the MF runtime/manifest.
 - *"Why is the manifest always mf-manifest.json?"* The URL is the identity; the filename is
