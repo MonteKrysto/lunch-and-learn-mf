@@ -10,17 +10,20 @@ Keys: `0`–`6` jump to parts, arrows step, `F` fullscreen, `R` replays an anima
 
 ## Run of show (45 min)
 
-| Time | Segment | Deck |
-|---|---|---|
-| 0–2 | Title + agenda; tease :3100 in a tab ("five apps pretending to be one") | steps 0–1 |
-| 2–10 | Part 1 — the coupling ladder (shared-core conflicts → queue jam → ownership slices [one repo or many] → one build artifact → full vertical slices, UI+API, deployed alone) | steps 2–7 |
-| 10–16 | Part 2 — build-time vs runtime sharing, the singleton | steps 8–11 |
-| 16–26 | LIVE block — the demo-cue slide lists the five beats (illusion tour, configs, federated types, kill-a-remote, time-bomb if time); beats detailed below | step 12 |
-| 26–31 | Part 3 — per-remote versioning (this replaces a live docker deploy) | steps 13–16 |
-| 31–35 | Part 4 — where the APIs live | steps 17–19 |
-| 35–39 | Part 5 — three hosting topologies (the artifact-store story) | steps 20–22 |
-| 39–43 | Part 6 — when a remote dies, two-layer resilience | steps 23–25 |
-| 43–45 | Close — the pitch: clone, videos, `make catchup` | step 26 |
+The deck is ONE architecture diagram of the actual demo system, evolving across six
+parts (22 steps total). Keys: 0-6 jump to parts, arrows step, F fullscreen, R replay.
+
+| Time | Part | Deck steps | The diagram... |
+|---|---|---|---|
+| 0-2 | Title + agenda | 0-1 | - |
+| 2-10 | 1 The Problem | 2-5 | monolith with shared-core conflicts -> deploy-queue jam -> the real team cards (uikit, claims+api+data, worklist) -> the empty shell with three slots |
+| 10-17 | 2 Composition | 6-9 | uikit exposes chips -> MetricCard slot fills -> ClaimsApp mounts -> worklist fills + consumes uikit; react singleton badge |
+| 17-27 | LIVE block | 10 | cue slide lists the five beats (below) |
+| 27-32 | 3 Versioning | 11-13 | version chips per team -> uikit ships v3.1, open page keeps v3.0 -> reload composes v3.1 |
+| 32-36 | 4 Data | 14-15 | HTTP fetch arrows to the claims api -> two contracts per slice |
+| 36-40 | 5 Files | 16-17 | a remote = a folder -> the artifact store; deploy = file upload |
+| 40-43 | 6 Failure | 18-20 | uikit unreachable -> blank page -> boundaries + errorLoadRemote -> graceful slot |
+| 43-45 | Close | 21 | clone / videos / make catchup |
 
 ## Pre-session checklist (15 min before)
 
