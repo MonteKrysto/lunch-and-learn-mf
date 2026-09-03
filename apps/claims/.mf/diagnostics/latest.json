@@ -1,0 +1,10 @@
+{
+  "latestErrorEvent": {
+    "code": "TYPE-001",
+    "message": "Failed to generate type declaration. Execute the below cmd to reproduce and fix the error. #TYPE-001\nargs: {\"cmd\":\"/Users/cthaeh/.nvm/versions/node/v25.2.1/bin/node /Users/cthaeh/projects/lunch-and-learn-mfe/node_modules/.pnpm/typescript@7.0.2/node_modules/typescript/bin/tsc --project /Users/cthaeh/projects/lunch-and-learn-mfe/apps/claims/node_modules/.federation/tsconfig.0b4f3f2bf12a5f11136eda9cd3468fdf.json\"}\nView the docs to see how to solve: https://module-federation.io/guide/troubleshooting/type#type-001",
+    "args": {
+      "cmd": "/Users/cthaeh/.nvm/versions/node/v25.2.1/bin/node /Users/cthaeh/projects/lunch-and-learn-mfe/node_modules/.pnpm/typescript@7.0.2/node_modules/typescript/bin/tsc --project /Users/cthaeh/projects/lunch-and-learn-mfe/apps/claims/node_modules/.federation/tsconfig.0b4f3f2bf12a5f11136eda9cd3468fdf.json"
+    },
+    "timestamp": 1788472207337
+  }
+}

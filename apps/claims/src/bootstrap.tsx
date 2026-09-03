@@ -5,6 +5,6 @@ import ClaimsApp from './ClaimsApp';
 
 createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <ClaimsApp basename="/" />
+    <ClaimsApp basename="/" showDevtools />
   </React.StrictMode>,
 );
