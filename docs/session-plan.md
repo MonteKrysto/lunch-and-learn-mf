@@ -4,10 +4,6 @@ Format: 60 minutes — 45 content, 15 Q&A. The live session is **animated deck +
 live demo block**, not a code-along. The hands-on work moves to a self-paced video
 series: devs clone `main` (the zero-federation starter) and follow docs/workshop/.
 
-Present from the deck (docs/slides/intro-animations.html, or the artifact link):
-27 steps across six animated parts plus title/agenda/demo-cue/close slides.
-Keys: `0`–`6` jump to parts, arrows step, `F` fullscreen, `R` replays an animation.
-
 ## Run of show (45 min)
 
 The deck is ONE architecture diagram of the actual demo system, evolving across six
