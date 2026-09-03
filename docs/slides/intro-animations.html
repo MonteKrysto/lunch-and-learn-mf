@@ -55,7 +55,7 @@
   }
   figure.stage svg { width: 100%; height: 100%; max-height: 66vh; }
   .captions {
-    min-height: 64px; display: flex; align-items: flex-start;
+    min-height: 92px; display: flex; align-items: flex-start;
     border-top: 1px solid var(--line); padding-top: 13px;
   }
   .captions p {
@@ -192,39 +192,44 @@
         </defs>
 
         <!-- ===== PART 1: the monolith (stages 0-1) ===== -->
-        <g class="g" id="g-monolith">
-          <text x="330" y="66" class="sub">the frontend &middot; one codebase &middot; four teams</text>
-          <rect x="330" y="76" width="540" height="212" class="card" stroke="var(--line-strong)"/>
-          <rect x="358" y="102" width="146" height="42" rx="8" fill="var(--surface)" stroke="var(--tclaims)" stroke-width="1.4"/>
-          <text x="431" y="128" text-anchor="middle" font-size="12">claims ui</text>
-          <rect x="527" y="102" width="146" height="42" rx="8" fill="var(--surface)" stroke="var(--tworklist)" stroke-width="1.4"/>
-          <text x="600" y="128" text-anchor="middle" font-size="12">denials ui</text>
-          <rect x="696" y="102" width="146" height="42" rx="8" fill="var(--surface)" stroke="var(--tshell)" stroke-width="1.4"/>
-          <text x="769" y="128" text-anchor="middle" font-size="12">dashboard ui</text>
-          <line x1="431" y1="144" x2="540" y2="212" stroke="var(--line-strong)" stroke-width="1.1"/>
-          <line x1="600" y1="144" x2="600" y2="212" stroke="var(--line-strong)" stroke-width="1.1"/>
-          <line x1="769" y1="144" x2="660" y2="212" stroke="var(--line-strong)" stroke-width="1.1"/>
-          <rect x="432" y="212" width="336" height="46" rx="9" fill="var(--surface2)" stroke="var(--line-strong)" stroke-width="1.2"/>
-          <text x="600" y="232" text-anchor="middle" font-size="12">shared core</text>
-          <text x="600" y="249" text-anchor="middle" class="sub">components &middot; styles &middot; router &middot; one design system fork each</text>
+        <g class="g" id="g-monolith" transform="translate(-262 -16) scale(1.35)">
+          <text x="330" y="58" class="tag">the frontend &mdash; one codebase that all four teams work in, every day</text>
+          <rect x="330" y="72" width="540" height="216" class="card" stroke="var(--line-strong)"/>
+          <rect x="358" y="98" width="146" height="42" rx="8" fill="var(--surface)" stroke="var(--tclaims)" stroke-width="1.4"/>
+          <text x="431" y="124" text-anchor="middle" font-size="12">claims team</text>
+          <rect x="527" y="98" width="146" height="42" rx="8" fill="var(--surface)" stroke="var(--tworklist)" stroke-width="1.4"/>
+          <text x="600" y="124" text-anchor="middle" font-size="12">denials team</text>
+          <rect x="696" y="98" width="146" height="42" rx="8" fill="var(--surface)" stroke="var(--tshell)" stroke-width="1.4"/>
+          <text x="769" y="124" text-anchor="middle" font-size="12">dashboard team</text>
+          <rect x="432" y="212" width="336" height="52" rx="9" fill="var(--surface2)" stroke="var(--line-strong)" stroke-width="1.2"/>
+          <text x="600" y="234" text-anchor="middle" font-size="12">shared code &mdash; components, styles, routing</text>
+          <text x="600" y="252" text-anchor="middle" class="sub">no part of it belongs to any one team</text>
+          <line x1="769" y1="140" x2="680" y2="210" stroke="var(--line-strong)" stroke-width="1.1"/>
           <g id="g-conflicts">
-            <rect x="452" y="162" width="104" height="22" rx="11" fill="var(--surface)" stroke="var(--danger)" stroke-width="1.3"/>
-            <text x="504" y="177" text-anchor="middle" font-size="10.5" fill="var(--danger)">merge conflict</text>
-            <rect x="652" y="162" width="104" height="22" rx="11" fill="var(--surface)" stroke="var(--danger)" stroke-width="1.3"/>
-            <text x="704" y="177" text-anchor="middle" font-size="10.5" fill="var(--danger)">merge conflict</text>
+            <rect x="466" y="158" width="140" height="26" rx="7" fill="var(--surface)" stroke="var(--danger)" stroke-width="1.4"/>
+            <text x="536" y="175" text-anchor="middle" font-size="11">StatusBadge.tsx</text>
+            <line x1="431" y1="140" x2="500" y2="156" stroke="var(--danger)" stroke-width="1.3" marker-end="url(#arr)"/>
+            <line x1="600" y1="140" x2="560" y2="156" stroke="var(--danger)" stroke-width="1.3" marker-end="url(#arr)"/>
+            <text x="622" y="176" font-size="11.5" fill="var(--danger)">&larr; two teams changed this file this week</text>
+            <text x="890" y="120" class="tag">Every change one team makes</text>
+            <text x="890" y="138" class="tag">can break another team&rsquo;s work</text>
+            <text x="890" y="156" class="tag">&mdash; and often does.</text>
           </g>
         </g>
-        <g class="g" id="g-jam">
-          <line class="pipe" x1="600" y1="288" x2="600" y2="336" />
-          <line class="pipe" x1="600" y1="336" x2="806" y2="336" marker-end="url(#arr)"/>
-          <text x="612" y="322" class="tag">one deploy queue</text>
-          <circle cx="700" cy="336" r="8" fill="var(--danger)"/>
-          <text x="700" y="341" text-anchor="middle" font-size="10" fill="#fff" font-weight="600">&#x2715;</text>
-          <circle cx="664" cy="336" r="6" fill="var(--tclaims)"/>
-          <circle cx="634" cy="336" r="6" fill="var(--tworklist)"/>
-          <text x="664" y="362" text-anchor="middle" class="tag">everyone waits</text>
-          <rect x="816" y="306" width="150" height="58" class="card" stroke="var(--line-strong)" opacity="0.5"/>
-          <text x="891" y="340" text-anchor="middle" font-size="13" opacity="0.6">prod &middot; web</text>
+
+        <g class="g" id="g-jam" transform="translate(-262 -16) scale(1.35)">
+          <line class="pipe" x1="600" y1="288" x2="600" y2="332"/>
+          <line class="pipe" x1="600" y1="332" x2="806" y2="332" marker-end="url(#arr)"/>
+          <text x="330" y="322" class="tag">one release pipeline, shared by everyone</text>
+          <circle cx="700" cy="332" r="9" fill="var(--danger)"/>
+          <text x="700" y="337" text-anchor="middle" font-size="10" fill="#fff" font-weight="600">&#x2715;</text>
+          <text x="714" y="316" font-size="11.5" fill="var(--danger)">&larr; the denials build is failing</text>
+          <text x="440" y="368" class="tag">stuck in line behind it:</text>
+          <text x="452" y="390" font-size="11.5">&bull; claims &mdash; an urgent production fix, ready to go</text>
+          <text x="452" y="410" font-size="11.5">&bull; dashboard &mdash; a finished feature</text>
+          <rect x="816" y="302" width="150" height="60" class="card" stroke="var(--line-strong)" opacity="0.5"/>
+          <text x="891" y="328" text-anchor="middle" font-size="12" opacity="0.6">production</text>
+          <text x="891" y="346" text-anchor="middle" class="sub" opacity="0.8">nothing is arriving</text>
         </g>
 
         <!-- ===== team cards (stages 2+) ===== -->
@@ -233,8 +238,8 @@
           <rect x="30" y="80" width="220" height="140" class="card" stroke="var(--tuikit)"/>
           <text x="48" y="112" class="lbl">uikit</text>
           <text x="48" y="134" class="sub">:3101 &middot; design system</text>
-          <text x="48" y="196" class="sub">its own repo-in-spirit,</text>
-          <text x="48" y="211" class="sub">its own deploys</text>
+          <text x="48" y="196" class="sub">one team owns it and</text>
+          <text x="48" y="211" class="sub">ships it on its own</text>
           <!-- claims (full slice: app + api + data) -->
           <rect x="460" y="52" width="320" height="222" class="card" stroke="var(--tclaims)"/>
           <text x="478" y="84" class="lbl">claims</text>
@@ -250,16 +255,16 @@
           <rect x="830" y="80" width="250" height="140" class="card" stroke="var(--tworklist)"/>
           <text x="848" y="112" class="lbl">worklist</text>
           <text x="848" y="134" class="sub">:3103 &middot; denials widget</text>
-          <text x="848" y="196" class="sub">smallest possible team:</text>
+          <text x="848" y="196" class="sub">the smallest team of all:</text>
           <text x="848" y="211" class="sub">one widget, one owner</text>
         </g>
         <g class="g" id="g-pipelines">
           <rect x="140" y="228" width="110" height="22" rx="11" fill="var(--surface)" stroke="var(--ok)" stroke-width="1.2"/>
-          <text x="195" y="243" text-anchor="middle" font-size="10.5" fill="var(--ok)">deploys alone</text>
+          <text x="195" y="243" text-anchor="middle" font-size="10.5" fill="var(--ok)">ships on its own</text>
           <rect x="670" y="282" width="110" height="22" rx="11" fill="var(--surface)" stroke="var(--ok)" stroke-width="1.2"/>
-          <text x="725" y="297" text-anchor="middle" font-size="10.5" fill="var(--ok)">deploys alone</text>
+          <text x="725" y="297" text-anchor="middle" font-size="10.5" fill="var(--ok)">ships on its own</text>
           <rect x="970" y="228" width="110" height="22" rx="11" fill="var(--surface)" stroke="var(--ok)" stroke-width="1.2"/>
-          <text x="1025" y="243" text-anchor="middle" font-size="10.5" fill="var(--ok)">deploys alone</text>
+          <text x="1025" y="243" text-anchor="middle" font-size="10.5" fill="var(--ok)">ships on its own</text>
         </g>
 
         <!-- exposed chips -->
@@ -271,7 +276,7 @@
           <rect x="262" y="133" width="176" height="26" class="chip" stroke="var(--tuikit)"/>
           <text x="350" y="150" text-anchor="middle" class="chip-t">&lt;ClaimStatusBadge/&gt;</text>
           <rect x="30" y="46" width="164" height="22" rx="11" fill="var(--surface2)" stroke="var(--line-strong)" stroke-width="1"/>
-          <text x="112" y="61" text-anchor="middle" font-size="10.5" fill="var(--muted)">mf-manifest.json &#x2713;</text>
+          <text x="112" y="61" text-anchor="middle" font-size="10.5" fill="var(--muted)">publishes mf-manifest.json</text>
         </g>
         <g class="g" id="g-expose-claims">
           <line x1="620" y1="274" x2="620" y2="286" stroke="var(--tclaims)" stroke-width="1.3"/>
@@ -298,30 +303,30 @@
           <text x="740" y="422" class="sub">/claims route</text>
         </g>
         <g class="g" id="g-slot-empty-uikit"><rect x="285" y="432" width="190" height="64" class="slot"/>
-          <text x="380" y="468" text-anchor="middle" class="sub">empty slot</text></g>
+          <text x="380" y="468" text-anchor="middle" class="sub">nothing here yet</text></g>
         <g class="g" id="g-slot-empty-worklist"><rect x="510" y="432" width="200" height="64" class="slot"/>
-          <text x="610" y="468" text-anchor="middle" class="sub">empty slot</text></g>
+          <text x="610" y="468" text-anchor="middle" class="sub">nothing here yet</text></g>
         <g class="g" id="g-slot-empty-claims"><rect x="745" y="432" width="180" height="64" class="slot"/>
-          <text x="835" y="468" text-anchor="middle" class="sub">empty slot</text></g>
+          <text x="835" y="468" text-anchor="middle" class="sub">nothing here yet</text></g>
         <g class="g" id="g-question">
-          <text x="600" y="560" text-anchor="middle" class="tag" fill="var(--accent)">four independent deployables &mdash; what fills these slots, and how?</text>
+          <text x="600" y="560" text-anchor="middle" class="tag" fill="var(--accent)">Four teams can now ship independently &mdash; but who puts their work back together into one app?</text>
         </g>
 
         <!-- filled slots -->
         <g class="g" id="g-fill-uikit">
           <rect x="285" y="432" width="190" height="64" class="slotfill" stroke="var(--tuikit)"/>
           <text x="380" y="459" text-anchor="middle" class="chip-t">&lt;MetricCard/&gt; &times;4</text>
-          <text x="380" y="480" text-anchor="middle" class="sub">rendered from uikit&rsquo;s code</text>
+          <text x="380" y="480" text-anchor="middle" class="sub">this is uikit&rsquo;s code, running here</text>
         </g>
         <g class="g" id="g-fill-worklist">
           <rect x="510" y="432" width="200" height="64" class="slotfill" stroke="var(--tworklist)"/>
           <text x="610" y="459" text-anchor="middle" class="chip-t">&lt;WorklistWidget/&gt;</text>
-          <text x="610" y="480" text-anchor="middle" class="sub">uses uikit badges inside</text>
+          <text x="610" y="480" text-anchor="middle" class="sub">and it uses uikit&rsquo;s badges inside</text>
         </g>
         <g class="g" id="g-fill-claims">
           <rect x="745" y="432" width="180" height="64" class="slotfill" stroke="var(--tclaims)"/>
           <text x="835" y="459" text-anchor="middle" class="chip-t">&lt;ClaimsApp/&gt;</text>
-          <text x="835" y="480" text-anchor="middle" class="sub">own router &middot; basename</text>
+          <text x="835" y="480" text-anchor="middle" class="sub">a whole app, with its own router</text>
         </g>
 
         <!-- federation arrows -->
@@ -329,10 +334,10 @@
         <g class="g" id="g-arr-claims"><path class="fed" d="M 640 312 Q 760 360 830 428" marker-end="url(#arrA)"/></g>
         <g class="g" id="g-arr-worklist"><path class="fed" d="M 920 262 Q 780 360 622 428" marker-end="url(#arrA)"/></g>
         <g class="g" id="g-arr-w2u"><path class="fed" d="M 830 138 Q 640 6 442 126" marker-end="url(#arrA)"/>
-          <text x="620" y="24" text-anchor="middle" class="tag" fill="var(--accent)">a remote can be a host: worklist consumes uikit</text></g>
+          <text x="620" y="24" text-anchor="middle" class="tag" fill="var(--accent)">the worklist consumes uikit, while the shell consumes the worklist</text></g>
         <g class="g" id="g-react1">
           <rect x="500" y="335" width="200" height="24" rx="12" fill="var(--surface)" stroke="var(--accent)" stroke-width="1.3"/>
-          <text x="600" y="351" text-anchor="middle" font-size="11" fill="var(--accent)">shared: react &times;1 &middot; singleton</text>
+          <text x="600" y="351" text-anchor="middle" font-size="11" fill="var(--accent)">everyone shares one copy of React</text>
         </g>
 
         <!-- versions -->
@@ -344,20 +349,20 @@
           <rect x="1026" y="70" width="44" height="20" rx="10" fill="var(--surface)" stroke="var(--line-strong)" stroke-width="1.1"/>
           <text x="1048" y="84" text-anchor="middle" font-size="10.5">v2.1</text>
         </g>
-        <g class="g" id="g-slotver-old"><text x="380" y="510" text-anchor="middle" font-size="10.5" fill="var(--muted)">running v3.0</text></g>
+        <g class="g" id="g-slotver-old"><text x="380" y="510" text-anchor="middle" font-size="10.5" fill="var(--muted)">this page is running v3.0</text></g>
         <g class="g" id="g-newver">
           <rect x="196" y="70" width="44" height="20" rx="10" fill="var(--surface)" stroke="var(--ok)" stroke-width="1.4" class="pulse"/>
           <text x="218" y="84" text-anchor="middle" font-size="10.5" fill="var(--ok)">v3.1</text>
-          <text x="140" y="42" class="tag" fill="var(--ok)">uikit deploys v3.1</text>
+          <text x="140" y="42" class="tag" fill="var(--ok)">uikit just shipped v3.1</text>
         </g>
-        <g class="g" id="g-stillold"><text x="380" y="526" text-anchor="middle" font-size="10.5" fill="var(--accent)">open page: still v3.0 &mdash; deploys never yank a session</text></g>
-        <g class="g" id="g-slotver-new"><text x="380" y="510" text-anchor="middle" font-size="10.5" fill="var(--ok)">v3.1 after reload &middot; others unchanged</text></g>
+        <g class="g" id="g-stillold"><text x="380" y="526" text-anchor="middle" font-size="10.5" fill="var(--accent)">pages already open stay on v3.0 &mdash; a deploy never interrupts anyone</text></g>
+        <g class="g" id="g-slotver-new"><text x="380" y="510" text-anchor="middle" font-size="10.5" fill="var(--ok)">after a reload: v3.1 &mdash; the other teams didn&rsquo;t change</text></g>
 
         <!-- data -->
         <g class="g" id="g-data">
           <path class="datae" d="M 560 352 Q 540 260 544 188" marker-end="url(#arrD)"/>
           <text x="40" y="316" class="tag" fill="var(--data)">fetch('/api/claims') &middot; plain HTTP</text>
-          <text x="40" y="334" class="tag">dashboard, widget, and ClaimsApp all call it</text>
+          <text x="40" y="334" class="tag">the dashboard, the widget, and ClaimsApp all call this API</text>
         </g>
         <g class="g" id="g-apipipe">
           <rect x="478" y="190" width="132" height="22" rx="11" fill="var(--surface)" stroke="var(--data)" stroke-width="1.2"/>
@@ -366,8 +371,8 @@
 
         <!-- files / store -->
         <g class="g" id="g-files">
-          <text x="30" y="566" class="tag" fill="var(--accent)">a &ldquo;deployed remote&rdquo; = a folder: manifest +</text>
-          <text x="30" y="584" class="tag" fill="var(--accent)">remoteEntry + chunks. no server runs.</text>
+          <text x="30" y="566" class="tag" fill="var(--accent)">a deployed remote is just a folder of files &mdash;</text>
+          <text x="30" y="584" class="tag" fill="var(--accent)">there is no server running for it.</text>
           <rect x="30" y="596" width="130" height="24" rx="6" fill="var(--surface2)" stroke="var(--line-strong)" stroke-width="1"/>
           <text x="95" y="612" text-anchor="middle" font-size="10.5">uikit/dist/ &#128193;</text>
         </g>
@@ -381,7 +386,7 @@
           <text x="1075" y="462" text-anchor="middle" font-size="10.5">/claims</text>
           <rect x="1000" y="478" width="150" height="24" rx="6" fill="var(--surface)" stroke="var(--tworklist)" stroke-width="1.1"/>
           <text x="1075" y="494" text-anchor="middle" font-size="10.5">/worklist</text>
-          <text x="1075" y="520" text-anchor="middle" class="sub">a deploy = a file upload</text>
+          <text x="1075" y="520" text-anchor="middle" class="sub">deploying = uploading files</text>
           <path class="fed" d="M 975 440 Q 960 460 952 470" marker-end="url(#arrA)"/>
         </g>
 
@@ -389,12 +394,12 @@
         <g class="g" id="g-kill">
           <circle cx="250" cy="82" r="13" fill="var(--danger)"/>
           <text x="250" y="87" text-anchor="middle" font-size="12" fill="#fff" font-weight="600">&#x2715;</text>
-          <text x="268" y="86" class="tag" fill="var(--danger)">uikit unreachable</text>
+          <text x="268" y="86" class="tag" fill="var(--danger)">uikit&rsquo;s files can&rsquo;t be reached</text>
         </g>
         <g class="g" id="g-dead">
           <rect x="250" y="352" width="700" height="252" rx="12" fill="var(--bg)" opacity="0.9"/>
           <text x="600" y="470" text-anchor="middle" font-size="26" fill="var(--danger)">&#x2715;</text>
-          <text x="600" y="500" text-anchor="middle" font-size="12.5" fill="var(--danger)">blank page &mdash; the whole product, down with it</text>
+          <text x="600" y="500" text-anchor="middle" font-size="12.5" fill="var(--danger)">the whole page is blank &mdash; every team is down</text>
         </g>
         <g class="g" id="g-defense">
           <rect x="278" y="425" width="204" height="78" rx="13" fill="none" stroke="var(--ok)" stroke-width="1.3" stroke-dasharray="4 5"/>
@@ -402,12 +407,12 @@
           <rect x="738" y="425" width="194" height="78" rx="13" fill="none" stroke="var(--ok)" stroke-width="1.3" stroke-dasharray="4 5"/>
           <rect x="380" y="556" width="230" height="26" rx="13" fill="var(--surface)" stroke="var(--ok)" stroke-width="1.3"/>
           <text x="495" y="573" text-anchor="middle" font-size="11" fill="var(--ok)">errorLoadRemote runtime plugin</text>
-          <text x="646" y="573" font-size="11" fill="var(--ok)">+ a boundary per slot</text>
+          <text x="646" y="573" font-size="11" fill="var(--ok)">and an error boundary around every slot</text>
         </g>
         <g class="g" id="g-graceful">
           <rect x="285" y="432" width="190" height="64" rx="10" fill="var(--surface)" stroke="var(--danger)" stroke-width="1.3" stroke-dasharray="5 5"/>
-          <text x="380" y="461" text-anchor="middle" font-size="11" fill="var(--muted)">uikit unavailable</text>
-          <text x="380" y="479" text-anchor="middle" class="sub">rest of the page: fine</text>
+          <text x="380" y="461" text-anchor="middle" font-size="11" fill="var(--muted)">uikit&rsquo;s part couldn&rsquo;t load</text>
+          <text x="380" y="479" text-anchor="middle" class="sub">everything else still works</text>
         </g>
       </svg>
     </figure>
@@ -418,11 +423,11 @@
     <p class="eyebrow">Live &middot; the real thing &middot; &asymp;10 min</p>
     <h1>Enough pictures.</h1>
     <ul class="cue-list">
-      <li><span class="n">1</span><span>The illusion: :3100 is four codebases &mdash; walk :3101, :3102, :3103</span></li>
-      <li><span class="n">2</span><span>The whole mechanism: two configs side by side &mdash; <code>exposes</code> / <code>remotes</code> / <code>shared</code></span></li>
-      <li><span class="n">3</span><span>Federated types: hover <code>uikit/MetricCard</code> &mdash; autocomplete from another app</span></li>
-      <li><span class="n">4</span><span>Kill uikit&rsquo;s file server &rarr; reload &rarr; a remote fails like a CDN, not like an app</span></li>
-      <li><span class="n">5</span><span>If time: the two-React time bomb &mdash; remove <code>shared</code>, add a hook, boom</span></li>
+      <li><span class="n">1</span><span>Start at :3100 &mdash; it looks like one app. Then walk :3101, :3102 and :3103 to show it&rsquo;s really four.</span></li>
+      <li><span class="n">2</span><span>Open the two configs side by side &mdash; <code>exposes</code>, <code>remotes</code>, <code>shared</code>. That&rsquo;s the entire mechanism.</span></li>
+      <li><span class="n">3</span><span>Hover <code>uikit/MetricCard</code> in the editor &mdash; full autocomplete, coming from another running app.</span></li>
+      <li><span class="n">4</span><span>Kill uikit&rsquo;s file server and reload &mdash; a remote fails like a CDN outage, not like a crashed app.</span></li>
+      <li><span class="n">5</span><span>If there&rsquo;s time: remove <code>shared</code>, add a hook to MetricCard, and watch two Reacts explode.</span></li>
     </ul>
     <p class="sub">Deck resumes at Part 3.</p>
   </section>
@@ -436,30 +441,29 @@
       <div><b>pnpm install</b> &amp;&amp; <b>pnpm dev</b> &mdash; five apps, zero federation</div>
       <div>follow the videos + docs/workshop &middot; stuck? <b>make catchup step=N</b></div>
     </div>
-    <p class="sub">Takeaways: microfrontends are a team-scaling tool &middot; a remote is files that
-    run in the browser &middot; singletons are where it bites &middot; every consumer owns its resilience.</p>
+    <p class="sub">Four things to remember: microfrontends solve a team problem, not a code problem. A deployed remote is just files &mdash; it only runs in the browser. The shared-singleton line is where production breaks. And every consumer owns its own resilience.</p>
     <p class="url">Questions?</p>
   </section>
 
   <div class="captions" id="captions">
-    <p data-step="2">Our product: a revenue-cycle console. Four teams &mdash; but one frontend codebase, where every team&rsquo;s UI leans on the same shared core. Everyone edits everything; merge conflicts are the tell.</p>
-    <p data-step="3">And one deploy queue for the whole frontend: a single broken build parks every team&rsquo;s release. Code coupling and release coupling, stacked.</p>
-    <p data-step="4">Split along ownership lines instead &mdash; these are the actual apps in the repo you&rsquo;ll clone: <code>uikit</code>, <code>claims</code> (a full application, with its own API and data), and <code>worklist</code>. Each deploys alone. Workspaces in one repo or separate repos &mdash; the boundary is what matters.</p>
-    <p data-step="5">But users don&rsquo;t want four apps &mdash; they want one. Here&rsquo;s the shell: the RCM Console, with three empty slots. The rest of this talk is filling them &mdash; without giving up a single independent deploy.</p>
-    <p data-step="6">Module federation, act one: uikit <em>exposes</em> components &mdash; real modules, published over HTTP via <code>mf-manifest.json</code>. Nothing consumes them yet; publishing is unilateral.</p>
-    <p data-step="7">The shell declares <code>remotes: uikit@&hellip;/mf-manifest.json</code> and imports <code>&lt;MetricCard/&gt;</code> like any module &mdash; except it arrives <em>at runtime</em>, from uikit&rsquo;s deployment. First slot filled.</p>
-    <p data-step="8">Same move at application scale: claims exposes one module, <code>&lt;ClaimsApp/&gt;</code> &mdash; router, data layer and all &mdash; and the shell mounts it under <code>/claims</code> with a single <code>basename</code> prop.</p>
-    <p data-step="9">The worklist fills the last slot &mdash; and consumes uikit&rsquo;s badges itself while the shell consumes <em>it</em>. Federation is a graph. And everyone runs ONE React: <code>shared &hellip; singleton</code>. That line is where production bugs live.</p>
-    <p data-step="11">Every slot shows the version its team last deployed &mdash; the shell never pinned any of this at build time; it discovers versions from each manifest at page load.</p>
-    <p data-step="12">The uikit team ships v3.1. The open page keeps running v3.0 &mdash; a deploy never yanks code out of a live session.</p>
-    <p data-step="13">Next reload: v3.1 composes in. Claims and worklist didn&rsquo;t move. Three teams, three release cadences, zero shell redeploys.</p>
-    <p data-step="14">Federation moves UI only &mdash; data stays plain HTTP. The dashboard, the widget, and ClaimsApp itself all call the claims team&rsquo;s API. Consuming a team&rsquo;s data doesn&rsquo;t require consuming its UI.</p>
-    <p data-step="15">And the API is a normal running service &mdash; deployed, versioned, and scaled like any backend. Each slice publishes two contracts: the exposed module for UI, the endpoints for data.</p>
-    <p data-step="16">Now the part everyone gets wrong: a deployed remote is not a running app. It&rsquo;s a <em>folder</em> &mdash; manifest, remoteEntry, hashed chunks. The only place a remote runs is the browser.</p>
-    <p data-step="17">So remotes don&rsquo;t need servers at all: every team&rsquo;s CI uploads its folder to one store behind a CDN, and the shell composes from there. A deploy is a file copy. (<code>make store</code> + <code>make publish</code> simulate exactly this.)</p>
-    <p data-step="18">The honest failure mode: uikit&rsquo;s files unreachable &rarr; the runtime&rsquo;s boot-time manifest fetch fails &rarr; the whole product blanks. A remote is a runtime dependency, and this is the bill.</p>
-    <p data-step="19">Two layers of defense, about thirty lines: an error boundary around every slot, and the <code>errorLoadRemote</code> runtime hook &mdash; stub manifest for dead hosts, placeholder component for dead modules.</p>
-    <p data-step="20">Same outage, new day: uikit&rsquo;s slot degrades to a placeholder; claims and the worklist keep working. Every consumer owns its own resilience &mdash; bonus step 7 in the repo.</p>
+    <p data-step="2">Here&rsquo;s where we start. Our product is a revenue-cycle console, and four teams build it &mdash; but all of their code lives in one frontend codebase, leaning on the same shared components, styles, and routing. Two teams routinely end up editing the same files, because nothing in this picture belongs to any one team.</p>
+    <p data-step="3">It gets worse at release time, because there&rsquo;s only one pipeline. Right now the denials team&rsquo;s build is failing &mdash; so the claims team&rsquo;s urgent fix and the dashboard team&rsquo;s finished feature are stuck in line behind it. Nobody can ship until somebody else fixes their build. That is the real cost of a shared codebase.</p>
+    <p data-step="4">So we split it up &mdash; and this is the actual repo you&rsquo;ll clone. <code>uikit</code> is the design-system team. <code>claims</code> is a complete application that owns its own API and data. <code>worklist</code> is the smallest team possible: one widget. Each of them builds and ships on its own &mdash; and whether they live as workspaces in one repo or as separate repos entirely, the ownership boundary is what matters.</p>
+    <p data-step="5">There&rsquo;s just one problem left: our users don&rsquo;t want three separate apps &mdash; they want one. So here&rsquo;s the shell: the RCM Console. Right now it&rsquo;s mostly empty &mdash; three slots waiting for the other teams&rsquo; work. The rest of this talk is about filling those slots without giving up a single independent deploy.</p>
+    <p data-step="6">Module federation starts on the producer&rsquo;s side. uikit <em>exposes</em> two of its components &mdash; they become real, importable modules, published over HTTP through a small file called <code>mf-manifest.json</code>. Notice that nothing is consuming them yet. Publishing is something a team does on its own; nobody needs to ask permission.</p>
+    <p data-step="7">Now the consumer&rsquo;s side. The shell adds one line of configuration &mdash; &ldquo;the remote called uikit lives at this manifest URL&rdquo; &mdash; and then imports <code>&lt;MetricCard/&gt;</code> exactly like any other component. The difference is invisible in the code but enormous in practice: the component arrives <em>at runtime</em>, straight from uikit&rsquo;s own deployment. First slot filled.</p>
+    <p data-step="8">The same trick works at a much bigger scale. The claims team exposes exactly one module &mdash; <code>&lt;ClaimsApp/&gt;</code>, their entire application, router and data-fetching included &mdash; and the shell mounts it under <code>/claims</code>. The only thing the two teams had to agree on is a single prop telling the app which path it lives at.</p>
+    <p data-step="9">The worklist fills the last slot, and does something interesting on the way in: it consumes uikit&rsquo;s badges itself, while the shell is consuming <em>it</em>. Host and remote aren&rsquo;t identities &mdash; they&rsquo;re roles, and an app can play both at once. One last thing holds all of this together: every app shares a single copy of React. Remember that config line &mdash; it&rsquo;s the one that breaks production when it goes missing.</p>
+    <p data-step="11">Look at the version tags. Every slot is running whatever its team most recently deployed &mdash; uikit&rsquo;s v3.0, claims&rsquo; v1.2, the worklist&rsquo;s v2.1. The shell never chose any of these versions at build time. It discovers them fresh, from each team&rsquo;s manifest, every single time the page loads.</p>
+    <p data-step="12">Now the uikit team ships version 3.1&hellip; and nothing dramatic happens. That&rsquo;s the point. Pages that are already open keep running v3.0, because a deploy never reaches into someone&rsquo;s live session and swaps the code out from under them.</p>
+    <p data-step="13">The next time anyone loads the page, it picks up v3.1 automatically. Claims and the worklist didn&rsquo;t change, didn&rsquo;t rebuild, didn&rsquo;t even notice. Three teams shipping on three separate schedules &mdash; and the shell itself was never redeployed.</p>
+    <p data-step="14">One thing federation deliberately does <em>not</em> touch: data. The UI arrives through federation, but data still travels over ordinary HTTP. The dashboard, the worklist widget, and the claims app all call the claims team&rsquo;s API the normal way &mdash; and you can consume a team&rsquo;s data without ever consuming its UI.</p>
+    <p data-step="15">And that API is just a regular backend service. It deploys, versions, and scales like every other service you already run. So each team really publishes two contracts: the module it exposes for its UI, and the endpoints it exposes for its data.</p>
+    <p data-step="16">Now for the fact that surprises almost everyone: a deployed remote is not a running application. It&rsquo;s a folder &mdash; a manifest, a remote-entry file, and some hashed chunks. There is no server process behind it. The only place a remote ever actually <em>runs</em> is in the user&rsquo;s browser.</p>
+    <p data-step="17">Once you see that, the whole picture gets simpler: every team&rsquo;s CI just uploads its folder into one storage bucket behind a CDN, and the shell composes the app from there. Deploying becomes copying files. In the repo, <code>make store</code> and <code>make publish</code> simulate exactly this setup.</p>
+    <p data-step="18">Now the honest part. If uikit&rsquo;s files ever become unreachable, the shell&rsquo;s very first manifest fetch fails at startup &mdash; and by default, that takes the entire product down with it. A remote is a runtime dependency, and this blank page is the bill for all that independence.</p>
+    <p data-step="19">The fix is about thirty lines of code, in two layers. A React error boundary goes around every slot, so one crashing remote can&rsquo;t take down the whole tree. And the federation runtime gives you a hook &mdash; <code>errorLoadRemote</code> &mdash; where you hand back a stub manifest for a dead host, or a placeholder component for a module that failed to load.</p>
+    <p data-step="20">And here&rsquo;s that same outage on a better day: uikit&rsquo;s slot politely says it&rsquo;s unavailable, while claims and the worklist carry on working. That&rsquo;s the deal you actually want &mdash; independence when things go well, containment when they don&rsquo;t. It&rsquo;s all in the repo as bonus step 7.</p>
   </div>
 
   <footer>
